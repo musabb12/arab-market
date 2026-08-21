@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         String    @default("customer")
+  phone        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  seller       Seller?
+  orders       Order[]
+  addresses    Address[]
+}
+
+model Seller {
+  id             String    @id @default(cuid())
+  userId         String?   @unique
+  name           String
+  country        String    @default("")
+  image          String    @default("")
+  status         String    @default("pending")
+  commissionRate Float     @default(8)
+  rating         Float     @default(5)
+  followers      Int       @default(0)
+  response       String    @default("within 24 hours")
+  since          String    @default("")
+  bio            String    @default("")
+  earnings       Float     @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  user           User?     @relation(fields: [userId], references: [id])
+  products       Product[]
+}
+
+model Category {
+  id            String @id
+  nameKey       String
+  image         String
+  gradient      String @default("")
+  description   String @default("")
+  subcategories String @default("[]")
+}
+
+model Brand {
+  id          String @id
+  name        String
+  logo        String @default("")
+  description String @default("")
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  name          String
+  brandId       String   @default("")
+  categoryId    String
+  sellerId      String
+  price         Float
+  originalPrice Float?
+  rating        Float    @default(0)
+  reviewsCount  Int      @default(0)
+  image         String
+  images        String   @default("[]")
+  badges        String   @default("[]")
+  flashPercent  Int?
+  stock         Int      @default(0)
+  colors        String   @default("[]")
+  description   String   @default("")
+  specs         String   @default("[]")
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  seller        Seller   @relation(fields: [sellerId], references: [id])
+  orderItems    OrderItem[]
+}
+
+model Coupon {
+  id       String  @id @default(cuid())
+  code     String  @unique
+  type     String
+  value    Float
+  status   String  @default("active")
+  used     Int     @default(0)
+  limit    Int     @default(100)
+  minOrder Float   @default(0)
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  userId          String?
+  email           String
+  status          String   @default("confirmed")
+  paymentMethod   String
+  paymentStatus   String   @default("pending")
+  stripeSessionId String?
+  subtotal        Float
+  shippingFee     Float    @default(0)
+  tax             Float    @default(0)
+  discount        Float    @default(0)
+  total           Float
+  currency        String   @default("USD")
+  shippingAddress String   @default("{}")
+  deliveryMethod  String   @default("standard")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User?    @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  productId String
+  name      String
+  price     Float
+  qty       Int
+  image     String @default("")
+  sellerId  String @default("")
+  order     Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Address {
+  id         String  @id @default(cuid())
+  userId     String
+  label      String  @default("Home")
+  firstName  String
+  lastName   String
+  line1      String
+  city       String
+  state      String  @default("")
+  zip        String
+  country    String
+  phone      String  @default("")
+  isDefault  Boolean @default(false)
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SiteSetting {
+  key   String @id
+  value String
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  author    String
+  rating    Int
+  comment   String
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+}
