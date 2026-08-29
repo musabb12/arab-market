@@ -78,12 +78,23 @@ export default {
     learnMore: 'Learn More',
     apply: 'Apply',
     productCount: '{count} products',
+    backHome: 'Back to storefront',
     sortBy: 'Sort by',
     filters: 'Filters',
     reset: 'Reset',
     breadcrumbHome: 'Home',
     visit: 'Visit',
     copy: 'Copy'
+  },
+  admin: {
+    login: {
+      title: 'ARAB Market Admin',
+      subtitle: 'Sign in to the control center',
+      username: 'Username',
+      password: 'Password',
+      submit: 'Sign in',
+      error: 'Invalid username or password'
+    }
   },
   home: {
     heroBadge: 'Premium marketplace',

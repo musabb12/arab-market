@@ -20,7 +20,7 @@ export default function AdminLogin() {
     if (ok) {
       navigate('/admin/dashboard', { replace: true })
     } else {
-      setError('Invalid credentials. Try admin / admin123')
+      setError(t('admin.login.error'))
     }
   }
 
@@ -42,8 +42,8 @@ export default function AdminLogin() {
               <Icon name="shield" size={22} className="text-white" />
             </span>
             <div>
-              <h1 className="font-display text-xl font-bold text-midnight-900">ARAB Market Admin</h1>
-              <p className="text-xs text-slate-400">Sign in to the control center</p>
+              <h1 className="font-display text-xl font-bold text-midnight-900">{t('admin.login.title')}</h1>
+              <p className="text-xs text-slate-400">{t('admin.login.subtitle')}</p>
             </div>
           </div>
 
@@ -56,30 +56,23 @@ export default function AdminLogin() {
 
           <form onSubmit={submit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Username</label>
-              <input value={username} onChange={(e) => setUsername(e.target.value)} className={input} placeholder="admin" autoFocus />
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('admin.login.username')}</label>
+              <input value={username} onChange={(e) => setUsername(e.target.value)} className={input} autoComplete="username" autoFocus />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Password</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className={input} placeholder="••••••••" />
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('admin.login.password')}</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className={input} autoComplete="current-password" />
             </div>
             <button type="submit" className="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold hover:shadow-glow transition-all flex items-center justify-center gap-2">
               <Icon name="lock" size={16} />
-              Sign in
+              {t('admin.login.submit')}
             </button>
           </form>
-
-          <div className="mt-6 bg-slate-50 border border-slate-100 rounded-xl p-4 text-xs text-slate-500 leading-relaxed">
-            <p className="font-semibold text-midnight-900 mb-1">Demo credentials</p>
-            <p>Admin: <span className="font-mono font-semibold text-brand-600">admin</span> / <span className="font-mono font-semibold text-brand-600">admin123</span></p>
-            <p>Manager: <span className="font-mono font-semibold text-brand-600">manager</span> / <span className="font-mono font-semibold text-brand-600">manager123</span></p>
-            <p className="mt-2 text-slate-400">Requires API server (`npm run dev:all`)</p>
-          </div>
         </div>
         <div className="text-center mt-5">
           <Link to="/" className="text-sm text-slate-400 hover:text-white transition-colors inline-flex items-center gap-1.5">
             <Icon name="arrowRight" size={15} className="rotate-180" />
-            {t('common.backHome') || 'Back to storefront'}
+            {t('common.backHome')}
           </Link>
         </div>
       </motion.div>

@@ -78,12 +78,23 @@ export default {
     learnMore: 'اعرف المزيد',
     apply: 'تطبيق',
     productCount: '{count} منتج',
+    backHome: 'العودة إلى المتجر',
     sortBy: 'ترتيب حسب',
     filters: 'التصفية',
     reset: 'إعادة تعيين',
     breadcrumbHome: 'الرئيسية',
     visit: 'زيارة',
     copy: 'نسخ'
+  },
+  admin: {
+    login: {
+      title: 'لوحة تحكم أراب ماركت',
+      subtitle: 'سجّل الدخول إلى مركز الإدارة',
+      username: 'اسم المستخدم',
+      password: 'كلمة المرور',
+      submit: 'تسجيل الدخول',
+      error: 'اسم المستخدم أو كلمة المرور غير صحيحة'
+    }
   },
   home: {
     heroBadge: 'سوق فاخر',

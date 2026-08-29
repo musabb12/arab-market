@@ -393,59 +393,92 @@ export function StoreProvider({ children }) {
   }
 
   const adminLogin = async (username, password) => {
+    const raw = username.trim()
     const emailMap = {
       admin: 'admin@lumina.market',
       manager: 'manager@lumina.market'
     }
-    const email = emailMap[username] || (username.includes('@') ? username : null)
-    if (!email) return false
-    try {
-      const { token, user: u } = await api.login({ email, password })
-      if (u.role !== 'admin' && u.role !== 'manager') {
-        setToken(null)
-        return false
+    const email = emailMap[raw.toLowerCase()] || (raw.includes('@') ? raw : null)
+
+    const loginLocal = () => {
+      const aliases = {
+        admin: 'admin',
+        manager: 'manager',
+        'admin@lumina.market': 'admin',
+        'manager@lumina.market': 'manager'
       }
-      setToken(token)
-      setUser(u)
+      const key = aliases[raw.toLowerCase()] || raw.toLowerCase()
+      const account = (siteData.adminUsers || []).find(
+        (a) => a.username.toLowerCase() === key && a.password === password
+      )
+      if (!account) return false
       setAdminSession({
-        username: u.email,
-        name: u.name,
-        role: u.role === 'admin' ? 'superadmin' : 'manager',
-        loginAt: new Date().toISOString()
+        username: account.username,
+        name: account.name,
+        role: account.role,
+        loginAt: new Date().toISOString(),
+        local: true
       })
-      try {
-        const overview = await api.adminOverview()
-        const [productsRes, sellersRes, ordersRes, usersRes] = await Promise.all([
-          api.adminProducts(),
-          api.adminSellers(),
-          api.adminOrders(),
-          api.adminUsers()
-        ])
-        setSiteData((prev) => ({
-          ...prev,
-          products: productsRes.products,
-          sellers: sellersRes.sellers,
-          users: usersRes.users,
-          notifications: [
-            {
-              id: `n-admin-${Date.now()}`,
-              title: 'Admin signed in',
-              text: `${overview.stats.pendingSellers} pending seller applications`,
-              type: 'seller',
-              read: false,
-              date: new Date().toISOString().slice(0, 10)
-            },
-            ...prev.notifications
-          ]
-        }))
-        setOrders(ordersRes.orders || [])
-      } catch {
-        /* ignore sync errors */
-      }
+      setUser({
+        id: account.id,
+        name: account.name,
+        email: emailMap[account.username] || `${account.username}@lumina.market`,
+        role: account.role === 'superadmin' ? 'admin' : account.role
+      })
       return true
-    } catch {
-      return false
     }
+
+    if (email) {
+      try {
+        const { token, user: u } = await api.login({ email, password })
+        if (u.role !== 'admin' && u.role !== 'manager') {
+          setToken(null)
+          return false
+        }
+        setToken(token)
+        setUser(u)
+        setAdminSession({
+          username: u.email,
+          name: u.name,
+          role: u.role === 'admin' ? 'superadmin' : 'manager',
+          loginAt: new Date().toISOString()
+        })
+        try {
+          const overview = await api.adminOverview()
+          const [productsRes, sellersRes, ordersRes, usersRes] = await Promise.all([
+            api.adminProducts(),
+            api.adminSellers(),
+            api.adminOrders(),
+            api.adminUsers()
+          ])
+          setSiteData((prev) => ({
+            ...prev,
+            products: productsRes.products,
+            sellers: sellersRes.sellers,
+            users: usersRes.users,
+            notifications: [
+              {
+                id: `n-admin-${Date.now()}`,
+                title: 'Admin signed in',
+                text: `${overview.stats.pendingSellers} pending seller applications`,
+                type: 'seller',
+                read: false,
+                date: new Date().toISOString().slice(0, 10)
+              },
+              ...prev.notifications
+            ]
+          }))
+          setOrders(ordersRes.orders || [])
+        } catch {
+          /* ignore sync errors */
+        }
+        return true
+      } catch (err) {
+        if (err.status === 401) return false
+      }
+    }
+
+    return loginLocal()
   }
 
   const adminLogout = () => {
