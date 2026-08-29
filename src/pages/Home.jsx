@@ -32,25 +32,27 @@ export default function Home() {
   const newArrivals = products.filter((p) => p.badges?.includes('newArrival')).slice(0, 8)
   const deals = [...products].sort((a, b) => (a.originalPrice ? (a.originalPrice - a.price) / a.originalPrice : 0) - (b.originalPrice ? (b.originalPrice - b.price) / b.originalPrice : 0)).slice(0, 8)
 
-  if (!heroSlides.length) return null
+  const activeSlide = heroSlides[slide] || heroSlides[0]
 
   return (
     <div>
       {/* HERO */}
       <section className="relative overflow-hidden bg-midnight-900 min-h-[560px] md:min-h-[640px] flex items-center">
         <div className="absolute inset-0 bg-hero-mesh opacity-60" />
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={slide}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.58 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.2 }}
-            className="absolute inset-0"
-          >
-            <img src={heroSlides[slide].image} alt="" className="w-full h-full object-cover" />
-          </motion.div>
-        </AnimatePresence>
+        {activeSlide && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={slide}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.58 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2 }}
+              className="absolute inset-0"
+            >
+              <img src={activeSlide.image} alt="" className="w-full h-full object-cover" />
+            </motion.div>
+          </AnimatePresence>
+        )}
         <div className="absolute inset-0 bg-gradient-to-r from-midnight-900/85 via-midnight-900/55 to-midnight-900/25" />
         <div className="relative max-w-7xl mx-auto px-4 py-24 w-full">
           <AnimatePresence mode="wait">
@@ -63,10 +65,10 @@ export default function Home() {
               className="max-w-2xl"
             >
               <h1 className="font-display text-4xl md:text-6xl font-semibold text-white leading-tight mb-6">
-                {heroSlides[slide].title}
+                {activeSlide?.title || t('home.slides.h1.title', { defaultValue: 'ARAB Market' })}
               </h1>
               <p className="text-slate-200 text-lg leading-relaxed mb-8 max-w-xl">
-                {heroSlides[slide].sub}
+                {activeSlide?.sub || t('home.slides.h1.subtitle', { defaultValue: 'Premium products from around the world.' })}
               </p>
               <div className="flex flex-wrap items-center gap-4">
                 <Link to="/products" className="group px-8 py-4 rounded-full bg-gradient-to-r from-brand-500 to-indigo-600 text-white font-semibold flex items-center gap-2 hover:shadow-glow transition-all">

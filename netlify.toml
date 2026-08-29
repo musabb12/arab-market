@@ -2,6 +2,13 @@
   command = "npm run build"
   publish = "dist"
 
+# Prefer a real 404 JSON for API paths so the SPA catch-all does not return index.html as 200.
+[[redirects]]
+  from = "/api/*"
+  to = "/api-offline.json"
+  status = 404
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

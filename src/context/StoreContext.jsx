@@ -147,29 +147,36 @@ export function StoreProvider({ children }) {
   const refreshCatalog = useCallback(async () => {
     try {
       const data = await api.catalog()
-      let sellers = data.sellers
+      if (!Array.isArray(data?.products)) {
+        throw new Error('Invalid catalog payload')
+      }
+      let sellers = Array.isArray(data.sellers) ? data.sellers : null
       const token = getStoredToken()
       if (token) {
         try {
           const me = JSON.parse(localStorage.getItem(STORAGE_KEYS.user) || 'null')
           if (me?.role === 'admin' || me?.role === 'manager') {
             const adminSellers = await api.adminSellers()
-            sellers = adminSellers.sellers
+            if (Array.isArray(adminSellers?.sellers)) sellers = adminSellers.sellers
           }
         } catch {
           /* keep public sellers */
         }
       }
+      const products = data.products.map((p) => ({ ...p, active: p.active !== false }))
+      const categories = Array.isArray(data.categories) ? data.categories : []
+      const brands = Array.isArray(data.brands) ? data.brands : []
+      const coupons = Array.isArray(data.coupons)
+        ? data.coupons.map((c) => ({ ...c, discount: c.discount ?? c.value }))
+        : null
       setSiteData((prev) => ({
         ...prev,
-        products: data.products.map((p) => ({ ...p, active: p.active !== false })),
-        sellers,
-        categories: data.categories.length ? data.categories : prev.categories,
-        brands: data.brands.length ? data.brands : prev.brands,
-        coupons: data.coupons.length
-          ? data.coupons.map((c) => ({ ...c, discount: c.discount ?? c.value }))
-          : prev.coupons,
-        settings: { ...prev.settings, ...data.settings },
+        products,
+        sellers: sellers || prev.sellers,
+        categories: categories.length ? categories : prev.categories,
+        brands: brands.length ? brands : prev.brands,
+        coupons: coupons?.length ? coupons : prev.coupons,
+        settings: { ...prev.settings, ...(data.settings || {}) },
         payments: data.payments || prev.payments,
         shippingMethods: data.shippingMethods || prev.shippingMethods
       }))
@@ -449,8 +456,8 @@ export function StoreProvider({ children }) {
     }
   }
 
-  const products = siteData.products.filter((p) => p.active !== false)
-  const activeLanguages = siteData.languages.filter((l) => l.enabled)
+  const products = (siteData.products || []).filter((p) => p.active !== false)
+  const activeLanguages = (siteData.languages || []).filter((l) => l.enabled)
 
   const value = useMemo(
     () => ({

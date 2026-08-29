@@ -261,7 +261,7 @@ export default function Navbar() {
                       <img src={c.image} alt="" className="h-12 w-12 rounded-lg object-cover" loading="lazy" />
                       <div className="min-w-0">
                         <span className="block text-sm font-semibold text-midnight-900 group-hover:text-brand-600 transition-colors">{t(c.nameKey)}</span>
-                        <span className="block text-xs text-slate-400 truncate">{c.subcategories.slice(0, 3).join(' · ')}</span>
+                        <span className="block text-xs text-slate-400 truncate">{(c.subcategories || []).slice(0, 3).join(' · ')}</span>
                       </div>
                     </Link>
                   ))}

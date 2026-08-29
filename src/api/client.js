@@ -31,12 +31,22 @@ async function request(path, options = {}) {
     body: options.body != null ? JSON.stringify(options.body) : undefined
   })
 
-  let data = null
   const text = await res.text()
+  const contentType = res.headers.get('content-type') || ''
+  // Netlify SPA fallback can return index.html with 200 for missing /api routes.
+  if (contentType.includes('text/html') || /^\s*</.test(text)) {
+    const err = new Error('API returned HTML instead of JSON (is the backend deployed?)')
+    err.status = res.status
+    throw err
+  }
+
+  let data = null
   try {
     data = text ? JSON.parse(text) : null
   } catch {
-    data = { error: text || 'Request failed' }
+    const err = new Error(text || 'Invalid JSON response')
+    err.status = res.status
+    throw err
   }
 
   if (!res.ok) {
