@@ -1,14 +1,16 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
-import { SectionTitle, Card, Toggle, Badge, Button, Field, TextInput } from '../ui.jsx'
+import { SectionTitle, Card, Toggle, Badge } from '../ui.jsx'
 
 export default function Currencies() {
+  const { t } = useTranslation()
   const { siteData, updateSite, toast } = useStore()
   const { currencies, settings } = siteData
 
   const toggle = (code, enabled) => {
     updateSite((prev) => ({ ...prev, currencies: prev.currencies.map((c) => (c.code === code ? { ...c, enabled } : c)) }))
-    toast(`${code} ${enabled ? 'enabled' : 'disabled'}`)
+    toast(enabled ? t('admin.common.enabled') : t('admin.common.disabled'))
   }
 
   const setRate = (code, rate) => {
@@ -17,23 +19,23 @@ export default function Currencies() {
 
   const setDefault = (code) => {
     updateSite((prev) => ({ ...prev, settings: { ...prev.settings, defaultCurrency: code } }))
-    toast(`Default currency set to ${code}`)
+    toast(t('admin.common.saved'))
   }
 
   return (
     <div>
-      <SectionTitle title="Currencies" subtitle="Configure the currencies shoppers can view prices in" />
+      <SectionTitle title={t('admin.currencies.title')} subtitle={t('admin.currencies.subtitle')} />
 
       <Card>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100 text-left">
-                <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Currency</th>
-                <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Symbol</th>
-                <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Exchange rate (1 USD)</th>
-                <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Default</th>
-                <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Enabled</th>
+                <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t('admin.currencies.title')}</th>
+                <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t('admin.currencies.symbol')}</th>
+                <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t('admin.currencies.rate')}</th>
+                <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t('admin.languages.default')}</th>
+                <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t('admin.common.enabled')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -52,9 +54,9 @@ export default function Currencies() {
                   </td>
                   <td className="px-4 py-3">
                     {settings.defaultCurrency === c.code ? (
-                      <Badge tone="blue">Default</Badge>
+                      <Badge tone="blue">{t('admin.languages.default')}</Badge>
                     ) : (
-                      <button onClick={() => setDefault(c.code)} className="text-xs font-semibold text-brand-600 hover:bg-brand-50 px-2 py-1.5 rounded-lg">Set default</button>
+                      <button onClick={() => setDefault(c.code)} className="text-xs font-semibold text-brand-600 hover:bg-brand-50 px-2 py-1.5 rounded-lg">{t('admin.languages.default')}</button>
                     )}
                   </td>
                   <td className="px-4 py-3"><Toggle checked={c.enabled} onChange={(v) => toggle(c.code, v)} /></td>

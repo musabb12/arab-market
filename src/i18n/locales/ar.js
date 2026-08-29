@@ -1,3 +1,5 @@
+import admin from './admin.ar.js'
+
 export default {
   brand: 'أراب ماركت',
   tagline: 'سوق عربي فاخر للمنتجات المميزة',
@@ -86,16 +88,7 @@ export default {
     visit: 'زيارة',
     copy: 'نسخ'
   },
-  admin: {
-    login: {
-      title: 'لوحة تحكم أراب ماركت',
-      subtitle: 'سجّل الدخول إلى مركز الإدارة',
-      username: 'اسم المستخدم',
-      password: 'كلمة المرور',
-      submit: 'تسجيل الدخول',
-      error: 'اسم المستخدم أو كلمة المرور غير صحيحة'
-    }
-  },
+  admin,
   home: {
     heroBadge: 'سوق فاخر',
     heroTitle: 'اكتشف الفخامة من كل أنحاء العالم',

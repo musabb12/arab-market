@@ -1,9 +1,11 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Badge, Button } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
 
 export default function Notifications() {
+  const { t } = useTranslation()
   const { siteData, updateSite, toast } = useStore()
   const { notifications } = siteData
 
@@ -13,7 +15,7 @@ export default function Notifications() {
 
   const markAllRead = () => {
     updateSite((prev) => ({ ...prev, notifications: prev.notifications.map((n) => ({ ...n, read: true })) }))
-    toast('All notifications marked as read')
+    toast(t('admin.common.saved'))
   }
 
   const unread = notifications.filter((n) => !n.read).length
@@ -21,14 +23,14 @@ export default function Notifications() {
   return (
     <div>
       <SectionTitle
-        title="Notifications"
-        subtitle={`${unread} unread notifications`}
-        actions={unread > 0 && <Button variant="outline" onClick={markAllRead}><Icon name="check" size={15} /> Mark all read</Button>}
+        title={t('admin.notifications.title')}
+        subtitle={t('admin.notifications.subtitle', { count: unread })}
+        actions={unread > 0 && <Button variant="outline" onClick={markAllRead}><Icon name="check" size={15} /> {t('admin.notifications.markAll')}</Button>}
       />
 
       <Card>
         {notifications.length === 0 ? (
-          <p className="py-12 text-center text-sm text-slate-400">No notifications yet.</p>
+          <p className="py-12 text-center text-sm text-slate-400">{t('admin.notifications.empty')}</p>
         ) : (
           <div className="divide-y divide-slate-50">
             {notifications.map((n) => (
@@ -40,7 +42,7 @@ export default function Notifications() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <p className={`text-sm font-semibold text-midnight-900 ${n.read ? 'font-medium text-slate-500' : ''}`}>{n.title}</p>
-                    {!n.read && <Badge tone="blue">New</Badge>}
+                    {!n.read && <Badge tone="blue">{t('admin.common.new')}</Badge>}
                   </div>
                   <p className="text-sm text-slate-500 mt-0.5">{n.message}</p>
                   <p className="text-xs text-slate-400 mt-1">{n.date}</p>

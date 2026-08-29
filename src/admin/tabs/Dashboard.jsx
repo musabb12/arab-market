@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
 import { Stat, Card, Badge, SectionTitle, Bar } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
@@ -14,8 +15,6 @@ function AreaChart() {
   const pts = AREA.map((v, i) => [ (i / (AREA.length - 1)) * w, h - (v / max) * (h - 20) - 10 ])
   const line = pts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ')
   const area = `${line} L${w},${h} L0,${h} Z`
-  const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  const weeks = pts.filter((_, i) => i % 2 === 0)
 
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-48" preserveAspectRatio="none">
@@ -40,32 +39,36 @@ function AreaChart() {
 }
 
 export default function Dashboard() {
-  const { orders, products, users, settings, content, adminSession } = useStore()
+  const { t } = useTranslation()
+  const { orders, products, users, settings, adminSession, formatPrice } = useStore()
 
   const revenue = orders.reduce((s, o) => s + o.total, 0) + 128450
   const orderCount = orders.length + 486
-  const pendingOrders = orders.filter((o) => o.status === 'processing' || o.status === 'pending').length + 12
   const activeProducts = products.length
   const lowStock = products.filter((p) => p.stock < settings.lowStockThreshold)
 
   const stats = [
-    { icon: 'creditCard', label: 'Total Revenue', value: `$${revenue.toLocaleString()}`, delta: 18.2, color: 'from-emerald-500 to-teal-600' },
-    { icon: 'cart', label: 'Total Orders', value: orderCount.toLocaleString(), delta: 9.4, color: 'from-brand-500 to-indigo-600' },
-    { icon: 'user', label: 'Customers', value: users.length.toLocaleString(), delta: 12.6, color: 'from-purple-500 to-pink-500' },
-    { icon: 'box', label: 'Products Live', value: activeProducts, delta: 4.1, color: 'from-amber-500 to-orange-600' }
+    { icon: 'creditCard', label: t('admin.dashboard.revenue'), value: formatPrice ? formatPrice(revenue) : `$${revenue.toLocaleString()}`, delta: 18.2, color: 'from-emerald-500 to-teal-600' },
+    { icon: 'cart', label: t('admin.dashboard.orders'), value: orderCount.toLocaleString(), delta: 9.4, color: 'from-brand-500 to-indigo-600' },
+    { icon: 'user', label: t('admin.dashboard.customers'), value: users.length.toLocaleString(), delta: 12.6, color: 'from-purple-500 to-pink-500' },
+    { icon: 'box', label: t('admin.dashboard.productsLive'), value: activeProducts, delta: 4.1, color: 'from-amber-500 to-orange-600' }
   ]
 
-  const salesData = [
-    { label: 'Mon', value: 42 }, { label: 'Tue', value: 58 }, { label: 'Wed', value: 39 },
-    { label: 'Thu', value: 71 }, { label: 'Fri', value: 55 }, { label: 'Sat', value: 89 }, { label: 'Sun', value: 62 }
-  ]
+  const dayKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+  const salesValues = [42, 58, 39, 71, 55, 89, 62]
+  const salesData = dayKeys.map((key, i) => ({ label: t(`admin.days.${key}`), value: salesValues[i] }))
   const maxSales = Math.max(...salesData.map((s) => s.value))
+  const ranges = [
+    { key: '7', label: t('admin.dashboard.days7') },
+    { key: '30', label: t('admin.dashboard.days30') },
+    { key: '90', label: t('admin.dashboard.days90') }
+  ]
 
   return (
     <div>
       <SectionTitle
-        title={`Welcome back, ${adminSession?.name || 'Admin'}`}
-        subtitle={`${settings?.siteName || 'ARAB'} Market is running smoothly. Here is what happened today.`}
+        title={t('admin.dashboard.welcome', { name: adminSession?.name || t('admin.nav.dashboard') })}
+        subtitle={t('admin.dashboard.subtitle', { site: `${settings?.siteName || 'ARAB'} ${settings?.siteSuffix || 'Market'}` })}
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
@@ -75,16 +78,16 @@ export default function Dashboard() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6 mb-6">
-        <Card title="Revenue Overview" subtitle="Weekly revenue trend" className="lg:col-span-2">
-          <div className="mb-3 flex items-center gap-2">
-            {['7 days', '30 days', '90 days'].map((r) => (
-              <button key={r} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${r === '7 days' ? 'bg-brand-600 text-white' : 'text-slate-500 hover:bg-slate-50'}`}>{r}</button>
+        <Card title={t('admin.dashboard.revenueOverview')} subtitle={t('admin.dashboard.revenueTrend')} className="lg:col-span-2">
+          <div className="mb-3 flex items-center gap-2 flex-wrap">
+            {ranges.map((r) => (
+              <button key={r.key} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${r.key === '7' ? 'bg-brand-600 text-white' : 'text-slate-500 hover:bg-slate-50'}`}>{r.label}</button>
             ))}
           </div>
           <AreaChart />
         </Card>
 
-        <Card title="Sales by Day" subtitle="Orders per weekday">
+        <Card title={t('admin.dashboard.salesByDay')} subtitle={t('admin.dashboard.ordersPerWeekday')}>
           <div className="space-y-3">
             {salesData.map((d) => (
               <div key={d.label}>
@@ -101,8 +104,8 @@ export default function Dashboard() {
 
       <div className="grid lg:grid-cols-2 gap-6">
         <Card
-          title="Recent Orders"
-          actions={<Link to="/admin/orders" className="text-xs font-semibold text-brand-600 hover:underline">View all</Link>}
+          title={t('admin.dashboard.recentOrders')}
+          actions={<Link to="/admin/orders" className="text-xs font-semibold text-brand-600 hover:underline">{t('admin.common.viewAll')}</Link>}
           className="overflow-hidden"
         >
           <div className="divide-y divide-slate-50">
@@ -115,23 +118,23 @@ export default function Dashboard() {
                   <p className="text-sm font-semibold text-midnight-900 truncate">{o.items?.[0]?.product?.name || o.id}</p>
                   <p className="text-xs text-slate-400">{o.id} · {formatDate(o.date)}</p>
                 </div>
-                <span className="text-sm font-bold text-midnight-900">${o.total?.toFixed?.(2) || '0.00'}</span>
-                <StatusBadge o={o} />
+                <span className="text-sm font-bold text-midnight-900">{formatPrice ? formatPrice(o.total || 0) : `$${(o.total || 0).toFixed?.(2) || '0.00'}`}</span>
+                <StatusBadge o={o} t={t} />
               </div>
             ))}
             {orders.length === 0 && (
-              <p className="py-8 text-center text-sm text-slate-400">No orders placed yet.</p>
+              <p className="py-8 text-center text-sm text-slate-400">{t('admin.dashboard.noOrders')}</p>
             )}
           </div>
         </Card>
 
         <Card
-          title="Low Stock Alerts"
-          subtitle={`Products below the ${settings.lowStockThreshold} unit threshold`}
-          actions={<Link to="/admin/products" className="text-xs font-semibold text-brand-600 hover:underline">Manage</Link>}
+          title={t('admin.dashboard.lowStock')}
+          subtitle={t('admin.dashboard.lowStockSub', { threshold: settings.lowStockThreshold })}
+          actions={<Link to="/admin/products" className="text-xs font-semibold text-brand-600 hover:underline">{t('admin.common.manage')}</Link>}
         >
           {lowStock.length === 0 ? (
-            <p className="py-8 text-center text-sm text-slate-400">All products are sufficiently stocked.</p>
+            <p className="py-8 text-center text-sm text-slate-400">{t('admin.dashboard.stockedOk')}</p>
           ) : (
             <div className="space-y-3">
               {lowStock.slice(0, 6).map((p) => (
@@ -141,7 +144,7 @@ export default function Dashboard() {
                     <p className="text-sm font-semibold text-midnight-900 truncate">{p.name}</p>
                     <p className="text-xs text-slate-400">{p.category}</p>
                   </div>
-                  <Badge tone={p.stock <= 0 ? 'red' : 'amber'}>{p.stock} left</Badge>
+                  <Badge tone={p.stock <= 0 ? 'red' : 'amber'}>{t('admin.common.left', { count: p.stock })}</Badge>
                 </div>
               ))}
             </div>
@@ -152,7 +155,7 @@ export default function Dashboard() {
   )
 }
 
-function StatusBadge({ o }) {
+function StatusBadge({ o, t }) {
   const map = { confirmed: 'green', processing: 'amber', shipped: 'blue', delivered: 'green', cancelled: 'red' }
-  return <Badge tone={map[o.status] || 'gray'}>{o.status}</Badge>
+  return <Badge tone={map[o.status] || 'gray'}>{t(`admin.status.${o.status}`, { defaultValue: o.status })}</Badge>
 }

@@ -1,3 +1,5 @@
+import admin from './admin.en.js'
+
 export default {
   brand: 'ARAB Market',
   tagline: 'Premium Arab Marketplace',
@@ -86,16 +88,7 @@ export default {
     visit: 'Visit',
     copy: 'Copy'
   },
-  admin: {
-    login: {
-      title: 'ARAB Market Admin',
-      subtitle: 'Sign in to the control center',
-      username: 'Username',
-      password: 'Password',
-      submit: 'Sign in',
-      error: 'Invalid username or password'
-    }
-  },
+  admin,
   home: {
     heroBadge: 'Premium marketplace',
     heroTitle: 'Discover Luxury from Every Corner of the World',

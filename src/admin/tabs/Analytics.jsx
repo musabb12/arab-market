@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Stat, Bar } from '../ui.jsx'
 
@@ -33,6 +34,7 @@ function Lines({ data, color, label }) {
 }
 
 export default function Analytics() {
+  const { t } = useTranslation()
   const { products, orders, users, coupons } = useStore()
 
   const topProducts = [...products]
@@ -45,26 +47,26 @@ export default function Analytics() {
 
   return (
     <div>
-      <SectionTitle title="Analytics" subtitle="Store performance across all channels" />
+      <SectionTitle title={t('admin.analytics.title')} subtitle={t('admin.analytics.subtitle')} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-        <Stat icon="creditCard" label="Annual revenue" value={`$${revenue.toLocaleString()}`} delta={18.2} color="from-emerald-500 to-teal-600" />
-        <Stat icon="cart" label="Orders (12 mo)" value={ordersCount.toLocaleString()} delta={9.4} color="from-brand-500 to-indigo-600" />
-        <Stat icon="user" label="Conversion rate" value="3.42%" delta={0.8} color="from-purple-500 to-pink-500" />
-        <Stat icon="globe" label="Visit duration" value="4m 12s" delta={-2.1} color="from-amber-500 to-orange-600" />
+        <Stat icon="creditCard" label={t('admin.dashboard.revenue')} value={`$${revenue.toLocaleString()}`} delta={18.2} color="from-emerald-500 to-teal-600" />
+        <Stat icon="cart" label={t('admin.dashboard.orders')} value={ordersCount.toLocaleString()} delta={9.4} color="from-brand-500 to-indigo-600" />
+        <Stat icon="user" label={t('admin.dashboard.customers')} value={users.length.toLocaleString()} delta={0.8} color="from-purple-500 to-pink-500" />
+        <Stat icon="globe" label={t('admin.nav.analytics')} value="3.42%" delta={-2.1} color="from-amber-500 to-orange-600" />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
-        <Card title="Revenue trend" subtitle="Monthly gross revenue (thousands USD)">
+        <Card title={t('admin.analytics.revenueTrend')} subtitle={t('admin.analytics.revenueTrendSub')}>
           <Lines data={REVENUE} color="#3f6eee" label="rev" />
         </Card>
-        <Card title="Order volume" subtitle="Monthly order count">
+        <Card title={t('admin.analytics.orderVolume')} subtitle={t('admin.analytics.orderVolumeSub')}>
           <Lines data={ORDERS} color="#8b5cf6" label="ord" />
         </Card>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <Card title="Top products" subtitle="By units sold this quarter">
+        <Card title={t('admin.analytics.topProducts')} subtitle={t('admin.analytics.topProductsSub')}>
           <div className="space-y-4">
             {topProducts.map((p, i) => (
               <div key={p.id} className="flex items-center gap-3">
@@ -81,7 +83,7 @@ export default function Analytics() {
         </Card>
 
         <div className="space-y-6">
-          <Card title="Traffic sources">
+          <Card title={t('admin.analytics.traffic')}>
             <div className="space-y-3">
               {[
                 { label: 'Organic search', value: 46, color: 'bg-brand-500' },
@@ -101,12 +103,12 @@ export default function Analytics() {
             </div>
           </Card>
 
-          <Card title="Channel summary">
+          <Card title={t('admin.analytics.channelSummary')}>
             <div className="grid grid-cols-3 gap-3 text-center">
               {[
-                { icon: 'user', label: 'Customers', value: users.length },
-                { icon: 'tag', label: 'Coupons', value: coupons.length },
-                { icon: 'cart', label: 'Live orders', value: orders.length }
+                { icon: 'user', label: t('admin.dashboard.customers'), value: users.length },
+                { icon: 'tag', label: t('admin.nav.coupons'), value: coupons.length },
+                { icon: 'cart', label: t('admin.dashboard.orders'), value: orders.length }
               ].map((c) => (
                 <div key={c.label} className="bg-slate-50 rounded-xl p-4">
                   <p className="text-xl font-bold text-midnight-900">{c.value}</p>

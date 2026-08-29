@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Button, Modal, Field, TextInput, Select, Textarea, Toggle, Badge, StatusBadge, SearchInput, Table, Empty } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
@@ -13,6 +14,7 @@ const emptyForm = {
 }
 
 export default function Products() {
+  const { t } = useTranslation()
   const { siteData, updateSite, toast, refreshCatalog } = useStore()
   const { products, categories, brands, sellers } = siteData
   const [q, setQ] = useState('')
@@ -38,16 +40,16 @@ export default function Products() {
           ...prev,
           products: prev.products.map((p) => (p.id === editing.id ? { ...p, ...product, ...form } : p))
         }))
-        toast('Product updated')
+        toast(t('admin.common.saved'))
       } else {
         const { product } = await api.adminCreateProduct(form)
         updateSite((prev) => ({ ...prev, products: [{ ...product, stockBase: form.stock }, ...prev.products] }))
-        toast('Product created')
+        toast(t('admin.common.saved'))
       }
       setOpen(false)
       await refreshCatalog()
     } catch (err) {
-      toast(err.message || 'Save failed', 'error')
+      toast(err.message || t('admin.common.save'), 'error')
     }
   }
 
@@ -56,10 +58,10 @@ export default function Products() {
       const { api } = await import('../../api/client.js')
       await api.adminDeleteProduct(id)
       updateSite((prev) => ({ ...prev, products: prev.products.filter((p) => p.id !== id) }))
-      toast('Product removed', 'info')
+      toast(t('admin.common.delete'), 'info')
       await refreshCatalog()
     } catch (err) {
-      toast(err.message || 'Delete failed', 'error')
+      toast(err.message || t('admin.common.delete'), 'error')
     }
   }
 
@@ -70,36 +72,36 @@ export default function Products() {
       const { product } = await api.adminUpdateProduct(p.id, { active })
       updateSite((prev) => ({ ...prev, products: prev.products.map((x) => (x.id === p.id ? { ...x, ...product } : x)) }))
     } catch (err) {
-      toast(err.message || 'Update failed', 'error')
+      toast(err.message || t('admin.common.save'), 'error')
     }
   }
 
   return (
     <div>
       <SectionTitle
-        title="Products"
-        subtitle={`${list.length} of ${products.length} products`}
-        actions={<Button onClick={() => { setEditing(null); setOpen(true) }}><Icon name="plus" size={15} /> Add product</Button>}
+        title={t('admin.products.title')}
+        subtitle={t('admin.products.subtitle', { shown: list.length, total: products.length })}
+        actions={<Button onClick={() => { setEditing(null); setOpen(true) }}><Icon name="plus" size={15} /> {t('admin.products.add')}</Button>}
       />
 
       <Card className="mb-5">
         <div className="grid md:grid-cols-4 gap-3">
           <div className="md:col-span-2">
-            <SearchInput value={q} onChange={setQ} placeholder="Search by name or ID..." />
+            <SearchInput value={q} onChange={setQ} placeholder={t('admin.products.search')} />
           </div>
-          <Select value={cat} onChange={(e) => setCat(e.target.value)} options={[{ value: 'all', label: 'All categories' }, ...categories.map((c) => ({ value: c.id, label: catName(c) }))]} />
+          <Select value={cat} onChange={(e) => setCat(e.target.value)} options={[{ value: 'all', label: t('admin.common.all') }, ...categories.map((c) => ({ value: c.id, label: catName(c) }))]} />
           <div className="flex items-center gap-3 px-2">
             <Toggle checked={onlyActive} onChange={setOnlyActive} />
-            <span className="text-sm font-medium text-slate-600">Active only</span>
+            <span className="text-sm font-medium text-slate-600">{t('admin.products.activeOnly')}</span>
           </div>
         </div>
       </Card>
 
       <Card className="overflow-hidden">
         {list.length === 0 ? (
-          <Empty icon="box" title="No products found" subtitle="Try adjusting your filters or add a new product." />
+          <Empty icon="box" title={t('admin.products.empty')} subtitle={t('admin.products.emptySub')} />
         ) : (
-          <Table head={['Product', 'Category', 'Brand', 'Price', 'Stock', 'Status', 'Actions']}>
+          <Table head={[t('admin.reviews.product'), t('admin.common.category'), t('admin.common.brand'), t('admin.common.price'), t('admin.common.stock'), t('admin.common.status'), t('admin.common.actions')]}>
             {list.map((p) => (
               <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
                 <td className="px-4 py-3">
@@ -118,12 +120,12 @@ export default function Products() {
                   {p.originalPrice && <span className="text-xs text-slate-400 line-through ms-1.5">${p.originalPrice}</span>}
                 </td>
                 <td className="px-4 py-3">
-                  <Badge tone={p.stock <= 0 ? 'red' : p.stock < 50 ? 'amber' : 'green'}>{p.stock} in stock</Badge>
+                  <Badge tone={p.stock <= 0 ? 'red' : p.stock < 50 ? 'amber' : 'green'}>{p.stock}</Badge>
                 </td>
-                <td className="px-4 py-3"><StatusBadge status={p.active !== false ? 'active' : 'draft'} /></td>
+                <td className="px-4 py-3"><StatusBadge status={p.active !== false ? 'active' : 'inactive'} /></td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
-                    <button onClick={() => toggleActive(p)} className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-brand-600 transition-colors" title="Toggle active">
+                    <button onClick={() => toggleActive(p)} className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-brand-600 transition-colors" title={t('admin.products.toggleActive')}>
                       <Icon name={p.active !== false ? 'eye' : 'lock'} size={16} />
                     </button>
                     <button onClick={() => { setEditing(p); setOpen(true) }} className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-brand-600 transition-colors">
@@ -140,7 +142,7 @@ export default function Products() {
         )}
       </Card>
 
-      <Modal open={open} onClose={() => setOpen(false)} title={editing ? `Edit ${editing.name}` : 'Add product'} width="max-w-3xl">
+      <Modal open={open} onClose={() => setOpen(false)} title={editing ? t('admin.products.edit', { name: editing.name }) : t('admin.products.add')} width="max-w-3xl">
         <ProductForm key={editing?.id || 'new'} initial={editing} categories={categories} brands={brands} sellers={sellers} onSave={save} />
       </Modal>
     </div>
@@ -148,6 +150,7 @@ export default function Products() {
 }
 
 function ProductForm({ initial, categories, brands, sellers, onSave }) {
+  const { t } = useTranslation()
   const [form, setForm] = useState({ ...emptyForm, ...initial })
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
   const toggleBadge = (b) => setForm((f) => ({ ...f, badges: f.badges.includes(b) ? f.badges.filter((x) => x !== b) : [...f.badges, b] }))
@@ -171,48 +174,48 @@ function ProductForm({ initial, categories, brands, sellers, onSave }) {
   return (
     <form onSubmit={submit} className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-4">
-        <Field label="Name" className="sm:col-span-2">
-          <TextInput value={form.name} onChange={set('name')} required placeholder="Product name" />
+        <Field label={t('admin.common.name')} className="sm:col-span-2">
+          <TextInput value={form.name} onChange={set('name')} required placeholder={t('admin.products.productName')} />
         </Field>
-        <Field label="Image URL" className="sm:col-span-2">
+        <Field label={t('admin.common.imageUrl')} className="sm:col-span-2">
           <TextInput value={form.image} onChange={set('image')} placeholder="https://images.unsplash.com/..." />
         </Field>
-        <Field label="Price (USD)">
+        <Field label={t('admin.common.price')}>
           <TextInput type="number" step="0.01" value={form.price} onChange={set('price')} required />
         </Field>
-        <Field label="Original price">
+        <Field label={t('admin.products.originalPrice')}>
           <TextInput type="number" step="0.01" value={form.originalPrice} onChange={set('originalPrice')} />
         </Field>
-        <Field label="Category">
+        <Field label={t('admin.common.category')}>
           <Select value={form.category} onChange={set('category')} options={categories.map((c) => ({ value: c.id, label: catName(c) }))} />
         </Field>
-        <Field label="Brand">
+        <Field label={t('admin.common.brand')}>
           <Select value={form.brand} onChange={set('brand')} options={brands.map((b) => ({ value: b.id, label: b.name }))} />
         </Field>
-        <Field label="Seller">
+        <Field label={t('admin.products.sellerId')}>
           <Select value={form.sellerId} onChange={set('sellerId')} options={sellers.map((s) => ({ value: s.id, label: s.name }))} />
         </Field>
-        <Field label="Stock">
+        <Field label={t('admin.common.stock')}>
           <TextInput type="number" value={form.stock} onChange={set('stock')} />
         </Field>
-        <Field label="Rating">
+        <Field label={t('admin.reviews.rating')}>
           <TextInput type="number" step="0.1" min="0" max="5" value={form.rating} onChange={set('rating')} />
         </Field>
-        <Field label="Review count">
+        <Field label={t('admin.common.value')}>
           <TextInput type="number" value={form.reviews} onChange={set('reviews')} />
         </Field>
-        <Field label="Description" className="sm:col-span-2">
+        <Field label={t('admin.common.description')} className="sm:col-span-2">
           <Textarea rows={3} value={form.description} onChange={set('description')} />
         </Field>
-        <Field label="Specifications (comma separated)" className="sm:col-span-2">
+        <Field label={t('admin.common.description')} className="sm:col-span-2">
           <TextInput value={form.specs.join(', ')} onChange={set('specs')} />
         </Field>
-        <Field label="Colors (hex, comma separated)" className="sm:col-span-2">
+        <Field label={t('admin.common.image')} className="sm:col-span-2">
           <TextInput value={form.colors.join(', ')} onChange={set('colors')} />
         </Field>
       </div>
       <div>
-        <p className="text-xs font-semibold text-slate-500 mb-2">Badges</p>
+        <p className="text-xs font-semibold text-slate-500 mb-2">{t('admin.products.badges')}</p>
         <div className="flex flex-wrap gap-2">
           {BADGES.map((b) => (
             <button
@@ -229,10 +232,10 @@ function ProductForm({ initial, categories, brands, sellers, onSave }) {
       <div className="flex items-center justify-between pt-2 border-t border-slate-100">
         <div className="flex items-center gap-3">
           <Toggle checked={form.active !== false} onChange={(v) => setForm((f) => ({ ...f, active: v }))} />
-          <span className="text-sm font-medium text-slate-600">Product active</span>
+          <span className="text-sm font-medium text-slate-600">{t('admin.products.productActive')}</span>
         </div>
         <div className="flex items-center gap-2">
-          <Button type="submit">{initial ? 'Save changes' : 'Create product'}</Button>
+          <Button type="submit">{initial ? t('admin.common.save') : t('admin.common.create')}</Button>
         </div>
       </div>
     </form>

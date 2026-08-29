@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Select, Table, Badge, SearchInput, Empty, Button } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
@@ -6,10 +7,14 @@ import StarRating from '../../components/StarRating.jsx'
 import { formatDate } from '../../utils/helpers.js'
 
 export default function Reviews() {
+  const { t } = useTranslation()
   const { siteData, updateSite, toast } = useStore()
   const { reviews, products } = siteData
   const [status, setStatus] = useState('all')
   const [q, setQ] = useState('')
+
+  const approved = reviews.filter((r) => r.status === 'approved').length
+  const pending = reviews.filter((r) => r.status === 'pending').length
 
   const list = reviews.filter((r) => {
     if (status !== 'all' && r.status !== status) return false
@@ -17,32 +22,41 @@ export default function Reviews() {
     return true
   })
 
+  const statusLabel = (s) => {
+    if (['approved', 'pending'].includes(s)) return t(`admin.common.${s}`)
+    return t(`admin.status.${s}`, { defaultValue: s })
+  }
+
   const setReviewStatus = (id, s) => {
     updateSite((prev) => ({ ...prev, reviews: prev.reviews.map((r) => (r.id === id ? { ...r, status: s } : r)) }))
-    toast(`Review ${s}`)
+    toast(statusLabel(s))
   }
 
   const remove = (id) => {
     updateSite((prev) => ({ ...prev, reviews: prev.reviews.filter((r) => r.id !== id) }))
-    toast('Review removed', 'info')
+    toast(t('admin.common.delete'), 'info')
   }
 
   const productName = (id) => products.find((p) => p.id === id)?.name || id
 
   return (
     <div>
-      <SectionTitle title="Reviews" subtitle={`${reviews.filter((r) => r.status === 'approved').length} approved · ${reviews.filter((r) => r.status === 'pending').length} pending`} />
+      <SectionTitle title={t('admin.reviews.title')} subtitle={t('admin.reviews.subtitle', { approved, pending })} />
 
       <Card className="mb-5">
         <div className="grid md:grid-cols-3 gap-3">
-          <div className="md:col-span-2"><SearchInput value={q} onChange={setQ} placeholder="Search reviews..." /></div>
-          <Select value={status} onChange={(e) => setStatus(e.target.value)} options={[{ value: 'all', label: 'All statuses' }, { value: 'approved', label: 'Approved' }, { value: 'pending', label: 'Pending' }, { value: 'rejected', label: 'Rejected' }]} />
+          <div className="md:col-span-2"><SearchInput value={q} onChange={setQ} placeholder={t('admin.reviews.search')} /></div>
+          <Select value={status} onChange={(e) => setStatus(e.target.value)} options={[
+            { value: 'all', label: t('admin.common.all') },
+            { value: 'approved', label: t('admin.common.approved') },
+            { value: 'pending', label: t('admin.common.pending') }
+          ]} />
         </div>
       </Card>
 
       <Card className="overflow-hidden">
-        {list.length === 0 ? <Empty icon="star" title="No reviews found" /> : (
-          <Table head={['Product', 'Author', 'Rating', 'Review', 'Date', 'Status', 'Actions']}>
+        {list.length === 0 ? <Empty icon="star" title={t('admin.reviews.empty')} /> : (
+          <Table head={[t('admin.reviews.product'), t('admin.reviews.author'), t('admin.reviews.rating'), t('admin.reviews.comment'), t('admin.common.date'), t('admin.common.status'), t('admin.common.actions')]}>
             {list.map((r) => (
               <tr key={r.id} className="hover:bg-slate-50/50 align-top">
                 <td className="px-4 py-3">
@@ -55,14 +69,14 @@ export default function Reviews() {
                 <td className="px-4 py-3"><StarRating rating={r.rating} size={13} /></td>
                 <td className="px-4 py-3 text-slate-600 text-sm max-w-[280px]">{r.comment}</td>
                 <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{formatDate(r.date)}</td>
-                <td className="px-4 py-3"><Badge tone={r.status === 'approved' ? 'green' : r.status === 'pending' ? 'amber' : 'red'}>{r.status}</Badge></td>
+                <td className="px-4 py-3"><Badge tone={r.status === 'approved' ? 'green' : r.status === 'pending' ? 'amber' : 'red'}>{statusLabel(r.status)}</Badge></td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     {r.status !== 'approved' && (
-                      <Button size="sm" variant="success" onClick={() => setReviewStatus(r.id, 'approved')}>Approve</Button>
+                      <Button size="sm" variant="success" onClick={() => setReviewStatus(r.id, 'approved')}>{t('admin.common.approve')}</Button>
                     )}
                     {r.status === 'approved' && (
-                      <Button size="sm" variant="outline" onClick={() => setReviewStatus(r.id, 'pending')}>Unapprove</Button>
+                      <Button size="sm" variant="outline" onClick={() => setReviewStatus(r.id, 'pending')}>{t('admin.common.unapprove')}</Button>
                     )}
                     <button onClick={() => remove(r.id)} className="p-2 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600"><Icon name="trash" size={15} /></button>
                   </div>

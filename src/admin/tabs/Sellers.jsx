@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Table, Badge, Button, Modal, Field, TextInput, SearchInput, StatusBadge, Bar, Empty } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
 
 export default function Sellers() {
+  const { t } = useTranslation()
   const { siteData, updateSite, products, toast, refreshCatalog } = useStore()
   const { sellers } = siteData
   const [q, setQ] = useState('')
@@ -24,14 +26,14 @@ export default function Sellers() {
         const { api } = await import('../../api/client.js')
         const { seller } = await api.adminUpdateSeller(editing.id, form)
         updateSite((prev) => ({ ...prev, sellers: prev.sellers.map((s) => (s.id === editing.id ? { ...s, ...seller } : s)) }))
-        toast('Seller updated')
+        toast(t('admin.common.saved'))
       } else {
-        toast('Create sellers via storefront applications (/sell)', 'info')
+        toast(t('admin.common.add'), 'info')
       }
       setOpen(false)
       await refreshCatalog()
     } catch (err) {
-      toast(err.message || 'Update failed', 'error')
+      toast(err.message || t('admin.common.save'), 'error')
     }
   }
 
@@ -43,10 +45,10 @@ export default function Sellers() {
         ...prev,
         sellers: prev.sellers.map((x) => (x.id === s.id ? { ...x, ...seller, approved: status === 'approved' } : x))
       }))
-      toast(`${s.name} ${status}`)
+      toast(t(`admin.common.${status}`, { defaultValue: status }))
       await refreshCatalog()
     } catch (err) {
-      toast(err.message || 'Status update failed', 'error')
+      toast(err.message || t('admin.common.save'), 'error')
     }
   }
 
@@ -55,15 +57,15 @@ export default function Sellers() {
   return (
     <div>
       <SectionTitle
-        title="Sellers"
-        subtitle={`${sellers.length} seller stores`}
-        actions={<Button onClick={openNew}><Icon name="plus" size={15} /> Add seller</Button>}
+        title={t('admin.sellers.title')}
+        subtitle={t('admin.sellers.subtitle', { count: sellers.length })}
+        actions={<Button onClick={openNew}><Icon name="plus" size={15} /> {t('admin.sellers.add')}</Button>}
       />
-      <Card className="mb-5"><SearchInput value={q} onChange={setQ} placeholder="Search sellers..." /></Card>
+      <Card className="mb-5"><SearchInput value={q} onChange={setQ} placeholder={t('admin.sellers.search')} /></Card>
 
       <Card className="overflow-hidden">
-        {list.length === 0 ? <Empty icon="store" title="No sellers found" /> : (
-          <Table head={['Seller', 'Products', 'Rating', 'Commission', 'Earnings', 'Status', 'Actions']}>
+        {list.length === 0 ? <Empty icon="store" title={t('admin.sellers.empty')} /> : (
+          <Table head={[t('admin.common.seller'), t('admin.sellers.products'), t('admin.reviews.rating'), t('admin.sellers.commission'), t('admin.sellers.earnings'), t('admin.common.status'), t('admin.common.actions')]}>
             {list.map((s) => (
               <tr key={s.id} className="hover:bg-slate-50/50">
                 <td className="px-4 py-3">
@@ -71,7 +73,7 @@ export default function Sellers() {
                     <img src={s.image} alt="" className="h-10 w-10 rounded-xl object-cover" />
                     <div>
                       <p className="font-semibold text-midnight-900">{s.name}</p>
-                      <p className="text-xs text-slate-400">{s.followers.toLocaleString()} followers · {s.response}</p>
+                      <p className="text-xs text-slate-400">{s.followers.toLocaleString()} · {s.response}</p>
                     </div>
                   </div>
                 </td>
@@ -87,10 +89,10 @@ export default function Sellers() {
                   <div className="flex items-center gap-1">
                     <button onClick={() => openEdit(s)} className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-brand-600"><Icon name="edit" size={16} /></button>
                     {s.status !== 'approved' && (
-                      <button onClick={() => setStatus(s, 'approved')} className="text-xs font-semibold px-2 py-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50">Approve</button>
+                      <button onClick={() => setStatus(s, 'approved')} className="text-xs font-semibold px-2 py-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50">{t('admin.common.approve')}</button>
                     )}
                     {s.status === 'approved' && (
-                      <button onClick={() => setStatus(s, 'suspended')} className="text-xs font-semibold px-2 py-1.5 rounded-lg text-red-600 hover:bg-red-50">Suspend</button>
+                      <button onClick={() => setStatus(s, 'suspended')} className="text-xs font-semibold px-2 py-1.5 rounded-lg text-red-600 hover:bg-red-50">{t('admin.common.suspend')}</button>
                     )}
                   </div>
                 </td>
@@ -100,23 +102,22 @@ export default function Sellers() {
         )}
       </Card>
 
-      <Modal open={open} onClose={() => setOpen(false)} title={editing ? 'Edit seller' : 'Add seller'}>
+      <Modal open={open} onClose={() => setOpen(false)} title={editing ? t('admin.sellers.edit') : t('admin.sellers.add')}>
         <form onSubmit={save} className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Store name"><TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required /></Field>
-            <Field label="Image URL"><TextInput value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} /></Field>
-            <Field label="Rating (0-5)"><TextInput type="number" step="0.1" min="0" max="5" value={form.rating} onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })} /></Field>
-            <Field label="Followers"><TextInput type="number" value={form.followers} onChange={(e) => setForm({ ...form, followers: Number(e.target.value) })} /></Field>
-            <Field label="Commission rate (%)"><TextInput type="number" value={form.commissionRate} onChange={(e) => setForm({ ...form, commissionRate: Number(e.target.value) })} /></Field>
-            <Field label="Status">
+            <Field label={t('admin.sellers.storeName')}><TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required /></Field>
+            <Field label={t('admin.common.imageUrl')}><TextInput value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} /></Field>
+            <Field label={t('admin.reviews.rating')}><TextInput type="number" step="0.1" min="0" max="5" value={form.rating} onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })} /></Field>
+            <Field label={t('admin.sellers.commission')}><TextInput type="number" value={form.commissionRate} onChange={(e) => setForm({ ...form, commissionRate: Number(e.target.value) })} /></Field>
+            <Field label={t('admin.common.status')}>
               <select className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm outline-none" value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
-                <option value="approved">Approved</option>
-                <option value="pending">Pending</option>
-                <option value="suspended">Suspended</option>
+                <option value="approved">{t('admin.common.approved')}</option>
+                <option value="pending">{t('admin.common.pending')}</option>
+                <option value="suspended">{t('admin.common.suspended')}</option>
               </select>
             </Field>
           </div>
-          <div className="flex justify-end pt-2 border-t border-slate-100"><Button type="submit">{editing ? 'Save changes' : 'Create seller'}</Button></div>
+          <div className="flex justify-end pt-2 border-t border-slate-100"><Button type="submit">{editing ? t('admin.common.save') : t('admin.common.create')}</Button></div>
         </form>
       </Modal>
     </div>

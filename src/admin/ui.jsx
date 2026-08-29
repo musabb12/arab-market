@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import Icon from '../components/Icons.jsx'
 
@@ -58,7 +59,7 @@ export function Toggle({ checked, onChange, disabled }) {
       onClick={() => !disabled && onChange(!checked)}
       className={`relative h-6 w-11 rounded-full transition-colors shrink-0 ${checked ? 'bg-brand-600' : 'bg-slate-200'} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
-      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${checked ? 'left-[22px]' : 'left-0.5'}`} />
+      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${checked ? 'start-[22px]' : 'start-0.5'}`} />
     </button>
   )
 }
@@ -139,12 +140,18 @@ export function Badge({ tone = 'gray', children, className = '' }) {
 }
 
 export function StatusBadge({ status }) {
+  const { t } = useTranslation()
   const map = {
     approved: 'green', active: 'green', confirmed: 'green', delivered: 'green', resolved: 'green',
     pending: 'amber', processing: 'amber', shipped: 'blue', cancelled: 'red', rejected: 'red',
-    suspended: 'red', closed: 'gray', open: 'amber', published: 'green', draft: 'gray', low: 'amber'
+    suspended: 'red', closed: 'gray', open: 'amber', published: 'green', draft: 'gray', low: 'amber',
+    inactive: 'gray'
   }
-  return <Badge tone={map[status] || 'gray'}>{status}</Badge>
+  const commonStatuses = ['active', 'inactive', 'pending', 'approved', 'suspended']
+  const label = commonStatuses.includes(status)
+    ? t(`admin.common.${status}`)
+    : t(`admin.status.${status}`, { defaultValue: status })
+  return <Badge tone={map[status] || 'gray'}>{label}</Badge>
 }
 
 export function Modal({ open, onClose, title, children, width = 'max-w-2xl' }) {
