@@ -18,7 +18,7 @@ export default function Deals() {
 
   return (
     <div>
-      <PageHero title={t('deals.title')} subtitle={t('deals.subtitle')} crumb={t('nav.deals')} />
+      <PageHero title={t('deals.title')} subtitle={t('deals.subtitle')} crumb={t('nav.deals')}  theme="deals" />
       <Breadcrumb items={[{ label: t('nav.deals') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">

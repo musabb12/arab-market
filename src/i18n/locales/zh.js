@@ -91,6 +91,11 @@ export default {
     heroSubtitle: '精选全球数百万件高端商品，涵盖时尚、数码、美妆与家居。全球配送，直达您的手中。',
     heroCta: '开始购物',
     heroCta2: '探索特惠',
+    slides: {
+      h1: { title: '发现来自世界各地的臻品', subtitle: '海量时尚、电子、美妆与家居精品，一站购齐。' },
+      h2: { title: '最新高端时尚', subtitle: '设计师系列与经典单品，全球配送。' },
+      h3: { title: '新一代电子产品', subtitle: '旗舰数码与智能生活，超值之选。' }
+    },
     statsShoppers: '全球消费者',
     statsProducts: '高端商品',
     statsBrands: '信赖品牌',

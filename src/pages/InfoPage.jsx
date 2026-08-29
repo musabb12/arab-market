@@ -31,7 +31,7 @@ export default function InfoPage() {
 
   return (
     <div>
-      <PageHero title={title} crumb={title} />
+      <PageHero title={title} crumb={title}  theme="info" />
       <Breadcrumb items={[{ label: title }]} />
 
       <div className="max-w-3xl mx-auto px-4 py-12">

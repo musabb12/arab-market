@@ -91,6 +91,11 @@ export default {
     heroSubtitle: 'Compra millones de productos premium de moda, electrónica, belleza y hogar. Entregados en tu puerta con envío a todo el mundo.',
     heroCta: 'Empezar a Comprar',
     heroCta2: 'Explorar Ofertas',
+    slides: {
+      h1: { title: 'Descubre el lujo de cada rincón del mundo', subtitle: 'Compra millones de productos premium en moda, electrónica, belleza y hogar.' },
+      h2: { title: 'Lo último en moda premium', subtitle: 'Colecciones de diseñador y esenciales atemporales, con envío mundial.' },
+      h3: { title: 'Electrónica de nueva generación', subtitle: 'Gadgets insignia y tecnología para el hogar a precios imbatibles.' }
+    },
     statsShoppers: 'Compradores Globales',
     statsProducts: 'Productos Premium',
     statsBrands: 'Marcas de Confianza',

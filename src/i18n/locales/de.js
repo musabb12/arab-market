@@ -91,6 +91,11 @@ export default {
     heroSubtitle: 'Kaufen Sie Millionen von Premium-Produkten in den Bereichen Mode, Elektronik, Beauty und Zuhause. Lieferung bis vor Ihre Haustür mit weltweitem Versand.',
     heroCta: 'Jetzt einkaufen',
     heroCta2: 'Angebote entdecken',
+    slides: {
+      h1: { title: 'Entdecken Sie Luxus aus aller Welt', subtitle: 'Millionen Premium-Produkte aus Mode, Elektronik, Beauty und Wohnen.' },
+      h2: { title: 'Das Neueste in Premium-Fashion', subtitle: 'Designer-Kollektionen und zeitlose Essentials – weltweit geliefert.' },
+      h3: { title: 'Elektronik der nächsten Generation', subtitle: 'Flaggschiff-Gadgets und Smart Living zu unschlagbaren Preisen.' }
+    },
     statsShoppers: 'Käufer weltweit',
     statsProducts: 'Premium-Produkte',
     statsBrands: 'Vertrauenswürdige Marken',

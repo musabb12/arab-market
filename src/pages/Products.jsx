@@ -59,7 +59,7 @@ export default function Products() {
 
   return (
     <div>
-      <PageHero title={q ? t('search.results') : t('products.title')} subtitle={t('categories.subtitle')} crumb={t('nav.categories')} />
+      <PageHero title={q ? t('search.results') : t('products.title')} subtitle={t('categories.subtitle')} crumb={t('nav.categories')}  theme="products" />
       <Breadcrumb items={[{ label: t('products.title') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-6 grid lg:grid-cols-[280px_1fr] gap-8">

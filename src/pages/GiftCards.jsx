@@ -45,7 +45,7 @@ export default function GiftCards() {
 
   return (
     <div>
-      <PageHero title={t('gifts.title')} subtitle={t('gifts.subtitle')} crumb={t('gifts.title')} />
+      <PageHero title={t('gifts.title')} subtitle={t('gifts.subtitle')} crumb={t('gifts.title')}  theme="gifts" />
       <Breadcrumb items={[{ label: t('gifts.title') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8 grid lg:grid-cols-2 gap-10">

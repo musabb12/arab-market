@@ -62,7 +62,7 @@ export default function Sell() {
 
   return (
     <div>
-      <PageHero title={t('sell.title')} subtitle={t('sell.subtitle')} crumb={t('nav.sell')} />
+      <PageHero title={t('sell.title')} subtitle={t('sell.subtitle')} crumb={t('nav.sell')}  theme="sell" />
       <Breadcrumb items={[{ label: t('nav.sell') }]} />
 
       <section className="relative overflow-hidden bg-gradient-to-br from-brand-700 via-indigo-700 to-purple-800 py-20">

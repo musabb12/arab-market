@@ -91,6 +91,11 @@ export default {
     heroSubtitle: 'Moda, elektronik, güzellik ve ev ürünleri dahil milyonlarca premium ürünü keşfedin. Dünya genelinde kargoyla kapınıza kadar teslim.',
     heroCta: 'Alışverişe Başla',
     heroCta2: 'Fırsatları Keşfet',
+    slides: {
+      h1: { title: 'Dünyanın her köşesinden lüksü keşfedin', subtitle: 'Moda, elektronik, güzellik ve ev kategorilerinde milyonlarca premium ürün.' },
+      h2: { title: 'En yeni premium moda', subtitle: 'Tasarımcı koleksiyonları ve zamansız parçalar, dünya çapında teslimat.' },
+      h3: { title: 'Yeni nesil elektronik', subtitle: 'Amiral gemisi cihazlar ve akıllı yaşam teknolojileri.' }
+    },
     statsShoppers: 'Küresel Alışverişçi',
     statsProducts: 'Premium Ürün',
     statsBrands: 'Güvenilir Marka',

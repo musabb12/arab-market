@@ -44,7 +44,7 @@ export default function TrackOrder() {
 
   return (
     <div>
-      <PageHero title={t('tracking.title')} subtitle={t('tracking.subtitle')} crumb={t('nav.trackOrder')} />
+      <PageHero title={t('tracking.title')} subtitle={t('tracking.subtitle')} crumb={t('nav.trackOrder')}  theme="track" />
       <Breadcrumb items={[{ label: t('tracking.title') }]} />
 
       <div className="max-w-3xl mx-auto px-4 py-10">

@@ -33,7 +33,7 @@ export default function CartPage() {
 
   return (
     <div>
-      <PageHero title={t('cart.title')} crumb={t('nav.cart')} />
+      <PageHero title={t('cart.title')} crumb={t('nav.cart')}  theme="cart" />
       <Breadcrumb items={[{ label: t('cart.title') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">

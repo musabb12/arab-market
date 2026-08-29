@@ -19,7 +19,7 @@ export default function Coupons() {
 
   return (
     <div>
-      <PageHero title={t('deals.couponTitle')} subtitle={t('deals.couponSubtitle')} crumb={t('deals.couponTitle')} />
+      <PageHero title={t('deals.couponTitle')} subtitle={t('deals.couponSubtitle')} crumb={t('deals.couponTitle')}  theme="coupons" />
       <Breadcrumb items={[{ label: t('deals.couponTitle') }]} />
 
       <div className="max-w-5xl mx-auto px-4 py-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

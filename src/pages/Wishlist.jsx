@@ -14,7 +14,7 @@ export default function Wishlist() {
 
   return (
     <div>
-      <PageHero title={t('wishlist.title')} subtitle={t('wishlist.items', { count: wishlist.length })} crumb={t('nav.wishlist')} />
+      <PageHero title={t('wishlist.title')} subtitle={t('wishlist.items', { count: wishlist.length })} crumb={t('nav.wishlist')}  theme="wishlist" />
       <Breadcrumb items={[{ label: t('wishlist.title') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">

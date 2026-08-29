@@ -91,6 +91,11 @@ export default {
     heroSubtitle: 'Parcourez des millions de produits premium dans les domaines de la mode, de l\'électronique, de la beauté et de la maison. Livrés à votre porte grâce à une expédition dans le monde entier.',
     heroCta: 'Commencer vos achats',
     heroCta2: 'Explorer les offres',
+    slides: {
+      h1: { title: 'Découvrez le luxe aux quatre coins du monde', subtitle: 'Des millions de produits premium en mode, électronique, beauté et maison.' },
+      h2: { title: 'Le meilleur de la mode premium', subtitle: 'Collections de créateurs et essentiels intemporels, livrés dans le monde entier.' },
+      h3: { title: 'Électronique nouvelle génération', subtitle: 'Gadgets phares et maison connectée à des prix imbattables.' }
+    },
     statsShoppers: 'Acheteurs dans le monde',
     statsProducts: 'Produits premium',
     statsBrands: 'Marques de confiance',

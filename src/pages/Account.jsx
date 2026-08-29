@@ -49,7 +49,7 @@ export default function Account() {
 
   return (
     <div>
-      <PageHero title={t('account.title')} crumb={t('nav.account')} />
+      <PageHero title={t('account.title')} crumb={t('nav.account')}  theme="account" />
       <Breadcrumb items={[{ label: t('account.title') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">

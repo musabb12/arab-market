@@ -83,7 +83,7 @@ export default function SellerDashboard() {
   if (error || !data) {
     return (
       <div>
-        <PageHero title={t('seller.dashboard')} crumb={t('nav.sell')} />
+        <PageHero title={t('seller.dashboard')} crumb={t('nav.sell')}  theme="sell" />
         <div className="max-w-xl mx-auto px-4 py-16 text-center">
           <p className="text-slate-600 mb-6">{error || 'No seller profile found.'}</p>
           <Link to="/sell#apply" className="px-8 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold">
@@ -109,7 +109,7 @@ export default function SellerDashboard() {
 
   return (
     <div>
-      <PageHero title={t('seller.dashboard')} crumb={t('nav.sell')} />
+      <PageHero title={t('seller.dashboard')} crumb={t('nav.sell')}  theme="sell" />
       <Breadcrumb items={[{ label: t('seller.dashboard') }]} />
 
       {pending && (

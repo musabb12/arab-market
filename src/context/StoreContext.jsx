@@ -38,11 +38,39 @@ function deepMerge(base, override) {
   return out
 }
 
+const HERO_IMAGE_MIGRATION = {
+  'photo-1441986300917-64674bd600d8': 'photo-1483985988355-763728e1935b',
+  'photo-1490481651871-ab68de25d43d': 'photo-1469334031218-e382a71b716b',
+  'photo-1487014679447-9f8336841d58': 'photo-1511707171634-5f897ff02aa9'
+}
+
+function migrateHeroImages(siteData) {
+  if (!siteData?.content?.heroSlides) return siteData
+  const heroSlides = siteData.content.heroSlides.map((slide) => {
+    let image = slide.image || ''
+    for (const [from, to] of Object.entries(HERO_IMAGE_MIGRATION)) {
+      if (image.includes(from)) {
+        image = `https://images.unsplash.com/${to}?auto=format&fit=crop&w=1400&q=80`
+        break
+      }
+    }
+    return { ...slide, image }
+  })
+  return {
+    ...siteData,
+    content: { ...siteData.content, heroSlides },
+    settings: {
+      ...siteData.settings,
+      logoText: siteData.settings?.logoText === 'L' ? 'A' : siteData.settings?.logoText || 'A'
+    }
+  }
+}
+
 function loadSiteData() {
   const stored = loadJSON(STORAGE_KEYS.siteData, null)
   const merged = deepMerge(defaultSiteData, stored)
   if (!Array.isArray(merged.products) || merged.products.length === 0) merged.products = defaultSiteData.products
-  return merged
+  return migrateHeroImages(merged)
 }
 
 let toastSeq = 0

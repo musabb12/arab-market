@@ -91,6 +91,11 @@ export default {
     heroSubtitle: 'Shop millions of premium products across fashion, electronics, beauty and home. Delivered to your door with worldwide shipping.',
     heroCta: 'Start Shopping',
     heroCta2: 'Explore Deals',
+    slides: {
+      h1: { title: 'Discover Luxury from Every Corner of the World', subtitle: 'Shop millions of premium products across fashion, electronics, beauty and home.' },
+      h2: { title: 'The Latest in Premium Fashion', subtitle: 'Designer collections and timeless essentials, delivered worldwide.' },
+      h3: { title: 'Next-Generation Electronics', subtitle: 'Flagship gadgets and smart living technology at unbeatable prices.' }
+    },
     statsShoppers: 'Global Shoppers',
     statsProducts: 'Premium Products',
     statsBrands: 'Trusted Brands',

@@ -13,7 +13,7 @@ export default function NewArrivals() {
 
   return (
     <div>
-      <PageHero title={t('nav.newArrivals')} subtitle={t('home.newSubtitle')} crumb={t('nav.newArrivals')} />
+      <PageHero title={t('nav.newArrivals')} subtitle={t('home.newSubtitle')} crumb={t('nav.newArrivals')}  theme="new" />
       <Breadcrumb items={[{ label: t('nav.newArrivals') }]} />
       <div className="max-w-7xl mx-auto px-4 py-8">
         <ProductGrid products={list} cols={4} />

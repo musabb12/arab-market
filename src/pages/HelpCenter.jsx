@@ -32,7 +32,7 @@ export default function HelpCenter() {
 
   return (
     <div>
-      <PageHero title={t('help.title')} subtitle={t('help.subtitle')} crumb={t('nav.help')} />
+      <PageHero title={t('help.title')} subtitle={t('help.subtitle')} crumb={t('nav.help')}  theme="help" />
       <Breadcrumb items={[{ label: t('nav.help') }]} />
 
       <div className="max-w-4xl mx-auto px-4 py-10">

@@ -12,7 +12,7 @@ export default function BestSellers() {
 
   return (
     <div>
-      <PageHero title={t('nav.bestSellers')} subtitle={t('home.bestSubtitle')} crumb={t('nav.bestSellers')} />
+      <PageHero title={t('nav.bestSellers')} subtitle={t('home.bestSubtitle')} crumb={t('nav.bestSellers')}  theme="bestsellers" />
       <Breadcrumb items={[{ label: t('nav.bestSellers') }]} />
       <div className="max-w-7xl mx-auto px-4 py-8">
         <ProductGrid products={list} cols={4} />

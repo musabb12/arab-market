@@ -14,7 +14,7 @@ export default function OrdersPage() {
 
   return (
     <div>
-      <PageHero title={t('orders.title')} crumb={t('nav.orders')} />
+      <PageHero title={t('orders.title')} crumb={t('nav.orders')}  theme="account" />
       <Breadcrumb items={[{ label: t('orders.title') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">

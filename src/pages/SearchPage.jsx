@@ -25,7 +25,7 @@ export default function SearchPage() {
 
   return (
     <div>
-      <PageHero title={t('search.results')} subtitle={q ? `"${q}"` : ''} crumb={t('search.button')} />
+      <PageHero title={t('search.results')} subtitle={q ? `"${q}"` : ''} crumb={t('search.button')}  theme="search" />
       <Breadcrumb items={[{ label: t('search.results') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">

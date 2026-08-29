@@ -79,8 +79,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 py-14 grid grid-cols-2 md:grid-cols-5 gap-10">
         <div className="col-span-2">
           <div className="flex items-center gap-2.5 mb-4">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600">
-              <Icon name="sparkle" size={20} className="text-white" />
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600 font-display text-lg font-bold text-white">
+              {settings?.logoText || 'A'}
             </span>
             <span className="font-display text-xl font-bold text-white">
               {settings?.siteName || 'ARAB'} {settings?.siteSuffix || 'Market'}

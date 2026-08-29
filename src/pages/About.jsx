@@ -37,7 +37,7 @@ export default function About() {
 
   return (
     <div>
-      <PageHero title={t('about.title')} subtitle={t('about.subtitle')} crumb={t('footer.about')} />
+      <PageHero title={t('about.title')} subtitle={t('about.subtitle')} crumb={t('footer.about')}  theme="about" />
       <Breadcrumb items={[{ label: t('footer.about') }]} />
 
       {/* Story */}

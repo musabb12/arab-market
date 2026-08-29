@@ -24,7 +24,7 @@ export default function Settings() {
 
   return (
     <div>
-      <PageHero title={t('account.settings')} crumb={t('nav.account')} />
+      <PageHero title={t('account.settings')} crumb={t('nav.account')}  theme="account" />
       <Breadcrumb items={[{ label: t('account.settings') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">

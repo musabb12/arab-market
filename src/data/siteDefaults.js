@@ -40,9 +40,9 @@ export const defaultSiteData = {
   content: {
     announcement: 'Free worldwide shipping on orders over $99',
     heroSlides: [
-      { id: 'h1', image: img('photo-1441986300917-64674bd600d8'), title: 'Discover Luxury from Every Corner of the World', subtitle: 'Shop millions of premium products across fashion, electronics, beauty and home.', enabled: true },
-      { id: 'h2', image: img('photo-1490481651871-ab68de25d43d'), title: 'The Latest in Premium Fashion', subtitle: 'Designer collections and timeless essentials, delivered worldwide.', enabled: true },
-      { id: 'h3', image: img('photo-1487014679447-9f8336841d58'), title: 'Next-Generation Electronics', subtitle: 'Flagship gadgets and smart living technology at unbeatable prices.', enabled: true }
+      { id: 'h1', image: img('photo-1483985988355-763728e1935b'), title: 'Discover Luxury from Every Corner of the World', subtitle: 'Shop millions of premium products across fashion, electronics, beauty and home.', enabled: true },
+      { id: 'h2', image: img('photo-1469334031218-e382a71b716b'), title: 'The Latest in Premium Fashion', subtitle: 'Designer collections and timeless essentials, delivered worldwide.', enabled: true },
+      { id: 'h3', image: img('photo-1511707171634-5f897ff02aa9'), title: 'Next-Generation Electronics', subtitle: 'Flagship gadgets and smart living technology at unbeatable prices.', enabled: true }
     ],
     promo: {
       enabled: true,

@@ -12,7 +12,7 @@ export default function Brands() {
 
   return (
     <div>
-      <PageHero title={t('brands.title')} subtitle={t('brands.subtitle')} crumb={t('nav.brands')} />
+      <PageHero title={t('brands.title')} subtitle={t('brands.subtitle')} crumb={t('nav.brands')}  theme="brands" />
       <Breadcrumb items={[{ label: t('nav.brands') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">

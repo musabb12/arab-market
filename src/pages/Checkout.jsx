@@ -45,7 +45,7 @@ export default function Checkout() {
   if (cart.length === 0 && step === 1) {
     return (
       <div>
-        <PageHero title={t('checkout.title')} crumb={t('cart.checkout')} />
+        <PageHero title={t('checkout.title')} crumb={t('cart.checkout')}  theme="checkout" />
         <div className="max-w-7xl mx-auto px-4 py-20 text-center">
           <h3 className="font-display text-2xl font-semibold text-midnight-900 mb-4">{t('cart.empty')}</h3>
           <Link to="/products" className="text-brand-600 font-semibold hover:underline">{t('cart.startShopping')}</Link>
@@ -85,7 +85,7 @@ export default function Checkout() {
 
   return (
     <div>
-      <PageHero title={t('checkout.title')} crumb={t('cart.checkout')} />
+      <PageHero title={t('checkout.title')} crumb={t('cart.checkout')}  theme="checkout" />
       <Breadcrumb items={[{ label: t('checkout.title') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8 grid lg:grid-cols-[1fr_400px] gap-8 items-start">

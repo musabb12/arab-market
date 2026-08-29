@@ -21,7 +21,7 @@ export default function ComparePage() {
 
   return (
     <div>
-      <PageHero title={t('compare.title')} subtitle={t('categories.subtitle')} crumb={t('compare.title')} />
+      <PageHero title={t('compare.title')} subtitle={t('categories.subtitle')} crumb={t('compare.title')}  theme="compare" />
       <Breadcrumb items={[{ label: t('compare.title') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">

@@ -25,7 +25,7 @@ export default function BrandDetail() {
 
   return (
     <div>
-      <PageHero title={brand.name} subtitle={brand.description} crumb={brand.name} />
+      <PageHero title={brand.name} subtitle={brand.description} crumb={brand.name}  theme="brands" />
       <Breadcrumb items={[{ to: '/brands', label: t('nav.brands') }, { label: brand.name }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">

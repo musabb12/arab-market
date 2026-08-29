@@ -27,7 +27,7 @@ export default function Contact() {
 
   return (
     <div>
-      <PageHero title={t('contact.title')} subtitle={t('contact.subtitle')} crumb={t('footer.contactUs')} />
+      <PageHero title={t('contact.title')} subtitle={t('contact.subtitle')} crumb={t('footer.contactUs')}  theme="contact" />
       <Breadcrumb items={[{ label: t('footer.contactUs') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-10 grid lg:grid-cols-2 gap-10">

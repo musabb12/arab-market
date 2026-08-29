@@ -9,20 +9,22 @@ import StarRating from '../components/StarRating.jsx'
 import Icon from '../components/Icons.jsx'
 
 export default function Home() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { formatPrice, products, categories, brands, testimonials, content, settings } = useStore()
   const [slide, setSlide] = useState(0)
 
   const heroSlides = (content.heroSlides || []).filter((s) => s.enabled !== false).map((s) => ({
+    id: s.id,
     image: s.image,
-    title: s.title,
-    sub: s.subtitle
+    title: t(`home.slides.${s.id}.title`, { defaultValue: s.title }),
+    sub: t(`home.slides.${s.id}.subtitle`, { defaultValue: s.subtitle })
   }))
 
   useEffect(() => {
+    if (!heroSlides.length) return
     const id = setInterval(() => setSlide((s) => (s + 1) % heroSlides.length), 6500)
     return () => clearInterval(id)
-  }, [])
+  }, [heroSlides.length])
 
   const flashProducts = products.filter((p) => p.badges?.includes('flashSale')).slice(0, 8)
   const featured = products.filter((p) => p.badges?.includes('featured')).slice(0, 8)
@@ -30,42 +32,40 @@ export default function Home() {
   const newArrivals = products.filter((p) => p.badges?.includes('newArrival')).slice(0, 8)
   const deals = [...products].sort((a, b) => (a.originalPrice ? (a.originalPrice - a.price) / a.originalPrice : 0) - (b.originalPrice ? (b.originalPrice - b.price) / b.originalPrice : 0)).slice(0, 8)
 
+  if (!heroSlides.length) return null
+
   return (
     <div>
       {/* HERO */}
       <section className="relative overflow-hidden bg-midnight-900 min-h-[560px] md:min-h-[640px] flex items-center">
-        <div className="absolute inset-0 bg-hero-mesh" />
+        <div className="absolute inset-0 bg-hero-mesh opacity-60" />
         <AnimatePresence mode="wait">
           <motion.div
             key={slide}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.35 }}
+            animate={{ opacity: 0.58 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.4 }}
+            transition={{ duration: 1.2 }}
             className="absolute inset-0"
           >
             <img src={heroSlides[slide].image} alt="" className="w-full h-full object-cover" />
           </motion.div>
         </AnimatePresence>
-        <div className="absolute inset-0 bg-gradient-to-r from-midnight-900 via-midnight-900/80 to-midnight-900/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-midnight-900/85 via-midnight-900/55 to-midnight-900/25" />
         <div className="relative max-w-7xl mx-auto px-4 py-24 w-full">
           <AnimatePresence mode="wait">
             <motion.div
-              key={slide}
+              key={`${slide}-${i18n.language}`}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.6 }}
               className="max-w-2xl"
             >
-              <span className="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider text-brand-200 mb-6">
-                <Icon name="sparkle" size={14} />
-                {t('home.heroBadge')}
-              </span>
               <h1 className="font-display text-4xl md:text-6xl font-semibold text-white leading-tight mb-6">
                 {heroSlides[slide].title}
               </h1>
-              <p className="text-slate-300 text-lg leading-relaxed mb-8 max-w-xl">
+              <p className="text-slate-200 text-lg leading-relaxed mb-8 max-w-xl">
                 {heroSlides[slide].sub}
               </p>
               <div className="flex flex-wrap items-center gap-4">

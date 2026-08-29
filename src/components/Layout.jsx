@@ -23,35 +23,63 @@ export function Layout({ children }) {
   )
 }
 
-export function PageHero({ title, subtitle, crumb, image }) {
-  return (
-    <div className="relative overflow-hidden bg-midnight-900">
-      <div className="absolute inset-0 bg-hero-mesh opacity-60" />
-      <div
-        className="absolute inset-0 opacity-10"
-        style={image ? { backgroundImage: `url(${image})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
-      />
-      <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-20 text-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          {crumb && (
-            <nav className="flex items-center justify-center gap-2 text-xs text-slate-400 mb-4">
-              <Link to="/" className="hover:text-white transition-colors">{tHome()}</Link>
-              <Icon name="chevronRight" size={12} />
-              <span className="text-slate-200">{crumb}</span>
-            </nav>
-          )}
-          <h1 className="font-display text-3xl md:text-5xl font-semibold text-white mb-4">{title}</h1>
-          {subtitle && <p className="text-slate-300 max-w-2xl mx-auto leading-relaxed">{subtitle}</p>}
-        </motion.div>
-      </div>
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-brand-500/50 to-transparent" />
-    </div>
-  )
+export const PAGE_HERO_IMAGES = {
+  deals: 'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?auto=format&fit=crop&w=1600&q=80',
+  products: 'https://images.unsplash.com/photo-1555529771-835f59fc5efe?auto=format&fit=crop&w=1600&q=80',
+  brands: 'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1600&q=80',
+  gifts: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=1600&q=80',
+  new: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80',
+  bestsellers: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1600&q=80',
+  cart: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=80',
+  checkout: 'https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1600&q=80',
+  account: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80',
+  wishlist: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=80',
+  sell: 'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=1600&q=80',
+  about: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1600&q=80',
+  contact: 'https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&w=1600&q=80',
+  help: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1600&q=80',
+  search: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1600&q=80',
+  track: 'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&w=1600&q=80',
+  coupons: 'https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1600&q=80',
+  compare: 'https://images.unsplash.com/photo-1556742111-a301076d9d18?auto=format&fit=crop&w=1600&q=80',
+  store: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=1600&q=80',
+  info: 'https://images.unsplash.com/photo-1450101499163-c8848c509772?auto=format&fit=crop&w=1600&q=80',
+  default: 'https://images.unsplash.com/photo-1555529771-835f59fc5efe?auto=format&fit=crop&w=1600&q=80'
 }
 
-function tHome() {
+export function PageHero({ title, subtitle, crumb, image, theme = 'default' }) {
   const { t } = useTranslation()
-  return t('common.breadcrumbHome')
+  const bg = image || PAGE_HERO_IMAGES[theme] || PAGE_HERO_IMAGES.default
+
+  return (
+    <div className="relative overflow-hidden bg-midnight-900 min-h-[220px] md:min-h-[280px] flex items-center">
+      <div
+        className="absolute inset-0 scale-105"
+        style={{
+          backgroundImage: `url(${bg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      />
+      <div className="absolute inset-0 bg-midnight-900/55" />
+      <div className="absolute inset-0 bg-gradient-to-r from-midnight-900/80 via-midnight-900/45 to-brand-900/35" />
+      <div className="absolute inset-0 bg-hero-mesh opacity-30" />
+      <div className="relative max-w-7xl mx-auto px-4 py-14 md:py-16 w-full text-center">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
+          {crumb && (
+            <nav className="flex items-center justify-center gap-2 text-xs text-slate-300 mb-4">
+              <Link to="/" className="hover:text-white transition-colors">{t('common.breadcrumbHome')}</Link>
+              <Icon name="chevronRight" size={12} />
+              <span className="text-white/90">{crumb}</span>
+            </nav>
+          )}
+          <h1 className="font-display text-3xl md:text-5xl font-semibold text-white mb-3 drop-shadow-sm">{title}</h1>
+          {subtitle && <p className="text-slate-200 max-w-2xl mx-auto leading-relaxed">{subtitle}</p>}
+        </motion.div>
+      </div>
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+    </div>
+  )
 }
 
 export function Breadcrumb({ items }) {

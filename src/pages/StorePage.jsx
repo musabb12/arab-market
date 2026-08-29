@@ -23,7 +23,7 @@ export default function StorePage() {
 
   return (
     <div>
-      <PageHero title={seller.name} subtitle={t('store.title')} crumb={seller.name} />
+      <PageHero title={seller.name} subtitle={t('store.title')} crumb={seller.name}  theme="store" />
       <Breadcrumb items={[{ label: t('store.title') }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">
