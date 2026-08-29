@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
-import { SectionTitle, Card, Button, Modal, Field, TextInput, Textarea, Toggle, Table, SearchInput, Badge } from '../ui.jsx'
+import { SectionTitle, Card, Button, Modal, Field, TextInput, Textarea, Toggle, SearchInput, Badge, AdminCardGrid, AdminEntityCard, AdminIconButton } from '../ui.jsx'
 import { catName } from '../../utils/catalog.js'
 import Icon from '../../components/Icons.jsx'
 
@@ -51,33 +51,52 @@ export default function Categories() {
       />
       <Card className="mb-5"><SearchInput value={q} onChange={setQ} placeholder={t('admin.categories.search')} /></Card>
 
-      <Card className="overflow-hidden">
-        {list.length === 0 ? (
+      {list.length === 0 ? (
+        <Card>
           <p className="py-12 text-center text-sm text-slate-400">{t('admin.categories.empty')}</p>
-        ) : (
-          <Table head={[t('admin.common.category'), t('admin.sellers.products'), t('admin.common.description'), t('admin.common.status'), t('admin.common.actions')]}>
-            {list.map((c) => (
-              <tr key={c.id} className="hover:bg-slate-50/50">
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <img src={c.image} alt="" className="h-11 w-11 rounded-xl object-cover" />
-                    <span className="font-semibold text-midnight-900">{catName(c)}</span>
+        </Card>
+      ) : (
+        <AdminCardGrid className="sm:grid-cols-2 xl:grid-cols-3">
+          {list.map((c) => (
+            <AdminEntityCard
+              key={c.id}
+              image={c.image}
+              imageAlt={catName(c)}
+              gradient={c.gradient}
+              title={catName(c)}
+              subtitle={`${countFor(c.id)} ${t('admin.sellers.products').toLowerCase()}`}
+              topBadges={[
+                { label: c.active !== false ? t('admin.common.active') : t('admin.common.inactive'), tone: c.active !== false ? 'green' : 'gray' },
+                { label: String(countFor(c.id)), tone: 'blue' }
+              ]}
+              meta={[
+                { label: t('admin.sellers.products'), value: countFor(c.id) },
+                { label: t('admin.common.status'), value: c.active !== false ? t('admin.common.active') : t('admin.common.inactive') }
+              ]}
+              footer={
+                <>
+                  <p className="text-xs text-slate-400 truncate flex-1 pe-2">
+                    {(c.subcategories || []).slice(0, 3).join(' · ')}
+                  </p>
+                  <div className="flex items-center gap-0.5 shrink-0">
+                    <AdminIconButton icon="edit" title={t('admin.common.edit')} onClick={() => openEdit(c)} />
+                    <AdminIconButton icon="trash" title={t('admin.common.delete')} variant="danger" onClick={() => remove(c.id)} />
                   </div>
-                </td>
-                <td className="px-4 py-3"><Badge tone="blue">{countFor(c.id)}</Badge></td>
-                <td className="px-4 py-3 text-slate-600 max-w-[280px] truncate">{c.subcategories.join(', ')}</td>
-                <td className="px-4 py-3"><Badge tone={c.active !== false ? 'green' : 'gray'}>{c.active !== false ? t('admin.common.active') : t('admin.common.inactive')}</Badge></td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => openEdit(c)} className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-brand-600"><Icon name="edit" size={16} /></button>
-                    <button onClick={() => remove(c.id)} className="p-2 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600"><Icon name="trash" size={16} /></button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </Table>
-        )}
-      </Card>
+                </>
+              }
+            >
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {(c.subcategories || []).slice(0, 4).map((sub) => (
+                  <Badge key={sub} tone="gray" className="text-[10px]">{sub}</Badge>
+                ))}
+                {(c.subcategories || []).length > 4 && (
+                  <Badge tone="gray" className="text-[10px]">+{(c.subcategories || []).length - 4}</Badge>
+                )}
+              </div>
+            </AdminEntityCard>
+          ))}
+        </AdminCardGrid>
+      )}
 
       <Modal open={open} onClose={() => setOpen(false)} title={editing ? t('admin.categories.edit') : t('admin.categories.add')}>
         <form onSubmit={save} className="space-y-4">

@@ -208,14 +208,107 @@ export function Empty({ icon = 'box', title, subtitle }) {
 export function SearchInput({ value, onChange, placeholder }) {
   return (
     <div className="relative">
-      <Icon name="search" size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+      <Icon name="search" size={16} className="absolute start-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`${inputClass} pl-10`}
+        className={`${inputClass} ps-10`}
       />
     </div>
+  )
+}
+
+export function AdminCardGrid({ children, className = '' }) {
+  return (
+    <div className={`grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 ${className}`}>
+      {children}
+    </div>
+  )
+}
+
+export function AdminIconButton({ icon, onClick, title, variant = 'default', className = '' }) {
+  const variants = {
+    default: 'hover:bg-slate-100 text-slate-500 hover:text-brand-600',
+    danger: 'hover:bg-red-50 text-slate-500 hover:text-red-600',
+    success: 'hover:bg-emerald-50 text-slate-500 hover:text-emerald-600'
+  }
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      className={`p-2 rounded-xl transition-colors ${variants[variant]} ${className}`}
+    >
+      <Icon name={icon} size={16} />
+    </button>
+  )
+}
+
+export function AdminEntityCard({
+  image,
+  imageAlt = '',
+  gradient,
+  topBadges = [],
+  title,
+  subtitle,
+  meta = [],
+  footer,
+  children,
+  className = ''
+}) {
+  return (
+    <motion.article
+      layout
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`group flex flex-col bg-white rounded-2xl border border-slate-100 shadow-soft overflow-hidden hover:shadow-lift hover:-translate-y-0.5 transition-all duration-300 ${className}`}
+    >
+      <div className="relative aspect-[5/4] overflow-hidden bg-slate-100">
+        {image ? (
+          <img
+            src={image}
+            alt={imageAlt}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+        ) : gradient ? (
+          <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
+        ) : null}
+        <div className="absolute inset-0 bg-gradient-to-t from-midnight-900/75 via-midnight-900/15 to-transparent" />
+        {topBadges.length > 0 && (
+          <div className="absolute top-3 start-3 end-3 flex flex-wrap gap-1.5">
+            {topBadges.map((b, i) => (
+              <Badge key={i} tone={b.tone || 'gray'} className="backdrop-blur-sm bg-white/90 shadow-sm">
+                {b.label}
+              </Badge>
+            ))}
+          </div>
+        )}
+        <div className="absolute bottom-0 inset-x-0 p-4">
+          <h3 className="font-semibold text-white text-sm leading-snug line-clamp-2 drop-shadow-sm">{title}</h3>
+          {subtitle && <p className="text-xs text-white/75 mt-1 truncate">{subtitle}</p>}
+        </div>
+      </div>
+      <div className="flex flex-col flex-1 p-4">
+        {meta.length > 0 && (
+          <div className="grid grid-cols-2 gap-2">
+            {meta.map((m, i) => (
+              <div key={i} className="rounded-xl bg-slate-50 px-3 py-2">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{m.label}</p>
+                <p className="text-sm font-semibold text-midnight-900 mt-0.5 truncate">{m.value}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {children}
+        {footer && (
+          <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            {footer}
+          </div>
+        )}
+      </div>
+    </motion.article>
   )
 }
 
@@ -243,7 +336,7 @@ export function Bar({ value, max, color = 'bg-brand-500' }) {
       <div className="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden">
         <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="text-xs font-semibold text-slate-500 w-12 text-right">{pct.toFixed(0)}%</span>
+      <span className="text-xs font-semibold text-slate-500 w-12 text-end">{pct.toFixed(0)}%</span>
     </div>
   )
 }

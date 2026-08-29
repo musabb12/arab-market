@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
-import { SectionTitle, Card, Table, Badge, Button, Modal, Field, TextInput, SearchInput, StatusBadge, Bar, Empty } from '../ui.jsx'
+import { SectionTitle, Card, Badge, Button, Modal, Field, TextInput, SearchInput, Bar, Empty, AdminCardGrid, AdminEntityCard, AdminIconButton } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
 
 export default function Sellers() {
   const { t } = useTranslation()
-  const { siteData, updateSite, products, toast, refreshCatalog } = useStore()
+  const { siteData, updateSite, products, toast, refreshCatalog, formatPrice } = useStore()
   const { sellers } = siteData
   const [q, setQ] = useState('')
   const [open, setOpen] = useState(false)
@@ -63,44 +63,55 @@ export default function Sellers() {
       />
       <Card className="mb-5"><SearchInput value={q} onChange={setQ} placeholder={t('admin.sellers.search')} /></Card>
 
-      <Card className="overflow-hidden">
-        {list.length === 0 ? <Empty icon="store" title={t('admin.sellers.empty')} /> : (
-          <Table head={[t('admin.common.seller'), t('admin.sellers.products'), t('admin.reviews.rating'), t('admin.sellers.commission'), t('admin.sellers.earnings'), t('admin.common.status'), t('admin.common.actions')]}>
-            {list.map((s) => (
-              <tr key={s.id} className="hover:bg-slate-50/50">
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <img src={s.image} alt="" className="h-10 w-10 rounded-xl object-cover" />
-                    <div>
-                      <p className="font-semibold text-midnight-900">{s.name}</p>
-                      <p className="text-xs text-slate-400">{s.followers.toLocaleString()} · {s.response}</p>
-                    </div>
+      {list.length === 0 ? (
+        <Card>
+          <Empty icon="store" title={t('admin.sellers.empty')} />
+        </Card>
+      ) : (
+        <AdminCardGrid className="sm:grid-cols-2 xl:grid-cols-3">
+          {list.map((s) => (
+            <AdminEntityCard
+              key={s.id}
+              image={s.image}
+              imageAlt={s.name}
+              gradient="from-brand-600 to-indigo-700"
+              title={s.name}
+              subtitle={`${s.followers?.toLocaleString?.() || s.followers} · ${s.response}`}
+              topBadges={[
+                {
+                  label: t(`admin.common.${s.status}`, { defaultValue: s.status }),
+                  tone: s.status === 'approved' ? 'green' : s.status === 'pending' ? 'amber' : 'red'
+                }
+              ]}
+              meta={[
+                { label: t('admin.sellers.products'), value: countFor(s.id) },
+                { label: t('admin.reviews.rating'), value: `${s.rating?.toFixed?.(1) || s.rating} ★` },
+                { label: t('admin.sellers.commission'), value: `${s.commissionRate}%` },
+                { label: t('admin.sellers.earnings'), value: formatPrice ? formatPrice(s.earnings || 0) : `$${(s.earnings || 0).toLocaleString()}` }
+              ]}
+              footer={
+                <>
+                  <div className="flex-1 min-w-0 pe-2">
+                    <Bar value={s.earnings || 0} max={maxEarnings} />
                   </div>
-                </td>
-                <td className="px-4 py-3"><Badge tone="blue">{countFor(s.id)}</Badge></td>
-                <td className="px-4 py-3 text-slate-600">{s.rating.toFixed(1)} ★</td>
-                <td className="px-4 py-3 text-slate-600">{s.commissionRate}%</td>
-                <td className="px-4 py-3 w-44">
-                  <div className="text-sm font-semibold text-midnight-900 mb-1">${s.earnings.toLocaleString()}</div>
-                  <Bar value={s.earnings} max={maxEarnings} />
-                </td>
-                <td className="px-4 py-3"><StatusBadge status={s.status} /></td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => openEdit(s)} className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-brand-600"><Icon name="edit" size={16} /></button>
-                    {s.status !== 'approved' && (
-                      <button onClick={() => setStatus(s, 'approved')} className="text-xs font-semibold px-2 py-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50">{t('admin.common.approve')}</button>
-                    )}
-                    {s.status === 'approved' && (
-                      <button onClick={() => setStatus(s, 'suspended')} className="text-xs font-semibold px-2 py-1.5 rounded-lg text-red-600 hover:bg-red-50">{t('admin.common.suspend')}</button>
+                  <div className="flex items-center gap-0.5 shrink-0">
+                    <AdminIconButton icon="edit" title={t('admin.common.edit')} onClick={() => openEdit(s)} />
+                    {s.status !== 'approved' ? (
+                      <button type="button" onClick={() => setStatus(s, 'approved')} className="text-xs font-semibold px-2.5 py-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors">
+                        {t('admin.common.approve')}
+                      </button>
+                    ) : (
+                      <button type="button" onClick={() => setStatus(s, 'suspended')} className="text-xs font-semibold px-2.5 py-1.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors">
+                        {t('admin.common.suspend')}
+                      </button>
                     )}
                   </div>
-                </td>
-              </tr>
-            ))}
-          </Table>
-        )}
-      </Card>
+                </>
+              }
+            />
+          ))}
+        </AdminCardGrid>
+      )}
 
       <Modal open={open} onClose={() => setOpen(false)} title={editing ? t('admin.sellers.edit') : t('admin.sellers.add')}>
         <form onSubmit={save} className="space-y-4">

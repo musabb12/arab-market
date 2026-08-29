@@ -237,7 +237,13 @@ export default {
     activeCoupons: 'Active coupons',
     flashSale: 'Flash sale',
     flashSub: '{{count}} products on flash sale',
-    preview: 'Live promotion preview'
+    preview: 'Live promotion preview',
+    badges: {
+      flashSale: 'Flash Sale',
+      featured: 'Featured',
+      bestSeller: 'Best Seller',
+      newArrival: 'New Arrival'
+    }
   },
   sellers: {
     title: 'Sellers',

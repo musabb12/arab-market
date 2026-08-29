@@ -237,7 +237,13 @@ export default {
     activeCoupons: 'كوبونات نشطة',
     flashSale: 'تخفيضات خاطفة',
     flashSub: '{{count}} منتج في التخفيضات الخاطفة',
-    preview: 'معاينة العرض المباشر'
+    preview: 'معاينة العرض المباشر',
+    badges: {
+      flashSale: 'تخفيض خاطف',
+      featured: 'مميز',
+      bestSeller: 'الأكثر مبيعاً',
+      newArrival: 'وصل حديثاً'
+    }
   },
   sellers: {
     title: 'البائعون',

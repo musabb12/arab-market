@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
-import { SectionTitle, Card, Button, Modal, Field, TextInput, Select, Textarea, Toggle, Badge, StatusBadge, SearchInput, Table, Empty } from '../ui.jsx'
+import { SectionTitle, Card, Button, Modal, Field, TextInput, Select, Textarea, Toggle, Badge, SearchInput, Empty, AdminCardGrid, AdminEntityCard, AdminIconButton } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
 import { getBrand, getCategory, catName } from '../../utils/helpers.js'
 
@@ -15,7 +15,7 @@ const emptyForm = {
 
 export default function Products() {
   const { t } = useTranslation()
-  const { siteData, updateSite, toast, refreshCatalog } = useStore()
+  const { siteData, updateSite, toast, refreshCatalog, formatPrice } = useStore()
   const { products, categories, brands, sellers } = siteData
   const [q, setQ] = useState('')
   const [cat, setCat] = useState('all')
@@ -97,50 +97,47 @@ export default function Products() {
         </div>
       </Card>
 
-      <Card className="overflow-hidden">
-        {list.length === 0 ? (
+      {list.length === 0 ? (
+        <Card>
           <Empty icon="box" title={t('admin.products.empty')} subtitle={t('admin.products.emptySub')} />
-        ) : (
-          <Table head={[t('admin.reviews.product'), t('admin.common.category'), t('admin.common.brand'), t('admin.common.price'), t('admin.common.stock'), t('admin.common.status'), t('admin.common.actions')]}>
-            {list.map((p) => (
-              <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <img src={p.image} alt="" className="h-11 w-11 rounded-xl object-cover shrink-0" />
-                    <div className="min-w-0">
-                      <p className="font-semibold text-midnight-900 truncate max-w-[220px]">{p.name}</p>
-                      <p className="text-xs text-slate-400">{p.id}</p>
-                    </div>
+        </Card>
+      ) : (
+        <AdminCardGrid>
+          {list.map((p) => (
+            <AdminEntityCard
+              key={p.id}
+              image={p.image}
+              imageAlt={p.name}
+              title={p.name}
+              subtitle={p.id}
+              topBadges={[
+                { label: p.active !== false ? t('admin.common.active') : t('admin.common.inactive'), tone: p.active !== false ? 'green' : 'gray' },
+                { label: p.stock <= 0 ? '0' : String(p.stock), tone: p.stock <= 0 ? 'red' : p.stock < 50 ? 'amber' : 'blue' }
+              ]}
+              meta={[
+                { label: t('admin.common.price'), value: formatPrice(p.price) },
+                { label: t('admin.common.stock'), value: p.stock },
+                { label: t('admin.common.category'), value: catName(getCategory(p.category)) },
+                { label: t('admin.common.brand'), value: getBrand(p.brand).name }
+              ]}
+              footer={
+                <>
+                  <div className="flex flex-wrap gap-1">
+                    {(p.badges || []).slice(0, 2).map((b) => (
+                      <Badge key={b} tone="purple" className="text-[10px]">{b}</Badge>
+                    ))}
                   </div>
-                </td>
-                <td className="px-4 py-3 text-slate-600">{catName(getCategory(p.category))}</td>
-                <td className="px-4 py-3 text-slate-600">{getBrand(p.brand).name}</td>
-                <td className="px-4 py-3 font-semibold text-midnight-900">
-                  ${p.price}
-                  {p.originalPrice && <span className="text-xs text-slate-400 line-through ms-1.5">${p.originalPrice}</span>}
-                </td>
-                <td className="px-4 py-3">
-                  <Badge tone={p.stock <= 0 ? 'red' : p.stock < 50 ? 'amber' : 'green'}>{p.stock}</Badge>
-                </td>
-                <td className="px-4 py-3"><StatusBadge status={p.active !== false ? 'active' : 'inactive'} /></td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => toggleActive(p)} className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-brand-600 transition-colors" title={t('admin.products.toggleActive')}>
-                      <Icon name={p.active !== false ? 'eye' : 'lock'} size={16} />
-                    </button>
-                    <button onClick={() => { setEditing(p); setOpen(true) }} className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-brand-600 transition-colors">
-                      <Icon name="edit" size={16} />
-                    </button>
-                    <button onClick={() => remove(p.id)} className="p-2 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600 transition-colors">
-                      <Icon name="trash" size={16} />
-                    </button>
+                  <div className="flex items-center gap-0.5">
+                    <AdminIconButton icon={p.active !== false ? 'eye' : 'lock'} title={t('admin.products.toggleActive')} onClick={() => toggleActive(p)} />
+                    <AdminIconButton icon="edit" title={t('admin.common.edit')} onClick={() => { setEditing(p); setOpen(true) }} />
+                    <AdminIconButton icon="trash" title={t('admin.common.delete')} variant="danger" onClick={() => remove(p.id)} />
                   </div>
-                </td>
-              </tr>
-            ))}
-          </Table>
-        )}
-      </Card>
+                </>
+              }
+            />
+          ))}
+        </AdminCardGrid>
+      )}
 
       <Modal open={open} onClose={() => setOpen(false)} title={editing ? t('admin.products.edit', { name: editing.name }) : t('admin.products.add')} width="max-w-3xl">
         <ProductForm key={editing?.id || 'new'} initial={editing} categories={categories} brands={brands} sellers={sellers} onSave={save} />
