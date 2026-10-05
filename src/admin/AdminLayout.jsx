@@ -92,7 +92,7 @@ export default function AdminLayout() {
   const Sidebar = (
     <div className="flex h-full flex-col bg-midnight-900">
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-white/10">
-        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600">
+        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600">
           <Icon name="shield" size={18} className="text-white" />
         </span>
         <div className="leading-tight">
@@ -158,7 +158,7 @@ export default function AdminLayout() {
       )}
 
       <div className="flex-1 lg:ms-64 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-100">
+        <header className="sticky top-0 z-30 bg-white border-b border-slate-100">
           <div className="flex items-center gap-3 px-4 md:px-6 h-16">
             <button className="lg:hidden p-2 -ms-2 text-midnight-900" onClick={() => setOpen(true)} aria-label="Menu">
               <Icon name="menu" size={22} />
@@ -212,7 +212,7 @@ export default function AdminLayout() {
                 )}
               </button>
               <div className="flex items-center gap-2.5 ps-2 border-s border-slate-100">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-indigo-600 text-white text-sm font-bold">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-white text-sm font-bold">
                   {adminSession.name?.[0] || adminSession.username?.[0] || 'A'}
                 </span>
                 <div className="hidden sm:block leading-tight">

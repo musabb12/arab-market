@@ -16,14 +16,8 @@ function Lines({ data, color, label }) {
   return (
     <div>
       <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-48" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id={`grad-${label}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.3" />
-            <stop offset="100%" stopColor={color} stopOpacity="0" />
-          </linearGradient>
-        </defs>
         {[0.25, 0.5, 0.75, 1].map((f) => <line key={f} x1="0" x2={w} y1={h * f} y2={h * f} stroke="#f1f5f9" />)}
-        <path d={area} fill={`url(#grad-${label})`} />
+        <path d={area} fill={color} fillOpacity="0.12" />
         <path d={line} fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
       <div className="flex justify-between mt-2 text-[11px] text-slate-400 px-1">
@@ -50,15 +44,15 @@ export default function Analytics() {
       <SectionTitle title={t('admin.analytics.title')} subtitle={t('admin.analytics.subtitle')} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-        <Stat icon="creditCard" label={t('admin.dashboard.revenue')} value={`$${revenue.toLocaleString()}`} delta={18.2} color="from-emerald-500 to-teal-600" />
-        <Stat icon="cart" label={t('admin.dashboard.orders')} value={ordersCount.toLocaleString()} delta={9.4} color="from-brand-500 to-indigo-600" />
-        <Stat icon="user" label={t('admin.dashboard.customers')} value={users.length.toLocaleString()} delta={0.8} color="from-purple-500 to-pink-500" />
-        <Stat icon="globe" label={t('admin.nav.analytics')} value="3.42%" delta={-2.1} color="from-amber-500 to-orange-600" />
+        <Stat icon="creditCard" label={t('admin.dashboard.revenue')} value={`$${revenue.toLocaleString()}`} delta={18.2} color="bg-emerald-600" />
+        <Stat icon="cart" label={t('admin.dashboard.orders')} value={ordersCount.toLocaleString()} delta={9.4} color="bg-brand-600" />
+        <Stat icon="user" label={t('admin.dashboard.customers')} value={users.length.toLocaleString()} delta={0.8} color="bg-midnight-700" />
+        <Stat icon="globe" label={t('admin.nav.analytics')} value="3.42%" delta={-2.1} color="bg-amber-500" />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         <Card title={t('admin.analytics.revenueTrend')} subtitle={t('admin.analytics.revenueTrendSub')}>
-          <Lines data={REVENUE} color="#3f6eee" label="rev" />
+          <Lines data={REVENUE} color="#e04418" label="rev" />
         </Card>
         <Card title={t('admin.analytics.orderVolume')} subtitle={t('admin.analytics.orderVolumeSub')}>
           <Lines data={ORDERS} color="#8b5cf6" label="ord" />
@@ -88,7 +82,7 @@ export default function Analytics() {
               {[
                 { label: 'Organic search', value: 46, color: 'bg-brand-500' },
                 { label: 'Direct', value: 24, color: 'bg-emerald-500' },
-                { label: 'Social media', value: 17, color: 'bg-purple-500' },
+                { label: 'Social media', value: 17, color: 'bg-midnight-700' },
                 { label: 'Referral', value: 9, color: 'bg-amber-500' },
                 { label: 'Email', value: 4, color: 'bg-rose-500' }
               ].map((s) => (

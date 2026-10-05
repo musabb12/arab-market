@@ -25,7 +25,7 @@ export function AccountNav({ active }) {
           <Link
             key={item.key}
             to={item.to}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${active === item.key ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-soft' : 'text-slate-600 hover:bg-slate-50 hover:text-brand-600'}`}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${active === item.key ? 'bg-brand-600 text-white shadow-soft' : 'text-slate-600 hover:bg-slate-50 hover:text-brand-600'}`}
           >
             <Icon name={item.icon} size={18} />
             {item.label}
@@ -41,10 +41,10 @@ export default function Account() {
   const { user, orders, wishlist, formatPrice, logout } = useStore()
 
   const stats = [
-    { icon: 'box', label: t('account.totalOrders'), value: orders.length, color: 'from-brand-500 to-indigo-600' },
-    { icon: 'creditCard', label: t('account.totalSpent'), value: formatPrice(orders.reduce((s, o) => s + o.total, 0)), color: 'from-emerald-500 to-teal-600' },
-    { icon: 'heart', label: t('account.wishlistCount'), value: wishlist.length, color: 'from-rose-500 to-pink-600' },
-    { icon: 'sparkle', label: t('account.rewardsPoints'), value: (orders.length * 50).toLocaleString(), color: 'from-amber-500 to-orange-600' }
+    { icon: 'box', label: t('account.totalOrders'), value: orders.length, color: 'bg-brand-600' },
+    { icon: 'creditCard', label: t('account.totalSpent'), value: formatPrice(orders.reduce((s, o) => s + o.total, 0)), color: 'bg-emerald-600' },
+    { icon: 'heart', label: t('account.wishlistCount'), value: wishlist.length, color: 'bg-rose-500' },
+    { icon: 'sparkle', label: t('account.rewardsPoints'), value: (orders.length * 50).toLocaleString(), color: 'bg-amber-500' }
   ]
 
   return (
@@ -59,7 +59,7 @@ export default function Account() {
           <div className="bg-white rounded-3xl border border-slate-100 shadow-soft p-7 mb-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-indigo-600 text-white text-2xl font-bold">
+                <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-600 text-white text-2xl font-bold">
                   {(user?.name?.[0] || 'G').toUpperCase()}
                 </span>
                 <div>
@@ -88,7 +88,7 @@ export default function Account() {
                 transition={{ duration: 0.4, delay: i * 0.06 }}
                 className="bg-white rounded-2xl border border-slate-100 shadow-soft p-5"
               >
-                <span className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${s.color} text-white mb-3`}>
+                <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${s.color} text-white mb-3`}>
                   <Icon name={s.icon} size={20} />
                 </span>
                 <p className="text-xl font-bold text-midnight-900">{s.value}</p>

@@ -91,7 +91,7 @@ export default function Tickets() {
             <div className="space-y-3 max-h-80 overflow-y-auto pr-1 mb-4">
               {active.messages.map((m, i) => (
                 <div key={i} className={`flex ${i % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
-                  <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm ${i % 2 === 0 ? 'bg-slate-100 text-slate-700' : 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white'}`}>
+                  <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm ${i % 2 === 0 ? 'bg-slate-100 text-slate-700' : 'bg-brand-600 text-white'}`}>
                     {m}
                   </div>
                 </div>

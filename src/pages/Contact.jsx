@@ -15,8 +15,8 @@ export default function Contact() {
 
   const channels = [
     { icon: 'headset', title: t('contact.supportTitle'), text: t('contact.supportText'), action: t('contact.phone'), value: '+1 (800) 555-0199', to: '/help' },
-    { icon: 'store', title: t('contact.salesTitle'), text: t('contact.salesText'), action: t('contact.email'), value: 'sell@luminamarket.com', to: '/sell' },
-    { icon: 'document', title: t('contact.pressTitle'), text: t('contact.pressText'), action: t('contact.email'), value: 'press@luminamarket.com', to: '/about' }
+    { icon: 'store', title: t('contact.salesTitle'), text: t('contact.salesText'), action: t('contact.email'), value: 'sell@ciarvip.com', to: '/sell' },
+    { icon: 'document', title: t('contact.pressTitle'), text: t('contact.pressText'), action: t('contact.email'), value: 'press@ciarvip.com', to: '/about' }
   ]
 
   const submit = (e) => {
@@ -36,7 +36,7 @@ export default function Contact() {
           <div className="grid sm:grid-cols-1 gap-4">
             {channels.map((c, i) => (
               <div key={c.title} className="bg-white rounded-2xl border border-slate-100 shadow-soft p-6 flex items-start gap-4">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600 text-white">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white">
                   <Icon name={c.icon} size={22} />
                 </span>
                 <div className="flex-1">
@@ -97,7 +97,7 @@ export default function Contact() {
                 <label className={label}>{t('contact.message')}</label>
                 <textarea required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className={`${input} resize-none`} />
               </div>
-              <button type="submit" className="w-full py-4 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold hover:shadow-glow transition-all">
+              <button type="submit" className="w-full py-4 rounded-full bg-brand-600 text-white font-semibold transition-all">
                 {t('contact.send')}
               </button>
             </form>

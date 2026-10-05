@@ -55,7 +55,7 @@ export default function TrackOrder() {
             placeholder={t('tracking.placeholder')}
             className="flex-1 border border-slate-200 rounded-2xl px-6 py-4 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100 transition-all"
           />
-          <button type="submit" className="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold flex items-center gap-2 hover:shadow-glow transition-all">
+          <button type="submit" className="px-8 py-4 rounded-2xl bg-brand-600 text-white font-semibold flex items-center gap-2 transition-all">
             <Icon name="truck" size={18} />
             {t('tracking.track')}
           </button>

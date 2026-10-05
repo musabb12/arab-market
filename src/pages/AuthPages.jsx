@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { useStore } from '../context/StoreContext.jsx'
@@ -9,7 +9,6 @@ import Icon from '../components/Icons.jsx'
 function AuthShell({ title, subtitle, children, side }) {
   return (
     <div className="relative overflow-hidden min-h-[80vh] bg-white">
-      <div className="absolute inset-0 bg-hero-mesh opacity-40" />
       <div className="relative max-w-6xl mx-auto px-4 py-16 grid lg:grid-cols-2 gap-12 items-center">
         <motion.div
           initial={{ opacity: 0, x: -24 }}
@@ -19,7 +18,7 @@ function AuthShell({ title, subtitle, children, side }) {
         >
           <div className="relative">
             <img src={side.image} alt="" className="rounded-3xl shadow-lift aspect-[4/5] object-cover w-full max-w-md mx-auto" />
-            <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur rounded-2xl p-5 shadow-lift">
+            <div className="absolute bottom-6 left-6 right-6 bg-white rounded-2xl p-5 shadow-lift">
               <p className="font-display text-lg font-semibold text-midnight-900 mb-1">{side.quote}</p>
               <p className="text-xs text-slate-500">{side.author}</p>
             </div>
@@ -46,12 +45,12 @@ const sideImages = {
   login: {
     image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=80',
     quote: 'Premium shopping, delivered worldwide.',
-    author: 'ARAB Market'
+    author: 'Ciar VIP'
   },
   register: {
     image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1000&q=80',
     quote: 'Join millions of happy shoppers.',
-    author: 'ARAB Community'
+    author: 'Ciar VIP Community'
   }
 }
 
@@ -60,20 +59,21 @@ const input = 'w-full border border-slate-200 rounded-xl px-4 py-3.5 text-sm out
 export function Login() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { login, apiOnline } = useStore()
+  const location = useLocation()
+  const { login } = useStore()
   const [form, setForm] = useState({ email: '', password: '', remember: true })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const from = location.state?.from || '/'
 
   const submit = async (e) => {
     e.preventDefault()
     setError('')
     setLoading(true)
     try {
-      if (!apiOnline) throw new Error('Server offline. Start the API with npm run dev:all')
       const u = await login({ email: form.email, password: form.password })
       if (u.role === 'seller') navigate('/seller')
-      else navigate('/account')
+      else navigate(from === '/login' || from === '/register' ? '/' : from)
     } catch (err) {
       setError(err.message || 'Login failed')
     } finally {
@@ -83,6 +83,11 @@ export function Login() {
 
   return (
     <AuthShell title={t('auth.loginTitle')} subtitle={t('auth.loginSubtitle')} side={sideImages.login}>
+      {from && from !== '/' && (
+        <div className="mb-4 text-sm text-brand-700 bg-brand-50 border border-brand-100 rounded-xl px-4 py-3">
+          {t('auth.gateSubtitle')}
+        </div>
+      )}
       {error && <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">{error}</div>}
       <form onSubmit={submit} className="space-y-4">
         <div>
@@ -100,7 +105,7 @@ export function Login() {
           <input type="checkbox" checked={form.remember} onChange={(e) => setForm({ ...form, remember: e.target.checked })} className="h-4 w-4 rounded border-slate-300 accent-brand-600" />
           {t('auth.rememberMe')}
         </label>
-        <button type="submit" disabled={loading} className="w-full py-4 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold hover:shadow-glow transition-all disabled:opacity-60">
+        <button type="submit" disabled={loading} className="w-full py-4 rounded-full bg-brand-600 text-white font-semibold transition-all disabled:opacity-60">
           {loading ? '...' : t('auth.signIn')}
         </button>
       </form>
@@ -117,23 +122,24 @@ export function Login() {
 export function Register() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { register, apiOnline } = useStore()
+  const location = useLocation()
+  const { register } = useStore()
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '', agree: true })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const from = location.state?.from || '/'
 
   const submit = async (e) => {
     e.preventDefault()
     setError('')
     if (form.password !== form.confirm) {
-      setError('Passwords do not match')
+      setError(t('auth.passwordMismatch'))
       return
     }
     setLoading(true)
     try {
-      if (!apiOnline) throw new Error('Server offline. Start the API with npm run dev:all')
       await register({ name: form.name, email: form.email, password: form.password })
-      navigate('/account')
+      navigate(from === '/login' || from === '/register' ? '/' : from)
     } catch (err) {
       setError(err.message || 'Registration failed')
     } finally {
@@ -167,7 +173,7 @@ export function Register() {
           <input type="checkbox" checked={form.agree} onChange={(e) => setForm({ ...form, agree: e.target.checked })} className="h-4 w-4 rounded border-slate-300 accent-brand-600" />
           {t('auth.agreeTerms')}
         </label>
-        <button type="submit" disabled={!form.agree || form.password !== form.confirm || loading} className="w-full py-4 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold hover:shadow-glow transition-all disabled:opacity-40">
+        <button type="submit" disabled={!form.agree || form.password !== form.confirm || loading} className="w-full py-4 rounded-full bg-brand-600 text-white font-semibold transition-all disabled:opacity-40">
           {loading ? '...' : t('auth.createAccount')}
         </button>
       </form>
@@ -212,7 +218,7 @@ export function ForgotPassword() {
             <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('auth.email')}</label>
             <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className={input} />
           </div>
-          <button type="submit" className="w-full py-4 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold hover:shadow-glow transition-all">
+          <button type="submit" className="w-full py-4 rounded-full bg-brand-600 text-white font-semibold transition-all">
             {t('auth.sendReset')}
           </button>
         </form>

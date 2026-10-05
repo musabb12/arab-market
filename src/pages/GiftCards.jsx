@@ -7,10 +7,10 @@ import Icon from '../components/Icons.jsx'
 
 const amounts = [25, 50, 100, 150, 250, 500]
 const designs = [
-  { id: 'gold', label: 'Aurum', gradient: 'from-amber-400 via-yellow-300 to-amber-500' },
-  { id: 'noir', label: 'Noir', gradient: 'from-slate-800 via-midnight-900 to-slate-700' },
-  { id: 'rose', label: 'Rosé', gradient: 'from-rose-400 via-pink-300 to-rose-500' },
-  { id: 'sapphire', label: 'Sapphire', gradient: 'from-blue-600 via-indigo-500 to-purple-500' }
+  { id: 'gold', label: 'Aurum', gradient: 'bg-amber-500' },
+  { id: 'noir', label: 'Noir', gradient: 'bg-slate-800' },
+  { id: 'rose', label: 'Rosé', gradient: 'bg-rose-400' },
+  { id: 'sapphire', label: 'Sapphire', gradient: 'bg-midnight-700' }
 ]
 
 export default function GiftCards() {
@@ -73,9 +73,9 @@ export default function GiftCards() {
                 <button
                   key={d.id}
                   onClick={() => setDesign(d.id)}
-                  className={`rounded-2xl p-2 border-2 transition-all ${design === d.id ? 'border-brand-600 shadow-glow' : 'border-transparent hover:border-slate-200'}`}
+                  className={`rounded-2xl p-2 border-2 transition-all ${design === d.id ? 'border-brand-600' : 'border-transparent hover:border-slate-200'}`}
                 >
-                  <span className={`flex h-20 items-center justify-center rounded-xl bg-gradient-to-br ${d.gradient} text-white font-semibold text-xs uppercase tracking-widest`}>
+                  <span className={`flex h-20 items-center justify-center rounded-xl ${d.gradient} text-white font-semibold text-xs uppercase tracking-widest`}>
                     {d.label}
                   </span>
                 </button>
@@ -126,13 +126,12 @@ export default function GiftCards() {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
-              className={`relative aspect-[4/5] max-w-md mx-auto rounded-3xl overflow-hidden bg-gradient-to-br ${current.gradient} shadow-lift`}
+              className={`relative aspect-[4/5] max-w-md mx-auto rounded-3xl overflow-hidden ${current.gradient} shadow-lift`}
             >
-              <div className="absolute inset-0 bg-[radial-gradient(400px_250px_at_80%_-10%,rgba(255,255,255,0.35),transparent_60%)]" />
               <div className="absolute inset-3 border border-white/40 rounded-2xl" />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
                 <Icon name="sparkle" size={28} className="text-white/90 mb-4" />
-                <p className="text-white font-display text-2xl font-semibold mb-1">ARAB</p>
+                <p className="text-white font-display text-2xl font-semibold mb-1">Ciar VIP</p>
                 <p className="text-white/80 text-xs uppercase tracking-[0.3em] mb-6">Gift Card</p>
                 <p className="text-white text-4xl md:text-5xl font-bold">{formatPrice(amount)}</p>
                 {recipient && <p className="text-white/90 text-sm mt-6">For {recipient}</p>}
@@ -147,7 +146,7 @@ export default function GiftCards() {
               </div>
               <button
                 onClick={() => addToCart(giftProduct)}
-                className="w-full py-4 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold flex items-center justify-center gap-2 hover:shadow-glow transition-all"
+                className="w-full py-4 rounded-full bg-brand-600 text-white font-semibold flex items-center justify-center gap-2 transition-all"
               >
                 <Icon name="cart" size={18} />
                 {t('gifts.addToCart')}
@@ -162,7 +161,7 @@ export default function GiftCards() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {features.map((f) => (
             <div key={f.text} className="bg-white rounded-2xl border border-slate-100 p-6 text-center">
-              <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-indigo-50 text-brand-600 mb-3">
+              <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 mb-3">
                 <Icon name={f.icon} size={22} />
               </span>
               <p className="text-sm font-semibold text-midnight-900">{f.text}</p>

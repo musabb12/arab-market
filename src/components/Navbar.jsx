@@ -1,11 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useStore } from '../context/StoreContext.jsx'
 import Icon from './Icons.jsx'
 
-function Dropdown({ trigger, children, align = 'right' }) {
+/** Routes with a dark full-bleed hero under the fixed navbar */
+function hasDarkHeroOverlay(pathname) {
+  if (pathname === '/') return true
+  if (
+    pathname.startsWith('/deals') ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/register') ||
+    pathname.startsWith('/forgot') ||
+    pathname.startsWith('/product/') ||
+    pathname.startsWith('/order-confirmation') ||
+    pathname.startsWith('/seller') ||
+    pathname === '/404'
+  ) {
+    return false
+  }
+  return true
+}
+
+function Dropdown({ trigger, children, align = 'right', light = false }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   useEffect(() => {
@@ -22,7 +40,9 @@ function Dropdown({ trigger, children, align = 'right' }) {
         className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-semibold transition-all ${
           open
             ? 'border-brand-200 bg-brand-50 text-brand-700'
-            : 'border-slate-200 bg-white text-midnight-800 hover:border-slate-300 hover:bg-slate-50'
+            : light
+              ? 'border-white/30 bg-white/10 text-white hover:bg-white/20 hover:border-white/45'
+              : 'border-slate-200 bg-white text-midnight-800 hover:border-slate-300 hover:bg-slate-50 dark:border-white/15 dark:bg-midnight-900 dark:text-white dark:hover:bg-midnight-800'
         }`}
       >
         {trigger}
@@ -35,7 +55,7 @@ function Dropdown({ trigger, children, align = 'right' }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.97 }}
             transition={{ duration: 0.18 }}
-            className={`absolute ${align === 'right' ? 'right-0' : 'left-0'} top-full mt-2 bg-white rounded-2xl shadow-lift border border-slate-100 py-2 min-w-[200px] z-50`}
+            className={`absolute ${align === 'right' ? 'right-0' : 'left-0'} top-full mt-2 bg-white dark:bg-midnight-900 rounded-2xl shadow-lift border border-slate-100 dark:border-white/10 py-2 min-w-[200px] z-50`}
           >
             {children}
           </motion.div>
@@ -48,6 +68,7 @@ function Dropdown({ trigger, children, align = 'right' }) {
 export default function Navbar() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
+  const location = useLocation()
   const {
     cartCount,
     wishlist,
@@ -61,12 +82,28 @@ export default function Navbar() {
     categories,
     activeLanguages,
     activeCurrencies,
-    settings
+    settings,
+    theme,
+    setTheme
   } = useStore()
   const [query, setQuery] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [catOpen, setCatOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(() => (typeof window !== 'undefined' ? window.scrollY > 24 : false))
   const catRef = useRef(null)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    setScrolled(window.scrollY > 24)
+    setCatOpen(false)
+    setMobileOpen(false)
+  }, [location.pathname])
 
   useEffect(() => {
     const close = (e) => {
@@ -84,6 +121,7 @@ export default function Navbar() {
   const currentLang = activeLanguages.find((l) => l.code === (language || 'en'))
   const ltr = i18n.dir() === 'ltr'
   const menuAlign = ltr ? 'right' : 'left'
+  const top = hasDarkHeroOverlay(location.pathname) && !scrolled
 
   const mainLinks = [
     { to: '/', key: 'nav.home' },
@@ -95,20 +133,31 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="sticky top-0 z-50">
-      <div className="bg-white/95 backdrop-blur-md border-b border-slate-100/80 shadow-[0_1px_0_rgba(15,23,42,0.04)]">
+    <header className="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+      <div
+        className={`transition-all duration-300 border-b ${
+          top
+            ? 'bg-transparent border-white/15'
+            : 'bg-white dark:bg-midnight-950 border-slate-200 dark:border-white/10 shadow-sm'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3 md:gap-4">
-          <button className="md:hidden p-2 -ms-2 text-midnight-900" onClick={() => setMobileOpen(true)} aria-label="Menu">
+          <button
+            className={`md:hidden p-2 -ms-2 transition-colors ${top ? 'text-white' : 'text-midnight-900 dark:text-white'}`}
+            onClick={() => setMobileOpen(true)}
+            aria-label="Menu"
+          >
             <Icon name="menu" size={24} />
           </button>
 
-          <Link to="/" className="flex items-center gap-2.5 shrink-0">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600 shadow-glow font-display text-lg font-bold text-white">
-              {settings?.logoText || 'A'}
-            </span>
-            <span className="hidden sm:block leading-tight">
-              <span className="block font-display text-lg font-bold text-midnight-900">{settings?.siteName || 'ARAB'}</span>
-              <span className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-600">{settings?.siteSuffix || 'Market'}</span>
+          <Link to="/" className="shrink-0">
+            <span
+              className={`font-display font-extrabold tracking-tight transition-colors ${
+                top ? 'text-white' : 'text-midnight-900 dark:text-white'
+              } text-3xl md:text-4xl leading-none`}
+            >
+              {settings?.siteName || 'Ciar'}{' '}
+              <span className={top ? 'text-brand-300' : 'text-brand-600'}>{settings?.siteSuffix || 'VIP'}</span>
             </span>
           </Link>
 
@@ -117,11 +166,15 @@ export default function Navbar() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t('search.placeholder')}
-              className="w-full rounded-full border border-slate-200 bg-slate-50 py-3 ps-5 pe-28 text-sm outline-none focus:border-brand-400 focus:bg-white focus:ring-4 focus:ring-brand-50 transition-all"
+              className={`w-full rounded-full border py-3 ps-5 pe-28 text-sm outline-none transition-all ${
+                top
+                  ? 'border-white/25 bg-white/10 text-white placeholder:text-white/60 focus:border-white/50 focus:bg-white/15'
+                  : 'border-slate-200 bg-slate-50 text-midnight-900 dark:bg-midnight-900 dark:border-white/10 dark:text-white focus:border-brand-400 focus:bg-white dark:focus:bg-midnight-800 focus:ring-4 focus:ring-brand-50'
+              }`}
             />
             <button
               type="submit"
-              className={`absolute ${ltr ? 'right-1' : 'left-1'} top-1 bottom-1 px-5 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold flex items-center gap-2 hover:opacity-90 transition-opacity`}
+              className={`absolute ${ltr ? 'right-1' : 'left-1'} top-1 bottom-1 px-5 rounded-full bg-brand-600 text-white text-sm font-semibold flex items-center gap-2 hover:opacity-90 transition-opacity`}
             >
               <Icon name="search" size={16} />
               <span className="hidden lg:inline">{t('search.button')}</span>
@@ -132,6 +185,7 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center gap-1.5 me-1">
               <Dropdown
                 align={menuAlign}
+                light={top}
                 trigger={
                   <>
                     <Icon name="globe" size={14} />
@@ -156,6 +210,7 @@ export default function Navbar() {
 
               <Dropdown
                 align={menuAlign}
+                light={top}
                 trigger={
                   <>
                     <Icon name="creditCard" size={14} />
@@ -177,14 +232,34 @@ export default function Navbar() {
               </Dropdown>
             </div>
 
-            <Link to="/track-order" className="hidden xl:flex items-center gap-2 px-3 py-2 text-sm font-medium text-midnight-800 hover:text-brand-600 transition-colors">
+            <button
+              type="button"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className={`inline-flex items-center gap-1.5 p-2.5 rounded-full transition-colors ${top ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-50 dark:hover:bg-white/10 text-midnight-900 dark:text-white'}`}
+              aria-label={theme === 'dark' ? t('common.lightMode') : t('common.darkMode')}
+              title={theme === 'dark' ? t('common.lightMode') : t('common.darkMode')}
+            >
+              <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={20} />
+            </button>
+
+            <Link
+              to="/track-order"
+              className={`hidden xl:flex items-center gap-2 px-3 py-2 text-sm font-medium transition-colors ${
+                top ? 'text-white/90 hover:text-white' : 'text-midnight-800 dark:text-slate-200 hover:text-brand-600'
+              }`}
+            >
               <Icon name="truck" size={18} />
               <span>{t('nav.trackOrder')}</span>
             </Link>
 
-            <Link to="/wishlist" className="relative p-2.5 rounded-full hover:bg-slate-50 transition-colors" aria-label={t('nav.wishlist')}>
-              <Icon name="heart" size={22} className="text-midnight-900" />
-              {wishlist.length > 0 && (
+            <Link
+              to={user ? '/wishlist' : '/login'}
+              state={user ? undefined : { from: '/wishlist' }}
+              className={`relative p-2.5 rounded-full transition-colors ${top ? 'hover:bg-white/10' : 'hover:bg-slate-50 dark:hover:bg-white/10'}`}
+              aria-label={t('nav.wishlist')}
+            >
+              <Icon name="heart" size={22} className={top ? 'text-white' : 'text-midnight-900 dark:text-white'} />
+              {user && wishlist.length > 0 && (
                 <span className="absolute -top-0.5 -end-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-white text-[10px] font-bold">{wishlist.length}</span>
               )}
             </Link>
@@ -192,6 +267,7 @@ export default function Navbar() {
             {user ? (
               <Dropdown
                 align={menuAlign}
+                light={top}
                 trigger={
                   <>
                     <Icon name="user" size={14} />
@@ -208,22 +284,38 @@ export default function Navbar() {
               <div className="hidden md:flex items-center gap-1.5">
                 <Link
                   to="/login"
-                  className="px-3.5 py-2 rounded-full text-sm font-semibold text-midnight-800 hover:bg-slate-50 transition-colors"
+                  className={`px-3.5 py-2 rounded-full text-sm font-semibold transition-colors ${
+                    top ? 'text-white hover:bg-white/10' : 'text-midnight-800 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10'
+                  }`}
                 >
                   {t('topBar.login')}
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 rounded-full bg-midnight-900 text-white text-sm font-semibold hover:bg-midnight-800 transition-colors"
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                    top
+                      ? 'keep-white bg-white text-[#0f2137] hover:bg-slate-100'
+                      : 'bg-midnight-900 text-white hover:bg-midnight-800 dark:keep-white dark:bg-white dark:text-[#0f2137] dark:hover:bg-slate-100'
+                  }`}
                 >
                   {t('topBar.register')}
                 </Link>
               </div>
             )}
 
-            <button onClick={() => setCartOpen(true)} className="relative p-2.5 rounded-full hover:bg-slate-50 transition-colors" aria-label={t('nav.cart')}>
-              <Icon name="cart" size={22} className="text-midnight-900" />
-              {cartCount > 0 && (
+            <button
+              onClick={() => {
+                if (!user) {
+                  navigate('/login', { state: { from: '/cart' } })
+                  return
+                }
+                setCartOpen(true)
+              }}
+              className={`relative p-2.5 rounded-full transition-colors ${top ? 'hover:bg-white/10' : 'hover:bg-slate-50 dark:hover:bg-white/10'}`}
+              aria-label={t('nav.cart')}
+            >
+              <Icon name="cart" size={22} className={top ? 'text-white' : 'text-midnight-900 dark:text-white'} />
+              {user && cartCount > 0 && (
                 <span className="absolute -top-0.5 -end-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-brand-600 text-white text-[10px] font-bold">{cartCount}</span>
               )}
             </button>
@@ -231,12 +323,22 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className="bg-white border-b border-slate-100 hidden md:block">
+      <div
+        className={`hidden md:block transition-all duration-300 border-b ${
+          top ? 'bg-transparent border-white/10' : 'bg-white dark:bg-midnight-950 border-slate-100 dark:border-white/10'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 flex items-center gap-1 text-sm">
           <div className="relative" ref={catRef}>
             <button
               onClick={() => setCatOpen((o) => !o)}
-              className={`flex items-center gap-2 px-4 py-3 font-semibold transition-colors ${catOpen ? 'text-brand-600' : 'text-midnight-900 hover:text-brand-600'}`}
+              className={`flex items-center gap-2 px-4 py-3 font-semibold transition-colors ${
+                catOpen
+                  ? 'text-brand-600'
+                  : top
+                    ? 'text-white hover:text-brand-300'
+                    : 'text-midnight-900 dark:text-white hover:text-brand-600'
+              }`}
             >
               <Icon name="menu" size={18} />
               {t('nav.categories')}
@@ -249,18 +351,18 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute start-0 top-full w-[760px] bg-white rounded-2xl shadow-lift border border-slate-100 grid grid-cols-2 gap-1 p-4 z-50"
+                  className="absolute start-0 top-full w-[760px] bg-white dark:bg-midnight-900 rounded-2xl shadow-lift border border-slate-100 dark:border-white/10 grid grid-cols-2 gap-1 p-4 z-50"
                 >
                   {categories.map((c) => (
                     <Link
                       key={c.id}
                       to={`/category/${c.id}`}
-                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
+                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group"
                       onClick={() => setCatOpen(false)}
                     >
                       <img src={c.image} alt="" className="h-12 w-12 rounded-lg object-cover" loading="lazy" />
                       <div className="min-w-0">
-                        <span className="block text-sm font-semibold text-midnight-900 group-hover:text-brand-600 transition-colors">{t(c.nameKey)}</span>
+                        <span className="block text-sm font-semibold text-midnight-900 dark:text-white group-hover:text-brand-600 transition-colors">{t(c.nameKey)}</span>
                         <span className="block text-xs text-slate-400 truncate">{(c.subcategories || []).slice(0, 3).join(' · ')}</span>
                       </div>
                     </Link>
@@ -271,14 +373,20 @@ export default function Navbar() {
           </div>
           <div className="flex items-center gap-1 flex-1">
             {mainLinks.map((l) => (
-              <Link key={l.key} to={l.to} className="relative px-3 py-3 font-medium text-midnight-900/80 hover:text-brand-600 transition-colors">
+              <Link
+                key={l.key}
+                to={l.to}
+                className={`relative px-3 py-3 font-medium transition-colors ${
+                  top ? 'text-white/85 hover:text-white' : 'text-midnight-900/80 dark:text-slate-200 hover:text-brand-600'
+                }`}
+              >
                 {t(l.key)}
                 {l.badge && (
-                  <span className="absolute top-1.5 end-1 text-[8px] font-bold text-red-600">{l.badge}</span>
+                  <span className={`absolute top-1.5 end-1 text-[8px] font-bold ${top ? 'text-brand-300' : 'text-red-600'}`}>{l.badge}</span>
                 )}
               </Link>
             ))}
-            <Link to="/sell" className="ms-auto px-4 py-2.5 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/sell" className="ms-auto px-4 py-2.5 rounded-full bg-brand-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity">
               {t('nav.sell')}
             </Link>
           </div>
@@ -299,14 +407,24 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: ltr ? -320 : 320 }}
               transition={{ type: 'tween', duration: 0.28 }}
-              className={`absolute top-0 ${ltr ? 'left-0' : 'right-0'} h-full w-80 bg-white shadow-lift overflow-y-auto`}
+              className={`absolute top-0 ${ltr ? 'left-0' : 'right-0'} h-full w-80 bg-white dark:bg-midnight-950 shadow-lift overflow-y-auto`}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-4 flex items-center justify-between border-b border-slate-100">
-                <span className="font-display font-bold text-lg text-midnight-900">{settings?.siteName || 'ARAB'} {settings?.siteSuffix || 'Market'}</span>
-                <button onClick={() => setMobileOpen(false)} className="p-2 text-slate-500" aria-label="Close">
-                  <Icon name="close" size={22} />
-                </button>
+              <div className="p-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10">
+                <span className="font-display font-bold text-lg text-midnight-900 dark:text-white">{settings?.siteName || 'Ciar'} {settings?.siteSuffix || 'VIP'}</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                    className="p-2 text-slate-500 hover:text-midnight-900 dark:hover:text-white"
+                    aria-label={theme === 'dark' ? t('common.lightMode') : t('common.darkMode')}
+                  >
+                    <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={20} />
+                  </button>
+                  <button onClick={() => setMobileOpen(false)} className="p-2 text-slate-500" aria-label="Close">
+                    <Icon name="close" size={22} />
+                  </button>
+                </div>
               </div>
               <form onSubmit={(e) => { submitSearch(e); setMobileOpen(false) }} className="p-4">
                 <div className="flex items-center bg-slate-100 rounded-xl overflow-hidden">

@@ -36,10 +36,10 @@ export default function CountdownTimer({ target: targetProp, className = '' }) {
   ]
 
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
+    <div className={`flex items-center gap-2 ${className}`} dir="ltr">
       {cells.map((c, i) => (
         <React.Fragment key={c.l}>
-          <div className="flex flex-col items-center bg-white/10 backdrop-blur rounded-xl px-3 py-2 min-w-[56px]">
+          <div className="flex flex-col items-center bg-white text-midnight-900 rounded-xl px-3 py-2 min-w-[56px]">
             <span className="text-xl font-bold tabular-nums">{String(c.v).padStart(2, '0')}</span>
             <span className="text-[10px] uppercase tracking-wider opacity-80">{c.l}</span>
           </div>

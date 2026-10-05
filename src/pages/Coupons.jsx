@@ -25,7 +25,7 @@ export default function Coupons() {
       <div className="max-w-5xl mx-auto px-4 py-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {coupons.map((c) => (
           <div key={c.code} className="relative bg-white rounded-2xl border border-slate-100 shadow-soft overflow-hidden hover:shadow-lift transition-shadow">
-            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-br from-brand-600 to-indigo-700 flex items-center justify-center">
+            <div className="absolute left-0 top-0 bottom-0 w-16 bg-brand-600 flex items-center justify-center">
               <Icon name="tag" size={26} className="text-white/90" />
             </div>
             <div className="pl-24 pr-6 py-6">

@@ -86,7 +86,7 @@ export default function SellerDashboard() {
         <PageHero title={t('seller.dashboard')} crumb={t('nav.sell')}  theme="sell" />
         <div className="max-w-xl mx-auto px-4 py-16 text-center">
           <p className="text-slate-600 mb-6">{error || 'No seller profile found.'}</p>
-          <Link to="/sell#apply" className="px-8 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold">
+          <Link to="/sell#apply" className="px-8 py-3 rounded-full bg-brand-600 text-white font-semibold">
             {t('sell.cta')}
           </Link>
         </div>
@@ -101,10 +101,10 @@ export default function SellerDashboard() {
   const max = Math.max(...weekData)
 
   const cards = [
-    { icon: 'zap', label: t('seller.today'), value: formatPrice(stats.todayRevenue), color: 'from-amber-500 to-orange-600' },
-    { icon: 'creditCard', label: t('seller.totalRevenue'), value: formatPrice(stats.revenue), color: 'from-emerald-500 to-teal-600' },
-    { icon: 'box', label: t('seller.pendingOrders'), value: stats.pendingOrders, color: 'from-brand-500 to-indigo-600' },
-    { icon: 'tag', label: t('seller.productsActive'), value: stats.productsActive, color: 'from-rose-500 to-pink-600' }
+    { icon: 'zap', label: t('seller.today'), value: formatPrice(stats.todayRevenue), color: 'bg-amber-500' },
+    { icon: 'creditCard', label: t('seller.totalRevenue'), value: formatPrice(stats.revenue), color: 'bg-emerald-600' },
+    { icon: 'box', label: t('seller.pendingOrders'), value: stats.pendingOrders, color: 'bg-brand-600' },
+    { icon: 'tag', label: t('seller.productsActive'), value: stats.productsActive, color: 'bg-rose-500' }
   ]
 
   return (
@@ -136,7 +136,7 @@ export default function SellerDashboard() {
               <button
                 key={tb.key}
                 onClick={() => setTab(tb.key)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${tab === tb.key ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-soft' : 'text-slate-600 hover:bg-slate-50 hover:text-brand-600'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${tab === tb.key ? 'bg-brand-600 text-white shadow-soft' : 'text-slate-600 hover:bg-slate-50 hover:text-brand-600'}`}
               >
                 <Icon name={tb.icon} size={18} />
                 {t(`seller.${tb.label}`)}
@@ -161,7 +161,7 @@ export default function SellerDashboard() {
                     transition={{ duration: 0.4, delay: i * 0.05 }}
                     className="bg-white rounded-2xl border border-slate-100 shadow-soft p-5"
                   >
-                    <span className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${s.color} text-white mb-3`}>
+                    <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${s.color} text-white mb-3`}>
                       <Icon name={s.icon} size={20} />
                     </span>
                     <p className="text-xl font-bold text-midnight-900">{s.value}</p>
@@ -179,7 +179,7 @@ export default function SellerDashboard() {
                         initial={{ height: 0 }}
                         animate={{ height: `${(v / max) * 100}%` }}
                         transition={{ duration: 0.6, delay: i * 0.06 }}
-                        className={`w-full rounded-t-xl ${i % 2 ? 'bg-gradient-to-t from-brand-600 to-indigo-400' : 'bg-gradient-to-t from-indigo-700 to-brand-500'}`}
+                        className={`w-full rounded-t-xl ${i % 2 ? 'bg-brand-600' : 'bg-midnight-800'}`}
                       />
                     </div>
                   ))}
@@ -233,7 +233,7 @@ export default function SellerDashboard() {
                   <input required type="number" placeholder="Stock" className={input} value={productForm.stock} onChange={(e) => setProductForm({ ...productForm, stock: e.target.value })} />
                   <input required placeholder="Image URL" className={`md:col-span-2 ${input}`} value={productForm.image} onChange={(e) => setProductForm({ ...productForm, image: e.target.value })} />
                   <textarea placeholder="Description" className={`md:col-span-2 ${input}`} rows={3} value={productForm.description} onChange={(e) => setProductForm({ ...productForm, description: e.target.value })} />
-                  <button type="submit" className="md:col-span-2 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold">Create product</button>
+                  <button type="submit" className="md:col-span-2 py-3 rounded-full bg-brand-600 text-white font-semibold">Create product</button>
                 </form>
               )}
               <div className="bg-white rounded-3xl border border-slate-100 shadow-soft overflow-hidden">

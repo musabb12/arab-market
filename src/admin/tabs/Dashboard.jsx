@@ -18,21 +18,15 @@ function AreaChart() {
 
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-48" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#3f6eee" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="#3f6eee" stopOpacity="0" />
-        </linearGradient>
-      </defs>
       <g>
         {[0.25, 0.5, 0.75, 1].map((f) => (
           <line key={f} x1="0" x2={w} y1={h * f} y2={h * f} stroke="#f1f5f9" strokeWidth="1" />
         ))}
       </g>
-      <path d={area} fill="url(#areaGrad)" />
-      <path d={line} fill="none" stroke="#3f6eee" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={area} fill="#e04418" fillOpacity="0.12" />
+      <path d={line} fill="none" stroke="#e04418" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
       {pts.map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="3.5" fill="#3f6eee" stroke="#fff" strokeWidth="1.5" />
+        <circle key={i} cx={x} cy={y} r="3.5" fill="#e04418" stroke="#fff" strokeWidth="1.5" />
       ))}
     </svg>
   )
@@ -48,10 +42,10 @@ export default function Dashboard() {
   const lowStock = products.filter((p) => p.stock < settings.lowStockThreshold)
 
   const stats = [
-    { icon: 'creditCard', label: t('admin.dashboard.revenue'), value: formatPrice ? formatPrice(revenue) : `$${revenue.toLocaleString()}`, delta: 18.2, color: 'from-emerald-500 to-teal-600' },
-    { icon: 'cart', label: t('admin.dashboard.orders'), value: orderCount.toLocaleString(), delta: 9.4, color: 'from-brand-500 to-indigo-600' },
-    { icon: 'user', label: t('admin.dashboard.customers'), value: users.length.toLocaleString(), delta: 12.6, color: 'from-purple-500 to-pink-500' },
-    { icon: 'box', label: t('admin.dashboard.productsLive'), value: activeProducts, delta: 4.1, color: 'from-amber-500 to-orange-600' }
+    { icon: 'creditCard', label: t('admin.dashboard.revenue'), value: formatPrice ? formatPrice(revenue) : `$${revenue.toLocaleString()}`, delta: 18.2, color: 'bg-emerald-600' },
+    { icon: 'cart', label: t('admin.dashboard.orders'), value: orderCount.toLocaleString(), delta: 9.4, color: 'bg-brand-600' },
+    { icon: 'user', label: t('admin.dashboard.customers'), value: users.length.toLocaleString(), delta: 12.6, color: 'bg-midnight-700' },
+    { icon: 'box', label: t('admin.dashboard.productsLive'), value: activeProducts, delta: 4.1, color: 'bg-amber-500' }
   ]
 
   const dayKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
@@ -68,7 +62,7 @@ export default function Dashboard() {
     <div>
       <SectionTitle
         title={t('admin.dashboard.welcome', { name: adminSession?.name || t('admin.nav.dashboard') })}
-        subtitle={t('admin.dashboard.subtitle', { site: `${settings?.siteName || 'ARAB'} ${settings?.siteSuffix || 'Market'}` })}
+        subtitle={t('admin.dashboard.subtitle', { site: `${settings?.siteName || 'Ciar'} ${settings?.siteSuffix || 'VIP'}` })}
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">

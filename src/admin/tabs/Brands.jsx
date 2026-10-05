@@ -4,7 +4,7 @@ import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Button, Modal, Field, TextInput, Textarea, Table, SearchInput, Badge } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
 
-const gradients = ['from-brand-500 to-indigo-600', 'from-rose-500 to-pink-600', 'from-emerald-500 to-teal-600', 'from-amber-500 to-orange-600', 'from-purple-500 to-violet-600', 'from-sky-500 to-blue-600']
+const gradients = ['bg-brand-600', 'bg-rose-500', 'bg-emerald-500', 'bg-amber-500', 'bg-midnight-800', 'bg-sky-500']
 
 export default function Brands() {
   const { t } = useTranslation()
@@ -58,7 +58,7 @@ export default function Brands() {
               <tr key={b.id} className="hover:bg-slate-50/50">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <span className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${b.gradient} text-white font-bold`}>{b.logo}</span>
+                    <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${b.gradient} text-white font-bold`}>{b.logo}</span>
                     <span className="font-semibold text-midnight-900">{b.name}</span>
                   </div>
                 </td>
@@ -93,7 +93,7 @@ export default function Brands() {
           <Field label={t('admin.common.brand')}>
             <div className="flex flex-wrap gap-2">
               {gradients.map((g) => (
-                <button type="button" key={g} onClick={() => setForm({ ...form, gradient: g })} className={`h-9 w-14 rounded-xl bg-gradient-to-br ${g} ${form.gradient === g ? 'ring-2 ring-midnight-900 ring-offset-2' : 'opacity-70'}`} />
+                <button type="button" key={g} onClick={() => setForm({ ...form, gradient: g })} className={`h-9 w-14 rounded-xl ${g} ${form.gradient === g ? 'ring-2 ring-midnight-900 ring-offset-2' : 'opacity-70'}`} />
               ))}
             </div>
           </Field>

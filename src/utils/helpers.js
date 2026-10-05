@@ -31,7 +31,8 @@ export const LANGUAGES = [
   { code: 'ja', name: '日本語', short: 'JA' },
   { code: 'ru', name: 'Русский', short: 'RU' },
   { code: 'tr', name: 'Türkçe', short: 'TR' },
-  { code: 'hi', name: 'हिन्दी', short: 'HI' }
+  { code: 'hi', name: 'हिन्दी', short: 'HI' },
+  { code: 'ms', name: 'Bahasa Melayu', short: 'MS' }
 ]
 
 export const COUNTRIES = [

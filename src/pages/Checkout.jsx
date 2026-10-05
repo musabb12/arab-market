@@ -147,7 +147,7 @@ export default function Checkout() {
                 </div>
               </div>
               <div className="flex justify-end">
-                <button onClick={() => setStep(2)} disabled={!validContact} className="px-8 py-3.5 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold disabled:opacity-40 hover:shadow-glow transition-all flex items-center gap-2">
+                <button onClick={() => setStep(2)} disabled={!validContact} className="px-8 py-3.5 rounded-full bg-brand-600 text-white font-semibold disabled:opacity-40 transition-all flex items-center gap-2">
                   {t('common.more')} <Icon name="arrowRight" size={16} />
                 </button>
               </div>
@@ -185,7 +185,7 @@ export default function Checkout() {
                   <Icon name="arrowRight" size={14} className="rotate-180" />
                   {t('checkout.backToCart')}
                 </button>
-                <button onClick={submit} disabled={!validPayment || submitting} className="px-8 py-3.5 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold disabled:opacity-40 hover:shadow-glow transition-all">
+                <button onClick={submit} disabled={!validPayment || submitting} className="px-8 py-3.5 rounded-full bg-brand-600 text-white font-semibold disabled:opacity-40 transition-all">
                   {submitting ? '...' : t('checkout.placeOrder')}
                 </button>
               </div>

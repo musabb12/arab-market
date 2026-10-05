@@ -25,7 +25,7 @@ export default function Wishlist() {
               title={t('wishlist.empty')}
               subtitle={t('wishlist.emptySub')}
               action={
-                <Link to="/products" className="px-6 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold">
+                <Link to="/products" className="px-6 py-3 rounded-full bg-brand-600 text-white text-sm font-semibold">
                   {t('wishlist.browse')}
                 </Link>
               }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -9,9 +9,18 @@ import Icon from './Icons.jsx'
 export default function CartDrawer() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { cart, cartOpen, setCartOpen, updateQty, removeFromCart, cartSubtotal, formatPrice } = useStore()
+  const { cart, cartOpen, setCartOpen, updateQty, removeFromCart, cartSubtotal, formatPrice, user } = useStore()
 
   const freeShipThreshold = 99
+
+  useEffect(() => {
+    if (cartOpen && !user) {
+      setCartOpen(false)
+      navigate('/login', { state: { from: '/cart' } })
+    }
+  }, [cartOpen, user, setCartOpen, navigate])
+
+  if (!user) return null
 
   return (
     <AnimatePresence>
@@ -28,15 +37,15 @@ export default function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className="absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-lift flex flex-col"
+            className="absolute top-0 right-0 h-full w-full max-w-md bg-white dark:bg-midnight-950 shadow-lift flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-white/10">
               <div className="flex items-center gap-3">
-                <h2 className="text-lg font-bold text-midnight-900">{t('cart.title')}</h2>
-                <span className="text-xs font-semibold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">{cart.length} {cart.length === 1 ? 'item' : 'items'}</span>
+                <h2 className="text-lg font-bold text-midnight-900 dark:text-white">{t('cart.title')}</h2>
+                <span className="text-xs font-semibold bg-slate-100 dark:bg-midnight-800 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-full">{cart.length} {cart.length === 1 ? 'item' : 'items'}</span>
               </div>
-              <button onClick={() => setCartOpen(false)} className="p-2 text-slate-500 hover:text-midnight-900 transition-colors" aria-label="Close">
+              <button onClick={() => setCartOpen(false)} className="p-2 text-slate-500 hover:text-midnight-900 dark:hover:text-white transition-colors" aria-label="Close">
                 <Icon name="close" size={22} />
               </button>
             </div>
@@ -48,7 +57,7 @@ export default function CartDrawer() {
                 </span>
                 <h3 className="font-semibold text-midnight-900 mb-1">{t('cart.empty')}</h3>
                 <p className="text-sm text-slate-500 mb-6">{t('cart.emptySub')}</p>
-                <button onClick={() => { setCartOpen(false); navigate('/products') }} className="px-6 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold">
+                <button onClick={() => { setCartOpen(false); navigate('/products') }} className="px-6 py-3 rounded-full bg-brand-600 text-white text-sm font-semibold">
                   {t('cart.startShopping')}
                 </button>
               </div>
@@ -88,7 +97,7 @@ export default function CartDrawer() {
                     </div>
                   ))}
                 </div>
-                <div className="px-6 py-5 border-t border-slate-100 bg-slate-50/60">
+                <div className="px-6 py-5 border-t border-slate-100 dark:border-white/10 bg-slate-50/60 dark:bg-midnight-900/80">
                   {cartSubtotal < freeShipThreshold && (
                     <div className="mb-3 text-xs text-slate-500">
                       <div className="flex justify-between mb-1">
@@ -100,7 +109,7 @@ export default function CartDrawer() {
                           initial={{ width: 0 }}
                           animate={{ width: `${Math.min(100, (cartSubtotal / freeShipThreshold) * 100)}%` }}
                           transition={{ duration: 0.6 }}
-                          className="h-full bg-gradient-to-r from-brand-500 to-indigo-600"
+                          className="h-full bg-brand-600"
                         />
                       </div>
                     </div>
@@ -111,7 +120,7 @@ export default function CartDrawer() {
                   </div>
                   <button
                     onClick={() => { setCartOpen(false); navigate('/checkout') }}
-                    className="w-full py-3.5 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold hover:opacity-90 transition-opacity"
+                    className="w-full py-3.5 rounded-full bg-brand-600 text-white font-semibold hover:opacity-90 transition-opacity"
                   >
                     {t('cart.checkout')}
                   </button>

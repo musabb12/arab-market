@@ -1,13 +1,13 @@
 export default {
   login: {
-    title: 'لوحة تحكم أراب ماركت',
+    title: 'لوحة تحكم Ciar VIP',
     subtitle: 'سجّل الدخول إلى مركز الإدارة',
     username: 'اسم المستخدم',
     password: 'كلمة المرور',
     submit: 'تسجيل الدخول',
     error: 'اسم المستخدم أو كلمة المرور غير صحيحة'
   },
-  brand: 'إدارة أراب',
+  brand: 'إدارة Ciar',
   controlCenter: 'مركز التحكم',
   signOut: 'تسجيل الخروج',
   language: 'اللغة',

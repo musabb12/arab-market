@@ -12,6 +12,7 @@ import ja from './locales/ja.js'
 import ru from './locales/ru.js'
 import tr from './locales/tr.js'
 import hi from './locales/hi.js'
+import ms from './locales/ms.js'
 
 export const LANGUAGE_META = {
   en: { name: 'English', flag: 'EN', dir: 'ltr' },
@@ -23,7 +24,8 @@ export const LANGUAGE_META = {
   ja: { name: '日本語', flag: 'JA', dir: 'ltr' },
   ru: { name: 'Русский', flag: 'RU', dir: 'ltr' },
   tr: { name: 'Türkçe', flag: 'TR', dir: 'ltr' },
-  hi: { name: 'हिन्दी', flag: 'HI', dir: 'ltr' }
+  hi: { name: 'हिन्दी', flag: 'HI', dir: 'ltr' },
+  ms: { name: 'Bahasa Melayu', flag: 'MS', dir: 'ltr' }
 }
 
 export const CURRENCIES = {
@@ -49,7 +51,8 @@ const resources = {
   ja: { translation: ja },
   ru: { translation: ru },
   tr: { translation: tr },
-  hi: { translation: hi }
+  hi: { translation: hi },
+  ms: { translation: ms }
 }
 
 i18n

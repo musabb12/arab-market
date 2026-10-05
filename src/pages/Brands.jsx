@@ -29,9 +29,9 @@ export default function Brands() {
                 transition={{ duration: 0.45, delay: (i % 3) * 0.06 }}
               >
                 <Link to={`/brand/${b.id}`} className="group relative bg-white rounded-3xl border border-slate-100 shadow-soft overflow-hidden hover:shadow-lift transition-all p-7 flex flex-col">
-                  <div className={`absolute -top-8 -right-8 h-32 w-32 rounded-full bg-gradient-to-br ${b.gradient} opacity-10 group-hover:opacity-20 transition-opacity`} />
+                  <div className={`absolute -top-8 -right-8 h-32 w-32 rounded-full ${b.gradient} opacity-10 group-hover:opacity-20 transition-opacity`} />
                   <div className="flex items-start justify-between mb-5">
-                    <span className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${b.gradient} text-white text-2xl font-bold shadow-soft group-hover:scale-110 transition-transform`}>
+                    <span className={`flex h-16 w-16 items-center justify-center rounded-2xl ${b.gradient} text-white text-2xl font-bold shadow-soft group-hover:scale-110 transition-transform`}>
                       {b.logo}
                     </span>
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{b.country}</span>

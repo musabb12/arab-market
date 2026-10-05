@@ -72,7 +72,7 @@ export default function OrderConfirmation() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 200, damping: 14, delay: 0.2 }}
-          className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-green-600 shadow-lift mb-6"
+          className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-emerald-600 shadow-lift mb-6"
         >
           <Icon name="check" size={44} className="text-white" strokeWidth={2.4} />
         </motion.span>
@@ -119,7 +119,7 @@ export default function OrderConfirmation() {
       </div>
 
       <div className="flex flex-wrap justify-center gap-3">
-        <Link to="/account/orders" className="px-6 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold">
+        <Link to="/account/orders" className="px-6 py-3 rounded-full bg-brand-600 text-white text-sm font-semibold">
           {t('account.orders')}
         </Link>
         <Link to="/products" className="px-6 py-3 rounded-full border border-slate-200 text-sm font-semibold text-midnight-900">

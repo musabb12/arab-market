@@ -134,11 +134,12 @@ async function main() {
   }
 
   const settings = {
-    siteName: 'ARAB',
-    siteSuffix: 'Market',
-    tagline: 'Premium Arab Marketplace',
-    brandColor: '#3f6eee',
-    accentColor: '#a855f7',
+    siteName: 'Ciar',
+    siteSuffix: 'VIP',
+    tagline: 'Premium Marketplace',
+    logoText: 'C',
+    brandColor: '#e04418',
+    accentColor: '#0f2137',
     freeShippingThreshold: 99,
     shippingFee: 9.95,
     expressFee: 19.95,

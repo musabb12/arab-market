@@ -42,7 +42,7 @@ export default function CategoryPage() {
             <div className="flex flex-wrap gap-3">
               {relatedBrands.map((b) => (
                 <Link key={b.id} to={`/brand/${b.id}`} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 hover:bg-brand-50 transition-colors">
-                  <span className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${b.gradient} text-white text-xs font-bold`}>{b.logo}</span>
+                  <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${b.gradient} text-white text-xs font-bold`}>{b.logo}</span>
                   <span className="text-sm font-semibold text-midnight-900">{b.name}</span>
                 </Link>
               ))}

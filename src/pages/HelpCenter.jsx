@@ -58,7 +58,7 @@ export default function HelpCenter() {
                 transition={{ duration: 0.4, delay: i * 0.05 }}
                 className="bg-white rounded-2xl border border-slate-100 shadow-soft p-5 hover:shadow-lift hover:-translate-y-0.5 transition-all"
               >
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-indigo-50 text-brand-600 border border-brand-100 mb-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 border border-brand-100 mb-3">
                   <Icon name={topic.icon} size={20} />
                 </span>
                 <h3 className="font-bold text-midnight-900 text-sm mb-1">{topic.title}</h3>
@@ -88,10 +88,10 @@ export default function HelpCenter() {
           </div>
         </div>
 
-        <div className="mt-12 bg-gradient-to-r from-brand-700 via-indigo-700 to-purple-700 rounded-3xl p-8 text-center">
+        <div className="mt-12 bg-midnight-900 rounded-3xl p-8 text-center">
           <h3 className="font-display text-xl font-semibold text-white mb-2">{t('help.stillNeedTitle')}</h3>
-          <p className="text-indigo-100 text-sm mb-6">{t('help.stillNeedText')}</p>
-          <Link to="/contact" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-indigo-700 font-semibold hover:bg-indigo-50 transition-colors">
+          <p className="text-brand-100 text-sm mb-6">{t('help.stillNeedText')}</p>
+          <Link to="/contact" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-midnight-800 font-semibold hover:bg-brand-50 transition-colors">
             <Icon name="headset" size={18} />
             {t('help.contactSupport')}
           </Link>

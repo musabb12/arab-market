@@ -74,7 +74,7 @@ export default function Sellers() {
               key={s.id}
               image={s.image}
               imageAlt={s.name}
-              gradient="from-brand-600 to-indigo-700"
+              gradient="bg-brand-600"
               title={s.name}
               subtitle={`${s.followers?.toLocaleString?.() || s.followers} · ${s.response}`}
               topBadges={[

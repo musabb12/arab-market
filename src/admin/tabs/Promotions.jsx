@@ -36,14 +36,14 @@ export default function Promotions() {
       <div className="grid lg:grid-cols-3 gap-4 mb-6">
         <Card title={t('admin.promotions.banner')} subtitle={t('admin.promotions.bannerSub')} className="lg:col-span-2">
           <div className="grid sm:grid-cols-2 gap-4">
-            <div className="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand-50 to-indigo-50 p-4 flex items-center justify-between gap-3">
+            <div className="rounded-2xl border border-slate-100 bg-brand-50 p-4 flex items-center justify-between gap-3">
               <div>
                 <p className="text-sm font-semibold text-midnight-900">{t('admin.promotions.bannerEnabled')}</p>
                 <p className="text-xs text-slate-500 mt-1">{t('admin.promotions.bannerHint')}</p>
               </div>
               <Toggle checked={content.promo.enabled !== false} onChange={(v) => setPromo({ enabled: v })} />
             </div>
-            <div className="rounded-2xl border border-slate-100 bg-gradient-to-br from-emerald-50 to-teal-50 p-4 flex items-center justify-between gap-3">
+            <div className="rounded-2xl border border-slate-100 bg-emerald-50 p-4 flex items-center justify-between gap-3">
               <div>
                 <p className="text-sm font-semibold text-midnight-900">{t('admin.promotions.activeCoupons')}</p>
                 <p className="text-xs text-slate-500 mt-1">{activeCoupons}</p>
@@ -55,7 +55,7 @@ export default function Promotions() {
 
         <Card title={t('admin.promotions.flashSale')} subtitle={t('admin.promotions.flashSub', { count: flashProducts.length })}>
           <div className="flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-glow">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500 text-white">
               <Icon name="zap" size={22} />
             </span>
             <div>
@@ -120,7 +120,7 @@ export default function Promotions() {
               </span>
               <h3 className="font-display text-2xl font-semibold text-white mb-2">{content.promo.title}</h3>
               <p className="text-slate-300 text-sm mb-5">{content.promo.subtitle}</p>
-              <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-brand-500 to-indigo-600 text-white text-sm font-semibold">
+              <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-600 text-white text-sm font-semibold">
                 <Icon name="zap" size={15} />
                 {content.promo.cta}
               </span>

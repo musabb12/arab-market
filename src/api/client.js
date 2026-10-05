@@ -37,6 +37,7 @@ async function request(path, options = {}) {
   if (contentType.includes('text/html') || /^\s*</.test(text)) {
     const err = new Error('API returned HTML instead of JSON (is the backend deployed?)')
     err.status = res.status
+    err.offline = true
     throw err
   }
 
@@ -63,6 +64,13 @@ async function request(path, options = {}) {
     throw err
   }
   return data
+}
+
+/** True when the store API can't be reached (network error, wrong server, or server crash). */
+export function isApiUnavailable(err) {
+  if (!err) return false
+  if (err.offline || !err.status) return true
+  return err.status === 404 || err.status >= 500
 }
 
 export const api = {

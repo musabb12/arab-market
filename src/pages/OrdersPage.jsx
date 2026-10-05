@@ -27,7 +27,7 @@ export default function OrdersPage() {
                 title={t('orders.empty')}
                 subtitle={t('orders.emptySub')}
                 action={
-                  <Link to="/products" className="px-6 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold">
+                  <Link to="/products" className="px-6 py-3 rounded-full bg-brand-600 text-white text-sm font-semibold">
                     {t('cart.startShopping')}
                   </Link>
                 }

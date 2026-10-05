@@ -65,8 +65,7 @@ export default function Sell() {
       <PageHero title={t('sell.title')} subtitle={t('sell.subtitle')} crumb={t('nav.sell')}  theme="sell" />
       <Breadcrumb items={[{ label: t('nav.sell') }]} />
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-brand-700 via-indigo-700 to-purple-800 py-20">
-        <div className="absolute inset-0 bg-[radial-gradient(800px_400px_at_80%_0%,rgba(255,255,255,0.15),transparent_60%)]" />
+      <section className="relative overflow-hidden bg-midnight-900 py-20">
         <div className="relative max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((s, i) => (
@@ -79,7 +78,7 @@ export default function Sell() {
                 className="text-center"
               >
                 <p className="font-display text-3xl md:text-4xl font-bold text-white mb-1">{s.value}</p>
-                <p className="text-indigo-200 text-sm">{s.label}</p>
+                <p className="text-brand-100 text-sm">{s.label}</p>
               </motion.div>
             ))}
           </div>
@@ -101,7 +100,7 @@ export default function Sell() {
                 Status: <span className="font-semibold capitalize">{done.status}</span>. An admin will review your application.
               </p>
               {done.status === 'approved' ? (
-                <Link to="/seller" className="inline-flex px-8 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold">
+                <Link to="/seller" className="inline-flex px-8 py-3 rounded-full bg-brand-600 text-white font-semibold">
                   {t('seller.dashboard')}
                 </Link>
               ) : (
@@ -134,7 +133,7 @@ export default function Sell() {
               <button
                 type="submit"
                 disabled={loading || !user}
-                className="w-full py-4 rounded-full bg-gradient-to-r from-brand-500 to-indigo-600 text-white font-semibold hover:shadow-glow transition-all disabled:opacity-40"
+                className="w-full py-4 rounded-full bg-brand-600 text-white font-semibold transition-all disabled:opacity-40"
               >
                 {loading ? '...' : t('sell.cta')}
               </button>
@@ -158,7 +157,7 @@ export default function Sell() {
                 transition={{ duration: 0.45, delay: (i % 3) * 0.06 }}
                 className="group bg-slate-50 hover:bg-white rounded-3xl border border-slate-100 p-7 hover:shadow-lift transition-all"
               >
-                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-indigo-600 text-white mb-4 group-hover:scale-110 transition-transform">
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-600 text-white mb-4 group-hover:scale-110 transition-transform">
                   <Icon name={r.icon} size={26} />
                 </span>
                 <h3 className="text-lg font-bold text-midnight-900 mb-2">{r.title}</h3>
@@ -186,7 +185,7 @@ export default function Sell() {
               >
                 <span className="absolute -top-5 left-7 font-display text-6xl font-bold text-gradient opacity-25">{s.n}</span>
                 <div className="relative">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-indigo-600 text-white font-bold mb-4">{s.n}</span>
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-white font-bold mb-4">{s.n}</span>
                   <h3 className="font-bold text-midnight-900 mb-2">{s.title}</h3>
                   <p className="text-sm text-slate-500 leading-relaxed">{s.text}</p>
                 </div>

@@ -5,6 +5,7 @@ import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import CartDrawer from './components/CartDrawer.jsx'
 import Toasts from './components/Toasts.jsx'
+import RequireAuth from './components/RequireAuth.jsx'
 
 import Home from './pages/Home.jsx'
 import Products from './pages/Products.jsx'
@@ -67,7 +68,7 @@ function StorefrontLayout() {
     <Layout>
       <ScrollToTop />
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 pt-[var(--site-nav-h)]">
         <Outlet />
       </main>
       <Footer />
@@ -75,6 +76,10 @@ function StorefrontLayout() {
       <Toasts />
     </Layout>
   )
+}
+
+function Private({ children }) {
+  return <RequireAuth>{children}</RequireAuth>
 }
 
 export default function App() {
@@ -107,38 +112,42 @@ export default function App() {
       </Route>
 
       <Route element={<StorefrontLayout />}>
+        {/* Public */}
         <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/category/:categoryId" element={<CategoryPage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/order-confirmation" element={<OrderConfirmation />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/compare" element={<ComparePage />} />
-        <Route path="/track-order" element={<TrackOrder />} />
-        <Route path="/deals" element={<Deals />} />
-        <Route path="/coupons" element={<Coupons />} />
-        <Route path="/new-arrivals" element={<NewArrivals />} />
-        <Route path="/best-sellers" element={<BestSellers />} />
-        <Route path="/brands" element={<Brands />} />
-        <Route path="/brand/:id" element={<BrandDetail />} />
-        <Route path="/gift-cards" element={<GiftCards />} />
-        <Route path="/store/:sellerId" element={<StorePage />} />
-        <Route path="/sell" element={<Sell />} />
-        <Route path="/seller" element={<SellerDashboard />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/account/orders" element={<OrdersPage />} />
-        <Route path="/account/addresses" element={<Addresses />} />
-        <Route path="/account/settings" element={<Settings />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/help" element={<HelpCenter />} />
         <Route path="/info/:page" element={<InfoPage />} />
+        <Route path="/sell" element={<Sell />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/* Shopping — members only */}
+        <Route path="/products" element={<Private><Products /></Private>} />
+        <Route path="/product/:id" element={<Private><ProductDetail /></Private>} />
+        <Route path="/category/:categoryId" element={<Private><CategoryPage /></Private>} />
+        <Route path="/search" element={<Private><SearchPage /></Private>} />
+        <Route path="/cart" element={<Private><CartPage /></Private>} />
+        <Route path="/checkout" element={<Private><Checkout /></Private>} />
+        <Route path="/order-confirmation" element={<Private><OrderConfirmation /></Private>} />
+        <Route path="/wishlist" element={<Private><Wishlist /></Private>} />
+        <Route path="/compare" element={<Private><ComparePage /></Private>} />
+        <Route path="/track-order" element={<Private><TrackOrder /></Private>} />
+        <Route path="/deals" element={<Private><Deals /></Private>} />
+        <Route path="/coupons" element={<Private><Coupons /></Private>} />
+        <Route path="/new-arrivals" element={<Private><NewArrivals /></Private>} />
+        <Route path="/best-sellers" element={<Private><BestSellers /></Private>} />
+        <Route path="/brands" element={<Private><Brands /></Private>} />
+        <Route path="/brand/:id" element={<Private><BrandDetail /></Private>} />
+        <Route path="/gift-cards" element={<Private><GiftCards /></Private>} />
+        <Route path="/store/:sellerId" element={<Private><StorePage /></Private>} />
+        <Route path="/seller" element={<Private><SellerDashboard /></Private>} />
+        <Route path="/account" element={<Private><Account /></Private>} />
+        <Route path="/account/orders" element={<Private><OrdersPage /></Private>} />
+        <Route path="/account/addresses" element={<Private><Addresses /></Private>} />
+        <Route path="/account/settings" element={<Private><Settings /></Private>} />
+
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

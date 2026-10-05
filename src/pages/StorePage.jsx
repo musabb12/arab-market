@@ -28,9 +28,7 @@ export default function StorePage() {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="bg-white rounded-3xl border border-slate-100 shadow-soft overflow-hidden mb-10">
-          <div className="relative h-40 bg-gradient-to-r from-brand-700 via-indigo-700 to-purple-700">
-            <div className="absolute inset-0 bg-[radial-gradient(700px_250px_at_80%_0%,rgba(255,255,255,0.2),transparent_60%)]" />
-          </div>
+          <div className="h-40 bg-midnight-900" />
           <div className="px-7 pb-7">
             <div className="flex flex-wrap items-end justify-between gap-4 -mt-12">
               <div className="flex items-end gap-4">
@@ -51,7 +49,7 @@ export default function StorePage() {
                 </div>
               </div>
               <div className="flex gap-3 pb-1">
-                <button className="px-6 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity">
+                <button className="px-6 py-3 rounded-full bg-brand-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity">
                   {t('store.follow')}
                 </button>
               </div>

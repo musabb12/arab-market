@@ -17,7 +17,7 @@ export function ScrollToTop() {
 
 export function Layout({ children }) {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-midnight-950">
       {children}
     </div>
   )
@@ -29,7 +29,7 @@ export const PAGE_HERO_IMAGES = {
   brands: 'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1600&q=80',
   gifts: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=1600&q=80',
   new: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80',
-  bestsellers: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1600&q=80',
+  bestsellers: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80',
   cart: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=80',
   checkout: 'https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1600&q=80',
   account: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80',
@@ -52,32 +52,35 @@ export function PageHero({ title, subtitle, crumb, image, theme = 'default' }) {
   const bg = image || PAGE_HERO_IMAGES[theme] || PAGE_HERO_IMAGES.default
 
   return (
-    <div className="relative overflow-hidden bg-midnight-900 min-h-[220px] md:min-h-[280px] flex items-center">
+    <div className="relative overflow-hidden -mt-[var(--site-nav-h)] min-h-[calc(var(--site-nav-h)+240px)] md:min-h-[calc(var(--site-nav-h)+280px)] flex items-end">
+      <img
+        src={bg}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover"
+        decoding="async"
+      />
       <div
-        className="absolute inset-0 scale-105"
+        className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage: `url(${bg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          background:
+            'linear-gradient(115deg, rgba(10,33,64,0.48) 0%, rgba(28,58,102,0.32) 48%, rgba(12,40,72,0.44) 100%)'
         }}
       />
-      <div className="absolute inset-0 bg-midnight-900/55" />
-      <div className="absolute inset-0 bg-gradient-to-r from-midnight-900/80 via-midnight-900/45 to-brand-900/35" />
-      <div className="absolute inset-0 bg-hero-mesh opacity-30" />
-      <div className="relative max-w-7xl mx-auto px-4 py-14 md:py-16 w-full text-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-          {crumb && (
-            <nav className="flex items-center justify-center gap-2 text-xs text-slate-300 mb-4">
-              <Link to="/" className="hover:text-white transition-colors">{t('common.breadcrumbHome')}</Link>
-              <Icon name="chevronRight" size={12} />
-              <span className="text-white/90">{crumb}</span>
-            </nav>
-          )}
-          <h1 className="font-display text-3xl md:text-5xl font-semibold text-white mb-3 drop-shadow-sm">{title}</h1>
-          {subtitle && <p className="text-slate-200 max-w-2xl mx-auto leading-relaxed">{subtitle}</p>}
-        </motion.div>
+      <div className="relative w-full pt-[var(--site-nav-h)]">
+        <div className="max-w-7xl mx-auto px-4 py-10 md:py-14 w-full text-center">
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
+            {crumb && (
+              <nav className="flex items-center justify-center gap-2 text-xs text-white/75 mb-3">
+                <Link to="/" className="hover:text-white transition-colors">{t('common.breadcrumbHome')}</Link>
+                <Icon name="chevronRight" size={12} />
+                <span className="text-white">{crumb}</span>
+              </nav>
+            )}
+            <h1 className="font-display text-3xl md:text-5xl font-semibold text-white mb-2 [text-shadow:0_2px_10px_rgba(8,24,48,0.45)]">{title}</h1>
+            {subtitle && <p className="text-slate-100 max-w-2xl mx-auto leading-relaxed [text-shadow:0_2px_8px_rgba(8,24,48,0.35)]">{subtitle}</p>}
+          </motion.div>
+        </div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
     </div>
   )
 }
@@ -141,7 +144,7 @@ export function FeatureBar() {
             transition={{ duration: 0.4, delay: i * 0.08 }}
             className="flex items-start gap-3"
           >
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-indigo-50 text-brand-600 border border-brand-100">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 border border-brand-100">
               <Icon name={f.icon} size={20} />
             </span>
             <div>
@@ -162,7 +165,7 @@ export function EmptyState({ icon, title, subtitle, action }) {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4 }}
-        className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-slate-100 to-slate-200 mb-6"
+        className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-100 mb-6"
       >
         <Icon name={icon} size={40} className="text-slate-300" />
       </motion.span>

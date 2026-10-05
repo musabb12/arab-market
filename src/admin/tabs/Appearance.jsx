@@ -4,12 +4,12 @@ import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Field, TextInput, Button } from '../ui.jsx'
 
 const SWATCHES = [
-  { name: 'ARAB Blue', brand: '#3f6eee', accent: '#a855f7' },
-  { name: 'Emerald', brand: '#059669', accent: '#0ea5e9' },
-  { name: 'Royal Purple', brand: '#7c3aed', accent: '#ec4899' },
-  { name: 'Crimson', brand: '#e11d48', accent: '#f59e0b' },
-  { name: 'Ocean Teal', brand: '#0d9488', accent: '#6366f1' },
-  { name: 'Sunset', brand: '#ea580c', accent: '#db2777' }
+  { name: 'Ciar Flame', brand: '#e04418', accent: '#0f2137' },
+  { name: 'Coral Navy', brand: '#f25c2a', accent: '#1c3045' },
+  { name: 'Ember', brand: '#bc3412', accent: '#0a1628' },
+  { name: 'Emerald', brand: '#059669', accent: '#0f2137' },
+  { name: 'Ocean', brand: '#0d9488', accent: '#0f2137' },
+  { name: 'Amber', brand: '#ea580c', accent: '#1c3045' }
 ]
 
 export default function Appearance() {
@@ -84,15 +84,13 @@ export default function Appearance() {
             <div className="px-5 py-2.5 text-xs text-white font-medium" style={{ background: draft.brandColor }}>
               {content.announcement}
             </div>
-            <div className="px-5 py-4 flex items-center gap-3 bg-white">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl text-white text-sm font-bold" style={{ background: `linear-gradient(135deg, ${draft.brandColor}, ${draft.accentColor})` }}>
-                {draft.logoText}
+            <div className="px-5 py-5 flex items-center bg-white">
+              <span className="font-display text-3xl font-bold tracking-tight text-midnight-900 leading-none">
+                {draft.siteName} <span style={{ color: draft.brandColor }}>{draft.siteSuffix}</span>
               </span>
-              <span className="font-display font-bold text-midnight-900">{draft.siteName}</span>
-              <span className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: draft.brandColor }}>{draft.siteSuffix}</span>
             </div>
             <div className="px-5 py-6 bg-slate-50 flex items-center justify-center">
-              <span className="px-6 py-3 rounded-full text-white text-sm font-semibold shadow-lg" style={{ background: `linear-gradient(90deg, ${draft.brandColor}, ${draft.accentColor})` }}>
+              <span className="px-6 py-3 rounded-full text-white text-sm font-semibold shadow-lg" style={{ background: draft.brandColor }}>
                 {t('admin.common.manage')}
               </span>
             </div>

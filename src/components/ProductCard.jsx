@@ -14,7 +14,7 @@ const badgeStyles = {
   featured: 'bg-brand-600 text-white',
   deal: 'bg-amber-500 text-white',
   topRated: 'bg-sky-600 text-white',
-  luxury: 'bg-gradient-to-r from-amber-500 to-yellow-500 text-white'
+  luxury: 'bg-amber-500 text-white'
 }
 
 const badgeKeys = {
@@ -42,16 +42,15 @@ export default function ProductCard({ product, index = 0 }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.5, delay: (index % 4) * 0.06 }}
-      className="group relative bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-soft hover:shadow-lift hover:-translate-y-1 transition-all duration-300"
+      className="group relative bg-white dark:bg-midnight-900 rounded-2xl border border-slate-100 dark:border-white/10 overflow-hidden shadow-soft hover:shadow-lift hover:-translate-y-1 transition-all duration-300"
     >
-      <Link to={`/product/${product.id}`} className="block relative aspect-square overflow-hidden bg-slate-50">
+      <Link to={`/product/${product.id}`} className="block relative aspect-square overflow-hidden bg-slate-50 dark:bg-midnight-800">
         <img
           src={product.image}
           alt={product.name}
           loading="lazy"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <div className="absolute top-3 left-3 flex flex-col gap-2">
           {product.badges?.map((b) => (
             <span key={b} className={`text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full ${badgeStyles[b] || badgeStyles.featured}`}>
@@ -65,7 +64,7 @@ export default function ProductCard({ product, index = 0 }) {
           </span>
         )}
         {product.sellerId === 's3' && (
-          <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-[10px] font-semibold px-2 py-1 rounded-full">Made in Italy</span>
+          <span className="absolute top-3 right-3 bg-white text-[10px] font-semibold px-2 py-1 rounded-full">Made in Italy</span>
         )}
       </Link>
 

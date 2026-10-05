@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import i18n, { LANGUAGE_META, CURRENCIES } from '../i18n/index.js'
 import { defaultSiteData } from '../data/siteDefaults.js'
 import { updateCatalog } from '../utils/catalog.js'
-import { api, setToken, getStoredToken } from '../api/client.js'
+import { api, setToken, getStoredToken, isApiUnavailable } from '../api/client.js'
 
 const StoreContext = createContext(null)
 
@@ -15,7 +15,9 @@ const STORAGE_KEYS = {
   user: 'lumina_user',
   orders: 'lumina_orders',
   siteData: 'lumina_siteData',
-  admin: 'lumina_admin_session'
+  admin: 'lumina_admin_session',
+  theme: 'ciar_theme',
+  localAccounts: 'ciar_local_accounts'
 }
 
 function loadJSON(key, fallback) {
@@ -24,6 +26,25 @@ function loadJSON(key, fallback) {
     return raw ? JSON.parse(raw) : fallback
   } catch {
     return fallback
+  }
+}
+
+function loadLocalAccounts() {
+  return loadJSON(STORAGE_KEYS.localAccounts, [])
+}
+
+function saveLocalAccounts(accounts) {
+  localStorage.setItem(STORAGE_KEYS.localAccounts, JSON.stringify(accounts))
+}
+
+function makeLocalUser({ name, email, phone, role = 'customer' }) {
+  return {
+    id: `local-${Date.now()}`,
+    name: name || email.split('@')[0],
+    email: email.toLowerCase().trim(),
+    phone: phone || '',
+    role,
+    local: true
   }
 }
 
@@ -39,14 +60,13 @@ function deepMerge(base, override) {
 }
 
 const HERO_IMAGE_MIGRATION = {
-  'photo-1441986300917-64674bd600d8': 'photo-1483985988355-763728e1935b',
-  'photo-1490481651871-ab68de25d43d': 'photo-1469334031218-e382a71b716b',
-  'photo-1487014679447-9f8336841d58': 'photo-1511707171634-5f897ff02aa9'
+  'photo-1469334031218-e382a71b716b': 'photo-1441986300917-64674bd600d8',
+  'photo-1511707171634-5f897ff02aa9': 'photo-1498049794561-7780e7231661'
 }
 
 function migrateHeroImages(siteData) {
-  if (!siteData?.content?.heroSlides) return siteData
-  const heroSlides = siteData.content.heroSlides.map((slide) => {
+  if (!siteData?.content?.heroSlides && !siteData?.settings) return siteData
+  let heroSlides = (siteData.content?.heroSlides || []).map((slide) => {
     let image = slide.image || ''
     for (const [from, to] of Object.entries(HERO_IMAGE_MIGRATION)) {
       if (image.includes(from)) {
@@ -56,12 +76,68 @@ function migrateHeroImages(siteData) {
     }
     return { ...slide, image }
   })
+
+  const defaultSlides = defaultSiteData.content.heroSlides
+  const needsHeroUpgrade =
+    heroSlides.length < 10 ||
+    heroSlides.some((s) => (s.image || '').includes('photo-1469334031218'))
+
+  if (needsHeroUpgrade) {
+    heroSlides = defaultSlides
+  }
+
+  const OLD_BRAND = new Set(['#3f6eee', '#3F6EEE'])
+  const OLD_ACCENT = new Set(['#a855f7', '#A855F7'])
+  const brandColor = OLD_BRAND.has(siteData.settings?.brandColor)
+    ? '#e04418'
+    : (siteData.settings?.brandColor || '#e04418')
+  const accentColor = OLD_ACCENT.has(siteData.settings?.accentColor)
+    ? '#0f2137'
+    : (siteData.settings?.accentColor || '#0f2137')
+
+  let promo = siteData.content?.promo || {}
+  if (/Lumina/i.test(`${promo.badge || ''} ${promo.title || ''} ${promo.subtitle || ''} ${promo.cta || ''}`)) {
+    promo = { ...defaultSiteData.content.promo, image: promo.image || defaultSiteData.content.promo.image }
+  }
+
+  const defaultPayments = defaultSiteData.payments || []
+  const storedPayments = Array.isArray(siteData.payments) ? siteData.payments : []
+  const allDigitalOff = ['paypal', 'applepay', 'googlepay'].every((id) => {
+    const s = storedPayments.find((p) => p.id === id)
+    return !s || s.enabled === false
+  })
+  const cardOff = storedPayments.find((p) => p.id === 'card')?.enabled === false
+  const seedLooksStale = allDigitalOff && (cardOff || storedPayments.length === 0)
+  const payments = defaultPayments.map((def) => {
+    const stored = storedPayments.find((p) => p.id === def.id)
+    if (!stored) return def
+    if (seedLooksStale) return { ...def, ...stored, enabled: def.enabled }
+    return { ...def, ...stored, enabled: stored.enabled ?? def.enabled }
+  })
+
+  const storedLanguages = Array.isArray(siteData.languages) ? siteData.languages : []
+  const languages = [
+    ...storedLanguages,
+    ...(defaultSiteData.languages || []).filter((def) => !storedLanguages.some((l) => l.code === def.code))
+  ]
+
   return {
     ...siteData,
-    content: { ...siteData.content, heroSlides },
+    languages,
+    payments,
+    content: {
+      ...siteData.content,
+      heroSlides: heroSlides.length ? heroSlides : siteData.content?.heroSlides,
+      promo
+    },
     settings: {
       ...siteData.settings,
-      logoText: siteData.settings?.logoText === 'L' ? 'A' : siteData.settings?.logoText || 'A'
+      siteName: ['ARAB', 'Lumina'].includes(siteData.settings?.siteName) ? 'Ciar' : (siteData.settings?.siteName || 'Ciar'),
+      siteSuffix: ['Market', 'market'].includes(siteData.settings?.siteSuffix) ? 'VIP' : (siteData.settings?.siteSuffix || 'VIP'),
+      logoText: ['L', 'A'].includes(siteData.settings?.logoText) ? 'C' : (siteData.settings?.logoText || 'C'),
+      tagline: siteData.settings?.tagline?.includes('Arab') ? 'Premium Marketplace' : (siteData.settings?.tagline || 'Premium Marketplace'),
+      brandColor,
+      accentColor
     }
   }
 }
@@ -71,6 +147,34 @@ function loadSiteData() {
   const merged = deepMerge(defaultSiteData, stored)
   if (!Array.isArray(merged.products) || merged.products.length === 0) merged.products = defaultSiteData.products
   return migrateHeroImages(merged)
+}
+
+function loadTheme() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.theme)
+    if (stored === 'light' || stored === 'dark') return stored
+  } catch {
+    /* ignore */
+  }
+  if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark'
+  }
+  return 'light'
+}
+
+function applyThemeClass(theme) {
+  const root = document.documentElement
+  const isDark = theme === 'dark'
+  root.classList.toggle('dark', isDark)
+  if (isDark) root.setAttribute('data-theme', 'dark')
+  else root.setAttribute('data-theme', 'light')
+  root.style.colorScheme = isDark ? 'dark' : 'light'
+}
+
+function getInitialTheme() {
+  const theme = loadTheme()
+  if (typeof document !== 'undefined') applyThemeClass(theme)
+  return theme
 }
 
 let toastSeq = 0
@@ -89,7 +193,41 @@ export function StoreProvider({ children }) {
   const [adminSession, setAdminSession] = useState(() => loadJSON(STORAGE_KEYS.admin, null))
   const [apiReady, setApiReady] = useState(false)
   const [apiOnline, setApiOnline] = useState(false)
+  const [theme, setThemeState] = useState(getInitialTheme)
   const timerRef = useRef({})
+
+  useEffect(() => {
+    applyThemeClass(theme)
+    try {
+      localStorage.setItem(STORAGE_KEYS.theme, theme)
+    } catch {
+      /* ignore */
+    }
+  }, [theme])
+
+  const setTheme = useCallback((next) => {
+    const value = next === 'dark' ? 'dark' : 'light'
+    applyThemeClass(value)
+    try {
+      localStorage.setItem(STORAGE_KEYS.theme, value)
+    } catch {
+      /* ignore */
+    }
+    setThemeState(value)
+  }, [])
+
+  const toggleTheme = useCallback(() => {
+    setThemeState((prev) => {
+      const value = prev === 'dark' ? 'light' : 'dark'
+      applyThemeClass(value)
+      try {
+        localStorage.setItem(STORAGE_KEYS.theme, value)
+      } catch {
+        /* ignore */
+      }
+      return value
+    })
+  }, [])
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.cart, JSON.stringify(cart))
@@ -120,8 +258,12 @@ export function StoreProvider({ children }) {
   }, [siteData])
   useEffect(() => {
     const root = document.documentElement
-    root.style.setProperty('--mc-brand', siteData.settings.brandColor || '#3f6eee')
-    root.style.setProperty('--mc-accent', siteData.settings.accentColor || '#a855f7')
+    const brand = siteData.settings.brandColor
+    const accent = siteData.settings.accentColor
+    const brandColor = ['#3f6eee', '#3F6EEE'].includes(brand) ? '#e04418' : (brand || '#e04418')
+    const accentColor = ['#a855f7', '#A855F7'].includes(accent) ? '#0f2137' : (accent || '#0f2137')
+    root.style.setProperty('--mc-brand', brandColor)
+    root.style.setProperty('--mc-accent', accentColor)
   }, [siteData.settings])
 
   useEffect(() => {
@@ -294,31 +436,66 @@ export function StoreProvider({ children }) {
   const cartSubtotal = cart.reduce((s, x) => s + x.product.price * x.qty, 0)
 
   const login = async ({ email, password, name }) => {
-    if (password) {
-      const { token, user: u } = await api.login({ email, password })
+    const normalized = (email || '').toLowerCase().trim()
+    if (!password) {
+      const u = { name: name || normalized, email: normalized }
+      setUser(u)
+      toast(t('notif.welcome').replace(/Lumina Market|Ciar VIP/g, t('brand')))
+      return u
+    }
+
+    try {
+      const { token, user: u } = await api.login({ email: normalized, password })
       setToken(token)
       setUser(u)
+      setApiOnline(true)
       try {
         const { orders: remoteOrders } = await api.myOrders()
         setOrders(remoteOrders || [])
       } catch {
         /* ignore */
       }
-      toast(t('notif.welcome').replace(/Lumina Market|ARAB Market/g, t('brand')))
+      toast(t('notif.welcome').replace(/Lumina Market|Ciar VIP/g, t('brand')))
+      return u
+    } catch (err) {
+      const accounts = loadLocalAccounts()
+      const account = accounts.find((a) => a.email === normalized && a.password === password)
+      if (!account) {
+        throw new Error(err.message || t('auth.invalidCredentials'))
+      }
+      const u = makeLocalUser(account)
+      setToken(`local-${u.id}`)
+      setUser(u)
+      toast(t('notif.welcome').replace(/Lumina Market|Ciar VIP/g, t('brand')))
       return u
     }
-    // legacy fallback — should not be used
-    setUser({ name, email })
-    toast(t('notif.welcome').replace(/Lumina Market|ARAB Market/g, t('brand')))
-    return { name, email }
   }
 
   const register = async ({ name, email, password, phone }) => {
-    const { token, user: u } = await api.register({ name, email, password, phone })
-    setToken(token)
-    setUser(u)
-    toast(t('notif.welcome').replace(/Lumina Market|ARAB Market/g, t('brand')))
-    return u
+    const normalized = (email || '').toLowerCase().trim()
+    try {
+      const { token, user: u } = await api.register({ name, email: normalized, password, phone })
+      setToken(token)
+      setUser(u)
+      setApiOnline(true)
+      toast(t('notif.welcome').replace(/Lumina Market|Ciar VIP/g, t('brand')))
+      return u
+    } catch (err) {
+      if (!isApiUnavailable(err)) {
+        throw new Error(err.status === 409 ? t('auth.emailTaken') : err.message)
+      }
+      const accounts = loadLocalAccounts()
+      if (accounts.some((a) => a.email === normalized)) {
+        throw new Error(t('auth.emailTaken'))
+      }
+      const account = { name, email: normalized, password, phone: phone || '' }
+      saveLocalAccounts([...accounts, account])
+      const u = makeLocalUser(account)
+      setToken(`local-${u.id}`)
+      setUser(u)
+      toast(t('notif.welcome').replace(/Lumina Market|Ciar VIP/g, t('brand')))
+      return u
+    }
   }
 
   const logout = () => {
@@ -551,7 +728,10 @@ export function StoreProvider({ children }) {
       adminLogout,
       apiReady,
       apiOnline,
-      refreshCatalog
+      refreshCatalog,
+      theme,
+      setTheme,
+      toggleTheme
     }),
     [
       cart,
@@ -573,7 +753,10 @@ export function StoreProvider({ children }) {
       adminSession,
       apiReady,
       apiOnline,
-      refreshCatalog
+      refreshCatalog,
+      theme,
+      setTheme,
+      toggleTheme
     ]
   )
 

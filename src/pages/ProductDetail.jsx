@@ -149,7 +149,7 @@ export default function ProductDetail() {
               </div>
               <button
                 onClick={() => addToCart(product, qty)}
-                className="flex-1 min-w-[180px] px-8 py-4 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold flex items-center justify-center gap-2 hover:shadow-glow transition-all"
+                className="flex-1 min-w-[180px] px-8 py-4 rounded-full bg-brand-600 text-white font-semibold flex items-center justify-center gap-2 transition-all"
               >
                 <Icon name="cart" size={18} />
                 {t('common.addToCart')}
@@ -264,7 +264,7 @@ export default function ProductDetail() {
                 {[product.rating, Math.max(4, product.rating - 0.4), Math.max(3.8, product.rating - 0.8)].map((r, i) => (
                   <div key={i} className="border-b border-slate-50 py-5 first:pt-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="h-9 w-9 rounded-full bg-gradient-to-br from-brand-500 to-indigo-600 text-white text-sm font-bold flex items-center justify-center">
+                      <span className="h-9 w-9 rounded-full bg-brand-600 text-white text-sm font-bold flex items-center justify-center">
                         {['A', 'M', 'S'][i]}
                       </span>
                       <div>

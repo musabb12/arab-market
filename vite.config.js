@@ -8,7 +8,7 @@ export default defineConfig({
     allowedHosts: ['.monkeycode-ai.live'],
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: 'http://localhost:4010',
         changeOrigin: true
       }
     }

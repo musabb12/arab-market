@@ -5,7 +5,7 @@ import { SectionTitle, Card, Button, Modal, Field, TextInput, Textarea, Toggle, 
 import { catName } from '../../utils/catalog.js'
 import Icon from '../../components/Icons.jsx'
 
-const gradients = ['from-brand-500 to-indigo-600', 'from-rose-500 to-pink-600', 'from-emerald-500 to-teal-600', 'from-amber-500 to-orange-600', 'from-purple-500 to-violet-600', 'from-sky-500 to-blue-600']
+const gradients = ['bg-brand-600', 'bg-rose-500', 'bg-emerald-500', 'bg-amber-500', 'bg-midnight-800', 'bg-sky-500']
 
 export default function Categories() {
   const { t } = useTranslation()
@@ -106,7 +106,7 @@ export default function Categories() {
           <Field label={t('admin.common.image')}>
             <div className="flex flex-wrap gap-2">
               {gradients.map((g) => (
-                <button type="button" key={g} onClick={() => setForm({ ...form, gradient: g })} className={`h-9 w-14 rounded-xl bg-gradient-to-br ${g} ${form.gradient === g ? 'ring-2 ring-midnight-900 ring-offset-2' : 'opacity-70'}`} />
+                <button type="button" key={g} onClick={() => setForm({ ...form, gradient: g })} className={`h-9 w-14 rounded-xl ${g} ${form.gradient === g ? 'ring-2 ring-midnight-900 ring-offset-2' : 'opacity-70'}`} />
               ))}
             </div>
           </Field>

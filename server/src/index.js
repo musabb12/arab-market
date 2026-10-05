@@ -11,7 +11,7 @@ import adminRoutes from './routes/admin.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
-const PORT = Number(process.env.PORT || 4000)
+const PORT = Number(process.env.PORT || 4010)
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173'
 
 app.use(

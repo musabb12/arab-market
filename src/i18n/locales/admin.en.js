@@ -1,13 +1,13 @@
 export default {
   login: {
-    title: 'ARAB Market Admin',
+    title: 'Ciar VIP Admin',
     subtitle: 'Sign in to the control center',
     username: 'Username',
     password: 'Password',
     submit: 'Sign in',
     error: 'Invalid username or password'
   },
-  brand: 'ARAB Admin',
+  brand: 'Ciar Admin',
   controlCenter: 'Control Center',
   signOut: 'Sign out',
   language: 'Language',

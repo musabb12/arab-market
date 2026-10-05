@@ -41,17 +41,17 @@ export default function About() {
       <Breadcrumb items={[{ label: t('footer.about') }]} />
 
       {/* Story */}
-      <section className="py-16 md:py-24 bg-white">
+      <section className="py-16 md:py-24 bg-white dark:bg-midnight-950">
         <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <h2 className="font-display text-3xl md:text-4xl font-semibold text-midnight-900 mb-6">{t('about.storyTitle')}</h2>
-            <div className="space-y-4 text-slate-600 leading-relaxed">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-midnight-900 dark:text-white mb-6">{t('about.storyTitle')}</h2>
+            <div className="space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed">
               <p>{t('about.story1')}</p>
               <p>{t('about.story2')}</p>
               <p>{t('about.story3')}</p>
             </div>
-            <div className="mt-8 p-5 bg-gradient-to-r from-brand-50 to-indigo-50 border border-brand-100 rounded-2xl">
-              <p className="font-display text-lg font-semibold text-midnight-900 italic">"{t('about.missionText')}"</p>
+            <div className="mt-8 p-5 bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-800/40 rounded-2xl">
+              <p className="font-display text-lg font-semibold text-midnight-900 dark:text-white italic">"{t('about.missionText')}"</p>
               <p className="text-sm text-brand-600 font-semibold mt-2 uppercase tracking-widest">{t('about.missionTitle')}</p>
             </div>
           </motion.div>
@@ -78,19 +78,19 @@ export default function About() {
       </section>
 
       {/* Values */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-16 md:py-20 bg-white dark:bg-midnight-950">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="font-display text-3xl md:text-4xl font-semibold text-midnight-900 mb-3">{t('about.valuesTitle')}</h2>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-midnight-900 dark:text-white mb-3">{t('about.valuesTitle')}</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v, i) => (
-              <motion.div key={v.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: i * 0.06 }} className="group bg-slate-50 hover:bg-white rounded-3xl border border-slate-100 p-7 hover:shadow-lift transition-all">
-                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-indigo-600 text-white mb-4 group-hover:scale-110 transition-transform">
+              <motion.div key={v.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: i * 0.06 }} className="group bg-slate-50 dark:bg-midnight-900 hover:bg-white dark:hover:bg-midnight-800 rounded-3xl border border-slate-100 dark:border-white/10 p-7 hover:shadow-lift transition-all">
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-600 text-white mb-4 group-hover:scale-110 transition-transform">
                   <Icon name={v.icon} size={26} />
                 </span>
-                <h3 className="text-lg font-bold text-midnight-900 mb-2">{v.title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{v.text}</p>
+                <h3 className="text-lg font-bold text-midnight-900 dark:text-white mb-2">{v.title}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{v.text}</p>
               </motion.div>
             ))}
           </div>
@@ -98,20 +98,20 @@ export default function About() {
       </section>
 
       {/* Team */}
-      <section className="py-16 md:py-20 bg-slate-50">
+      <section className="py-16 md:py-20 bg-slate-50 dark:bg-midnight-900/50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="font-display text-3xl md:text-4xl font-semibold text-midnight-900 mb-3">{t('about.teamTitle')}</h2>
-            <p className="text-slate-500">{t('about.teamSubtitle')}</p>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-midnight-900 dark:text-white mb-3">{t('about.teamTitle')}</h2>
+            <p className="text-slate-500 dark:text-slate-400">{t('about.teamSubtitle')}</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {team.map((m, i) => (
-              <motion.div key={m.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: i * 0.06 }} className="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-soft hover:shadow-lift transition-all">
+              <motion.div key={m.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: i * 0.06 }} className="group bg-white dark:bg-midnight-900 rounded-3xl overflow-hidden border border-slate-100 dark:border-white/10 shadow-soft hover:shadow-lift transition-all">
                 <div className="aspect-[4/5] overflow-hidden">
                   <img src={m.image} alt={m.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
                 <div className="p-5 text-center">
-                  <h3 className="font-bold text-midnight-900">{m.name}</h3>
+                  <h3 className="font-bold text-midnight-900 dark:text-white">{m.name}</h3>
                   <p className="text-sm text-brand-600 mt-0.5">{m.role}</p>
                 </div>
               </motion.div>
@@ -121,17 +121,16 @@ export default function About() {
       </section>
 
       {/* Offices */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-16 md:py-20 bg-white dark:bg-midnight-950">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="font-display text-3xl md:text-4xl font-semibold text-midnight-900 mb-3">{t('about.officeTitle')}</h2>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-midnight-900 dark:text-white mb-3">{t('about.officeTitle')}</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {offices.map((o, i) => (
               <motion.div key={o.city} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: i * 0.06 }} className="relative rounded-3xl overflow-hidden group">
                 <img src={o.image} alt={o.city} className="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
+                <div className="absolute bottom-0 inset-x-0 bg-midnight-900 p-6">
                   <p className="font-display text-xl font-semibold text-white">{o.city}</p>
                   <p className="text-sm text-slate-300">{o.country}</p>
                 </div>
@@ -143,12 +142,11 @@ export default function About() {
 
       {/* Careers CTA */}
       <section className="pb-16 md:pb-20 px-4">
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="max-w-7xl mx-auto relative rounded-3xl overflow-hidden bg-gradient-to-br from-brand-700 via-indigo-700 to-purple-800 py-16 text-center px-8">
-          <div className="absolute inset-0 bg-[radial-gradient(700px_300px_at_80%_0%,rgba(255,255,255,0.15),transparent_60%)]" />
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="max-w-7xl mx-auto relative rounded-3xl overflow-hidden bg-midnight-900 py-16 text-center px-8">
           <div className="relative">
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-white mb-3">{t('about.careersTitle')}</h2>
-            <p className="text-indigo-100 mb-8 max-w-xl mx-auto">{t('about.careersText')}</p>
-            <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-indigo-700 font-semibold hover:bg-indigo-50 transition-colors">
+            <p className="text-brand-100 mb-8 max-w-xl mx-auto">{t('about.careersText')}</p>
+            <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-midnight-800 font-semibold hover:bg-brand-50 transition-colors">
               {t('about.careersCta')}
               <Icon name="arrowRight" size={16} />
             </Link>

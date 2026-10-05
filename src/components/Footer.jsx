@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../context/StoreContext.jsx'
 import Icon from './Icons.jsx'
+import PaymentBrand from './PaymentBrand.jsx'
 
 export default function Footer() {
   const { t } = useTranslation()
@@ -66,7 +67,7 @@ export default function Footer() {
                   placeholder={t('footer.emailPlaceholder')}
                   className="flex-1 bg-white/10 border border-white/10 rounded-full px-5 py-3.5 text-sm placeholder:text-slate-500 outline-none focus:border-brand-400 focus:bg-white/15 transition-colors"
                 />
-                <button type="submit" className="px-7 py-3.5 rounded-full bg-gradient-to-r from-brand-500 to-indigo-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity shrink-0">
+                <button type="submit" className="px-7 py-3.5 rounded-full bg-brand-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity shrink-0">
                   {t('footer.subscribe')}
                 </button>
               </form>
@@ -78,12 +79,9 @@ export default function Footer() {
       {/* Link columns */}
       <div className="max-w-7xl mx-auto px-4 py-14 grid grid-cols-2 md:grid-cols-5 gap-10">
         <div className="col-span-2">
-          <div className="flex items-center gap-2.5 mb-4">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600 font-display text-lg font-bold text-white">
-              {settings?.logoText || 'A'}
-            </span>
-            <span className="font-display text-xl font-bold text-white">
-              {settings?.siteName || 'ARAB'} {settings?.siteSuffix || 'Market'}
+          <div className="mb-4">
+            <span className="font-display text-4xl font-extrabold text-white tracking-tight leading-none">
+              {settings?.siteName || 'Ciar'} <span className="text-brand-400">{settings?.siteSuffix || 'VIP'}</span>
             </span>
           </div>
           <p className="text-sm text-slate-400 leading-relaxed mb-5 max-w-sm">{t('footer.aboutText')}</p>
@@ -124,17 +122,17 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-slate-500">{t('footer.paymentNote')}</span>
-            <div className="flex items-center gap-1.5">
-              {['creditCard', 'wallet', 'lock', 'zap'].map((ic) => (
-                <span key={ic} className="flex h-8 w-11 items-center justify-center rounded-lg bg-white/10 text-white">
-                  <Icon name={ic} size={14} />
+            <div className="flex items-center gap-2.5">
+              {['visa', 'mastercard', 'mada', 'amex', 'paypal'].map((brand) => (
+                <span key={brand} className="flex h-10 min-w-[3.25rem] items-center justify-center rounded-lg bg-white px-2.5">
+                  <PaymentBrand id={brand} size="sm" />
                 </span>
               ))}
             </div>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 pb-6 text-center text-xs text-slate-500">
-          © {new Date().getFullYear()} {settings?.siteName || 'ARAB'} {settings?.siteSuffix || 'Market'}. {t('footer.rights')}
+          © {new Date().getFullYear()} {settings?.siteName || 'Ciar'} {settings?.siteSuffix || 'VIP'}. {t('footer.rights')}
         </div>
       </div>
     </footer>

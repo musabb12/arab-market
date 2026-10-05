@@ -59,7 +59,7 @@ export default function Users() {
               <tr key={u.id} className="hover:bg-slate-50/50">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-indigo-600 text-white text-sm font-bold">{u.name[0]}</span>
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-white text-sm font-bold">{u.name[0]}</span>
                     <span className="font-semibold text-midnight-900">{u.name}</span>
                   </div>
                 </td>

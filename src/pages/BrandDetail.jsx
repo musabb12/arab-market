@@ -30,13 +30,11 @@ export default function BrandDetail() {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="relative bg-white rounded-3xl border border-slate-100 shadow-soft overflow-hidden mb-10">
-          <div className={`h-40 bg-gradient-to-br ${brand.gradient} relative`}>
-            <div className="absolute inset-0 bg-[radial-gradient(600px_200px_at_70%_0%,rgba(255,255,255,0.25),transparent_60%)]" />
-          </div>
+          <div className={`h-40 ${brand.gradient}`} />
           <div className="px-7 pb-7">
             <div className="flex flex-wrap items-end justify-between gap-4 -mt-10">
               <div className="flex items-end gap-4">
-                <span className={`flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br ${brand.gradient} text-white text-3xl font-bold shadow-lift border-4 border-white`}>
+                <span className={`flex h-20 w-20 items-center justify-center rounded-2xl ${brand.gradient} text-white text-3xl font-bold shadow-lift border-4 border-white`}>
                   {brand.logo}
                 </span>
                 <div className="pb-1">
@@ -49,7 +47,7 @@ export default function BrandDetail() {
                 </div>
               </div>
               <div className="flex gap-3 pb-1">
-                <button className="px-5 py-2.5 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity">
+                <button className="px-5 py-2.5 rounded-full bg-brand-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity">
                   {t('store.follow')}
                 </button>
                 {store && (

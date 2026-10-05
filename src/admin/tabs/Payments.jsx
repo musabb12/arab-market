@@ -24,7 +24,7 @@ export default function Payments() {
         <div className="grid md:grid-cols-2 gap-4">
           {payments.map((p) => (
             <div key={p.id} className="border border-slate-100 rounded-2xl p-5 flex items-center gap-4">
-              <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${p.enabled ? 'bg-gradient-to-br from-brand-500 to-indigo-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
+              <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${p.enabled ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
                 <Icon name={icons[p.id] || 'creditCard'} size={22} />
               </span>
               <div className="flex-1">

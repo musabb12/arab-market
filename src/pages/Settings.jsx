@@ -41,7 +41,7 @@ export default function Settings() {
               <div><label className={label}>{t('auth.email')}</label><input type="email" value={profile.email} onChange={(e) => setProfile({ ...profile, email: e.target.value })} className={input} /></div>
               <div><label className={label}>{t('checkout.phone')}</label><input value={profile.phone} onChange={(e) => setProfile({ ...profile, phone: e.target.value })} className={input} /></div>
             </div>
-            <button type="submit" className="mt-5 px-6 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold">{t('account.saveChanges')}</button>
+            <button type="submit" className="mt-5 px-6 py-3 rounded-full bg-brand-600 text-white text-sm font-semibold">{t('account.saveChanges')}</button>
           </form>
 
           {/* Preferences */}

@@ -44,7 +44,7 @@ export default function CartPage() {
               title={t('cart.empty')}
               subtitle={t('cart.emptySub')}
               action={
-                <Link to="/products" className="px-6 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold">
+                <Link to="/products" className="px-6 py-3 rounded-full bg-brand-600 text-white text-sm font-semibold">
                   {t('cart.startShopping')}
                 </Link>
               }
@@ -127,7 +127,7 @@ export default function CartPage() {
                   </div>
                 )}
 
-                <button onClick={() => navigate('/checkout')} className="mt-5 w-full py-4 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold hover:shadow-glow transition-all">
+                <button onClick={() => navigate('/checkout')} className="mt-5 w-full py-4 rounded-full bg-brand-600 text-white font-semibold transition-all">
                   {t('cart.checkout')}
                 </button>
                 <p className="flex items-center justify-center gap-1.5 text-xs text-slate-400 mt-3">

@@ -74,14 +74,14 @@ export default function Addresses() {
                 <div><label className={label}>{t('checkout.phone')}</label><input value={form.phone || ''} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={input} /></div>
               </div>
               <div className="flex gap-3 pt-2">
-                <button type="submit" className="px-6 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold">{t('account.saveChanges')}</button>
+                <button type="submit" className="px-6 py-3 rounded-full bg-brand-600 text-white text-sm font-semibold">{t('account.saveChanges')}</button>
                 <button type="button" onClick={() => { setShowForm(false); setEditing(null) }} className="px-6 py-3 rounded-full border border-slate-200 text-sm font-semibold text-slate-600">{t('common.reset')}</button>
               </div>
             </form>
           ) : (
             <div className="space-y-4">
               <div className="flex justify-end">
-                <button onClick={() => { setEditing(null); setForm({}); setShowForm(true) }} className="px-5 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-sm font-semibold flex items-center gap-2">
+                <button onClick={() => { setEditing(null); setForm({}); setShowForm(true) }} className="px-5 py-3 rounded-full bg-brand-600 text-white text-sm font-semibold flex items-center gap-2">
                   <Icon name="plus" size={16} />
                   {t('account.addresses')}
                 </button>

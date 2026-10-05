@@ -12,7 +12,8 @@ export const ALL_LANGUAGES = [
   { code: 'ja', name: '日本語', dir: 'ltr', enabled: true },
   { code: 'ru', name: 'Русский', dir: 'ltr', enabled: true },
   { code: 'tr', name: 'Türkçe', dir: 'ltr', enabled: true },
-  { code: 'hi', name: 'हिन्दी', dir: 'ltr', enabled: true }
+  { code: 'hi', name: 'हिन्दी', dir: 'ltr', enabled: true },
+  { code: 'ms', name: 'Bahasa Melayu', dir: 'ltr', enabled: true }
 ]
 
 export const ALL_CURRENCIES = [
@@ -41,15 +42,22 @@ export const defaultSiteData = {
     announcement: 'Free worldwide shipping on orders over $99',
     heroSlides: [
       { id: 'h1', image: img('photo-1483985988355-763728e1935b'), title: 'Discover Luxury from Every Corner of the World', subtitle: 'Shop millions of premium products across fashion, electronics, beauty and home.', enabled: true },
-      { id: 'h2', image: img('photo-1469334031218-e382a71b716b'), title: 'The Latest in Premium Fashion', subtitle: 'Designer collections and timeless essentials, delivered worldwide.', enabled: true },
-      { id: 'h3', image: img('photo-1511707171634-5f897ff02aa9'), title: 'Next-Generation Electronics', subtitle: 'Flagship gadgets and smart living technology at unbeatable prices.', enabled: true }
+      { id: 'h2', image: img('photo-1441986300917-64674bd600d8'), title: 'Elegant Boutiques & Timeless Style', subtitle: 'Curated fashion houses and refined essentials for every season.', enabled: true },
+      { id: 'h3', image: img('photo-1498049794561-7780e7231661'), title: 'Next-Generation Electronics', subtitle: 'Flagship gadgets and smart living technology at unbeatable prices.', enabled: true },
+      { id: 'h4', image: img('photo-1555041469-a586c61ea9bc'), title: 'Beautiful Homes, Thoughtful Design', subtitle: 'Furniture and décor that transform everyday living into luxury.', enabled: true },
+      { id: 'h5', image: img('photo-1523275335684-37898b6baf30'), title: 'Iconic Watches & Fine Accessories', subtitle: 'Precision craftsmanship and signature pieces that last a lifetime.', enabled: true },
+      { id: 'h6', image: img('photo-1607082349566-187342175e2f'), title: 'Gifts Worth Celebrating', subtitle: 'Premium gift sets and exclusive drops for every occasion.', enabled: true },
+      { id: 'h7', image: img('photo-1553062407-98eeb64c6a62'), title: 'Crafted Leather & Everyday Luxury', subtitle: 'Handbags, wallets and travel pieces made with care.', enabled: true },
+      { id: 'h8', image: img('photo-1505740420928-5e560c06d30e'), title: 'Sound That Moves You', subtitle: 'Studio-grade audio and immersive listening experiences.', enabled: true },
+      { id: 'h9', image: img('photo-1472851294608-062f824d29cc'), title: 'A Marketplace Without Borders', subtitle: 'Trusted sellers, worldwide delivery and buyer protection on every order.', enabled: true },
+      { id: 'h10', image: img('photo-1490481651871-ab68de25d43d'), title: 'Seasonal Collections, Freshly Styled', subtitle: 'Discover new arrivals from the world’s most admired brands.', enabled: true }
     ],
     promo: {
       enabled: true,
-      badge: 'LIMITED OFFER',
+      badge: 'CIAR VIP EXCLUSIVE',
       title: 'Get 20% off your first order',
-      subtitle: 'Join ARAB Club and unlock exclusive member prices, early access and free shipping.',
-      cta: 'Join ARAB Club',
+      subtitle: 'Join Ciar VIP Club and unlock exclusive member prices, early access and free shipping.',
+      cta: 'Join Ciar VIP Club',
       image: 'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?auto=format&fit=crop&w=1800&q=80'
     },
     features: [
@@ -62,12 +70,12 @@ export const defaultSiteData = {
   },
 
   settings: {
-    siteName: 'ARAB',
-    siteSuffix: 'Market',
-    tagline: 'Premium Arab Marketplace',
-    logoText: 'A',
-    brandColor: '#3f6eee',
-    accentColor: '#a855f7',
+    siteName: 'Ciar',
+    siteSuffix: 'VIP',
+    tagline: 'Premium Marketplace',
+    logoText: 'C',
+    brandColor: '#e04418',
+    accentColor: '#0f2137',
     freeShippingThreshold: 99,
     shippingFee: 9.95,
     expressFee: 19.95,
@@ -85,9 +93,9 @@ export const defaultSiteData = {
   payments: [
     { id: 'card', name: 'Credit / Debit Card', enabled: true },
     { id: 'cod', name: 'Cash on Delivery', enabled: true },
-    { id: 'paypal', name: 'PayPal', enabled: false },
-    { id: 'applepay', name: 'Apple Pay', enabled: false },
-    { id: 'googlepay', name: 'Google Pay', enabled: false }
+    { id: 'paypal', name: 'PayPal', enabled: true },
+    { id: 'applepay', name: 'Apple Pay', enabled: true },
+    { id: 'googlepay', name: 'Google Pay', enabled: true }
   ],
 
   shippingMethods: [
@@ -133,8 +141,8 @@ export const defaultSiteData = {
   ],
 
   emailTemplates: {
-    orderConfirmed: { subject: 'Order confirmed - {orderId}', body: 'Hi {name},\n\nYour order {orderId} has been confirmed and is being prepared.\n\nThank you,\nARAB Market' },
-    orderShipped: { subject: 'Your order has shipped - {orderId}', body: 'Hi {name},\n\nYour order {orderId} is on its way!\n\nTrack it at any time.\n\nARAB Market' },
-    welcome: { subject: 'Welcome to ARAB Market!', body: 'Hi {name},\n\nWelcome aboard! Enjoy 20% off your first order.\n\nARAB Market' }
+    orderConfirmed: { subject: 'Order confirmed - {orderId}', body: 'Hi {name},\n\nYour order {orderId} has been confirmed and is being prepared.\n\nThank you,\nCiar VIP' },
+    orderShipped: { subject: 'Your order has shipped - {orderId}', body: 'Hi {name},\n\nYour order {orderId} is on its way!\n\nTrack it at any time.\n\nCiar VIP' },
+    welcome: { subject: 'Welcome to Ciar VIP!', body: 'Hi {name},\n\nWelcome aboard! Enjoy 20% off your first order.\n\nCiar VIP' }
   }
 }

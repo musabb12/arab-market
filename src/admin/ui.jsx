@@ -32,11 +32,11 @@ export function Card({ title, subtitle, actions, children, className = '', bodyC
   )
 }
 
-export function Stat({ icon, label, value, delta, color = 'from-brand-500 to-indigo-600', hint }) {
+export function Stat({ icon, label, value, delta, color = 'bg-brand-600', hint }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-soft p-5">
       <div className="flex items-center justify-between mb-4">
-        <span className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-white shadow-glow`}>
+        <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${color} text-white`}>
           <Icon name={icon} size={20} />
         </span>
         {delta && (
@@ -100,7 +100,7 @@ export function Textarea(props) {
 
 export function Button({ variant = 'primary', size = 'md', className = '', children, ...props }) {
   const styles = {
-    primary: 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white hover:shadow-glow',
+    primary: 'bg-brand-600 text-white',
     dark: 'bg-midnight-900 text-white hover:bg-midnight-800',
     outline: 'border border-slate-200 text-midnight-900 hover:border-brand-400 hover:text-brand-600 bg-white',
     ghost: 'text-slate-500 hover:text-midnight-900 hover:bg-slate-50',
@@ -127,8 +127,9 @@ const badgeTones = {
   green: 'bg-emerald-50 text-emerald-600',
   red: 'bg-red-50 text-red-600',
   amber: 'bg-amber-50 text-amber-600',
-  blue: 'bg-brand-50 text-brand-600',
-  purple: 'bg-purple-50 text-purple-600'
+  blue: 'bg-midnight-50 text-midnight-700',
+  purple: 'bg-brand-50 text-brand-700',
+  navy: 'bg-midnight-50 text-midnight-800'
 }
 
 export function Badge({ tone = 'gray', children, className = '' }) {
@@ -273,21 +274,20 @@ export function AdminEntityCard({
             loading="lazy"
           />
         ) : gradient ? (
-          <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
+          <div className={`absolute inset-0 ${gradient}`} />
         ) : null}
-        <div className="absolute inset-0 bg-gradient-to-t from-midnight-900/75 via-midnight-900/15 to-transparent" />
         {topBadges.length > 0 && (
           <div className="absolute top-3 start-3 end-3 flex flex-wrap gap-1.5">
             {topBadges.map((b, i) => (
-              <Badge key={i} tone={b.tone || 'gray'} className="backdrop-blur-sm bg-white/90 shadow-sm">
+              <Badge key={i} tone={b.tone || 'gray'} className="bg-white shadow-sm">
                 {b.label}
               </Badge>
             ))}
           </div>
         )}
-        <div className="absolute bottom-0 inset-x-0 p-4">
-          <h3 className="font-semibold text-white text-sm leading-snug line-clamp-2 drop-shadow-sm">{title}</h3>
-          {subtitle && <p className="text-xs text-white/75 mt-1 truncate">{subtitle}</p>}
+        <div className="absolute bottom-0 inset-x-0 bg-midnight-900 p-4">
+          <h3 className="font-semibold text-white text-sm leading-snug line-clamp-2">{title}</h3>
+          {subtitle && <p className="text-xs text-slate-300 mt-1 truncate">{subtitle}</p>}
         </div>
       </div>
       <div className="flex flex-col flex-1 p-4">

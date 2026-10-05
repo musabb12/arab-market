@@ -29,7 +29,6 @@ export default function AdminLogin() {
   return (
     <div className="min-h-screen bg-midnight-900 relative overflow-hidden flex items-center justify-center px-4">
       <div className="absolute inset-0 bg-hero-mesh" />
-      <div className="absolute inset-0 bg-[radial-gradient(700px_400px_at_80%_-10%,rgba(99,102,241,0.25),transparent_60%)]" />
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -38,7 +37,7 @@ export default function AdminLogin() {
       >
         <div className="bg-white rounded-3xl shadow-lift p-8">
           <div className="flex items-center gap-3 mb-8">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-indigo-600 shadow-glow">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-600">
               <Icon name="shield" size={22} className="text-white" />
             </span>
             <div>
@@ -63,7 +62,7 @@ export default function AdminLogin() {
               <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('admin.login.password')}</label>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className={input} autoComplete="current-password" />
             </div>
-            <button type="submit" className="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold hover:shadow-glow transition-all flex items-center justify-center gap-2">
+            <button type="submit" className="w-full py-3.5 rounded-xl bg-brand-600 text-white font-semibold transition-all flex items-center justify-center gap-2">
               <Icon name="lock" size={16} />
               {t('admin.login.submit')}
             </button>

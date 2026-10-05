@@ -185,7 +185,7 @@ export default function Products() {
                 <button
                   key={n}
                   onClick={() => setPage(n)}
-                  className={`h-10 w-10 rounded-xl text-sm font-semibold transition-colors ${n === page ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white' : 'border border-slate-200 text-slate-600 hover:border-brand-400'}`}
+                  className={`h-10 w-10 rounded-xl text-sm font-semibold transition-colors ${n === page ? 'bg-brand-600 text-white' : 'border border-slate-200 text-slate-600 hover:border-brand-400'}`}
                 >
                   {n}
                 </button>
