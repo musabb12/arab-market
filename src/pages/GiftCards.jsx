@@ -27,8 +27,8 @@ export default function GiftCards() {
   const giftProduct = {
     id: 'gift-card',
     name: `${t('gifts.title')} - $${amount}`,
-    brand: 'aurora',
-    category: 'grocery',
+    brand: 'ciar-gallery',
+    category: 'accessories',
     price: amount,
     rating: 5,
     reviews: 3200,

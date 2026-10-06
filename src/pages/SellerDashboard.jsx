@@ -27,7 +27,7 @@ export default function SellerDashboard() {
   const [loading, setLoading] = useState(true)
   const [productForm, setProductForm] = useState({
     name: '',
-    categoryId: 'electronics',
+    categoryId: 'bags',
     price: '',
     stock: '10',
     image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80',

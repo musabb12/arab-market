@@ -31,7 +31,10 @@ export const ALL_CURRENCIES = [
 
 const img = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=80`
 
+export const CATALOG_VERSION = 'luxury-2'
+
 export const defaultSiteData = {
+  catalogVersion: CATALOG_VERSION,
   products: defaultProducts.map((p) => ({ ...p, active: true, stockBase: p.stock })),
   categories: defaultCategories,
   brands: defaultBrands,
@@ -41,16 +44,14 @@ export const defaultSiteData = {
   content: {
     announcement: 'Free worldwide shipping on orders over $99',
     heroSlides: [
-      { id: 'h1', image: img('photo-1483985988355-763728e1935b'), title: 'Discover Luxury from Every Corner of the World', subtitle: 'Shop millions of premium products across fashion, electronics, beauty and home.', enabled: true },
-      { id: 'h2', image: img('photo-1441986300917-64674bd600d8'), title: 'Elegant Boutiques & Timeless Style', subtitle: 'Curated fashion houses and refined essentials for every season.', enabled: true },
-      { id: 'h3', image: img('photo-1498049794561-7780e7231661'), title: 'Next-Generation Electronics', subtitle: 'Flagship gadgets and smart living technology at unbeatable prices.', enabled: true },
-      { id: 'h4', image: img('photo-1555041469-a586c61ea9bc'), title: 'Beautiful Homes, Thoughtful Design', subtitle: 'Furniture and décor that transform everyday living into luxury.', enabled: true },
-      { id: 'h5', image: img('photo-1523275335684-37898b6baf30'), title: 'Iconic Watches & Fine Accessories', subtitle: 'Precision craftsmanship and signature pieces that last a lifetime.', enabled: true },
-      { id: 'h6', image: img('photo-1607082349566-187342175e2f'), title: 'Gifts Worth Celebrating', subtitle: 'Premium gift sets and exclusive drops for every occasion.', enabled: true },
-      { id: 'h7', image: img('photo-1553062407-98eeb64c6a62'), title: 'Crafted Leather & Everyday Luxury', subtitle: 'Handbags, wallets and travel pieces made with care.', enabled: true },
-      { id: 'h8', image: img('photo-1505740420928-5e560c06d30e'), title: 'Sound That Moves You', subtitle: 'Studio-grade audio and immersive listening experiences.', enabled: true },
-      { id: 'h9', image: img('photo-1472851294608-062f824d29cc'), title: 'A Marketplace Without Borders', subtitle: 'Trusted sellers, worldwide delivery and buyer protection on every order.', enabled: true },
-      { id: 'h10', image: img('photo-1490481651871-ab68de25d43d'), title: 'Seasonal Collections, Freshly Styled', subtitle: 'Discover new arrivals from the world’s most admired brands.', enabled: true }
+      { id: 'lx1', image: img('photo-1441986300917-64674bd600d8'), title: 'The World’s Rarest Maisons, One Address', subtitle: 'Hermès, Patek Philippe, Graff and more — guaranteed authentic, delivered with white gloves.', enabled: true },
+      { id: 'lx2', image: img('photo-1591561954557-26941169b49e'), title: 'Iconic Handbags, Timeless Investments', subtitle: 'Birkin, Kelly and Constance in pristine condition with full sets.', enabled: true },
+      { id: 'lx3', image: img('photo-1587836374828-4dbafa94cf0e'), title: 'The Art of Haute Horlogerie', subtitle: 'Patek Philippe, Rolex, IWC — waitlist icons, available now.', enabled: true },
+      { id: 'lx4', image: img('photo-1573408301185-9146fe634ad0'), title: 'High Jewelry Worthy of Heritage', subtitle: 'Certified diamonds and rare gems from Cartier, Graff and Harry Winston.', enabled: true },
+      { id: 'lx5', image: img('photo-1595777457583-95e059d581b8'), title: 'Haute Couture for Unforgettable Evenings', subtitle: 'Valentino, Elie Saab, Zuhair Murad — evening gowns made to measure.', enabled: true },
+      { id: 'lx6', image: img('photo-1592945403244-b3fbafd7f539'), title: 'Niche Perfumes & Precious Oud', subtitle: 'Clive Christian, Roja, Amouage — scents worn by the very few.', enabled: true },
+      { id: 'lx7', image: img('photo-1555041469-a586c61ea9bc'), title: 'Residences Dressed in Luxury', subtitle: 'Fendi Casa, Baccarat, Lalique — furniture and crystal for exceptional homes.', enabled: true },
+      { id: 'lx8', image: img('photo-1567899378494-47b22a2ae96a'), title: 'The Art of Living Well', subtitle: 'Riva yachts, Honma golf, Hermès equestrian — passions of the elite.', enabled: true }
     ],
     promo: {
       enabled: true,
@@ -58,7 +59,7 @@ export const defaultSiteData = {
       title: 'Get 20% off your first order',
       subtitle: 'Join Ciar VIP Club and unlock exclusive member prices, early access and free shipping.',
       cta: 'Join Ciar VIP Club',
-      image: 'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?auto=format&fit=crop&w=1800&q=80'
+      image: 'https://images.unsplash.com/photo-1617019114583-affb34d1b3cd?auto=format&fit=crop&w=1800&q=80'
     },
     features: [
       { icon: 'truck', title: 'Free Shipping', subtitle: 'Free worldwide shipping on orders over $99' },
@@ -70,6 +71,7 @@ export const defaultSiteData = {
   },
 
   settings: {
+    defaultLanguage: 'ar',
     siteName: 'Ciar',
     siteSuffix: 'VIP',
     tagline: 'Premium Marketplace',
@@ -113,12 +115,12 @@ export const defaultSiteData = {
   ],
 
   reviews: [
-    { id: 'r1', productId: 'p1', author: 'Amira H.', rating: 5, comment: 'Excellent quality and fast delivery. Highly recommended!', date: '2026-08-01', status: 'approved' },
-    { id: 'r2', productId: 'p2', author: 'Daniel K.', rating: 4, comment: 'Great phone, battery life is impressive.', date: '2026-07-28', status: 'approved' },
-    { id: 'r3', productId: 'p4', author: 'Noor S.', rating: 5, comment: 'Beautiful watch, looks even better in person.', date: '2026-07-25', status: 'pending' },
-    { id: 'r4', productId: 'p13', author: 'Marco P.', rating: 2, comment: 'Bag stitching came loose after a week.', date: '2026-07-20', status: 'approved' },
-    { id: 'r5', productId: 'p21', author: 'Lina B.', rating: 5, comment: 'The serum transformed my skin. Worth every penny.', date: '2026-07-18', status: 'pending' },
-    { id: 'r6', productId: 'p3', author: 'Hassan R.', rating: 4, comment: 'Fast laptop, great screen. Slightly heavy.', date: '2026-07-15', status: 'approved' }
+    { id: 'r1', productId: 'p1', author: 'Amira H.', rating: 5, comment: 'The gown fits like a dream. Couture service was impeccable.', date: '2026-08-01', status: 'approved' },
+    { id: 'r2', productId: 'p14', author: 'Sara A.', rating: 5, comment: 'Birkin arrived with the full set and receipt. Flawless.', date: '2026-07-28', status: 'approved' },
+    { id: 'r3', productId: 'p25', author: 'Khalid M.', rating: 5, comment: 'Finally found my Calatrava. Authentic and beautifully presented.', date: '2026-07-25', status: 'pending' },
+    { id: 'r4', productId: 'p33', author: 'Noura S.', rating: 5, comment: 'My Love bracelet came with its certificate and screwdriver.', date: '2026-07-20', status: 'approved' },
+    { id: 'r5', productId: 'p50', author: 'Lina B.', rating: 5, comment: 'Baccarat Rouge extrait lasts all day. Pure luxury.', date: '2026-07-18', status: 'pending' },
+    { id: 'r6', productId: 'p7', author: 'Hassan R.', rating: 4, comment: 'Superb tailoring, the fitting appointment was a nice touch.', date: '2026-07-15', status: 'approved' }
   ],
 
   tickets: [
@@ -131,7 +133,7 @@ export const defaultSiteData = {
   notifications: [
     { id: 'n1', title: 'New order received', text: 'Order LM-928103 from Amira H. requires confirmation.', type: 'order', read: false, date: '2026-08-12' },
     { id: 'n2', title: 'New seller application', text: 'Elena Petrova applied to sell on the marketplace.', type: 'seller', read: false, date: '2026-08-10' },
-    { id: 'n3', title: 'Low stock alert', text: 'SkyMaverick 4K Drone has only 18 units left.', type: 'stock', read: false, date: '2026-08-09' },
+    { id: 'n3', title: 'Low stock alert', text: 'Patek Philippe Calatrava 6119R has only 1 piece left.', type: 'stock', read: false, date: '2026-08-09' },
     { id: 'n4', title: 'New review pending', text: 'Noor S. left a review awaiting moderation.', type: 'review', read: true, date: '2026-07-25' }
   ],
 

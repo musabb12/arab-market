@@ -28,16 +28,19 @@ export default function Brands() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: (i % 3) * 0.06 }}
               >
-                <Link to={`/brand/${b.id}`} className="group relative bg-white rounded-3xl border border-slate-100 shadow-soft overflow-hidden hover:shadow-lift transition-all p-7 flex flex-col">
+                <Link to={`/brand/${b.id}`} className="group relative bg-white dark:bg-midnight-900 rounded-3xl border border-slate-100 dark:border-white/10 shadow-soft overflow-hidden hover:shadow-lift transition-all p-7 flex flex-col">
                   <div className={`absolute -top-8 -right-8 h-32 w-32 rounded-full ${b.gradient} opacity-10 group-hover:opacity-20 transition-opacity`} />
                   <div className="flex items-start justify-between mb-5">
                     <span className={`flex h-16 w-16 items-center justify-center rounded-2xl ${b.gradient} text-white text-2xl font-bold shadow-soft group-hover:scale-110 transition-transform`}>
                       {b.logo}
                     </span>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{b.country}</span>
+                    <span className="flex flex-col items-end gap-1.5">
+                      <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{b.country}</span>
+                      {b.rare && <span className="rounded-full bg-midnight-950 px-2.5 py-0.5 text-[10px] font-bold text-amber-300">{t('common.rare')}</span>}
+                    </span>
                   </div>
-                  <h3 className="font-display text-xl font-semibold text-midnight-900 group-hover:text-brand-600 transition-colors mb-2">{b.name}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed mb-4 flex-1">{b.description}</p>
+                  <h3 className="font-display text-xl font-semibold text-midnight-900 dark:text-white group-hover:text-brand-600 transition-colors mb-2">{b.name}</h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-4 flex-1">{b.description}</p>
                   <div className="flex items-center justify-between">
                     {cat && <span className="text-xs font-medium bg-slate-100 px-3 py-1 rounded-full text-slate-600">{t(cat.nameKey)}</span>}
                     <span className="flex items-center gap-2 text-sm font-semibold text-brand-600">

@@ -120,9 +120,9 @@ export default function Footer() {
               <Link key={l.key} to={l.to} className="hover:text-white transition-colors">{t(l.key)}</Link>
             ))}
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <span className="text-xs text-slate-500">{t('footer.paymentNote')}</span>
-            <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center justify-center gap-2.5">
               {['visa', 'mastercard', 'mada', 'amex', 'paypal'].map((brand) => (
                 <span key={brand} className="flex h-10 min-w-[3.25rem] items-center justify-center rounded-lg bg-white px-2.5">
                   <PaymentBrand id={brand} size="sm" />

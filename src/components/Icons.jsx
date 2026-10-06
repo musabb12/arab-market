@@ -9,6 +9,8 @@ const paths = {
   close: 'M18 6L6 18M6 6l12 12',
   chevronDown: 'M6 9l6 6 6-6',
   chevronRight: 'M9 6l6 6-6 6',
+  chevronLeft: 'M15 6l-6 6 6 6',
+  gem: 'M6 3h12l4 6-10 12L2 9l4-6zM2 9h20M12 21L8 9l4-6 4 6-4 12',
   arrowRight: 'M5 12h14M12 5l7 7-7 7',
   arrowLeft: 'M19 12H5M12 19l-7-7 7-7',
   check: 'M20 6L9 17l-5-5',

@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n, { LANGUAGE_META, CURRENCIES } from '../i18n/index.js'
-import { defaultSiteData } from '../data/siteDefaults.js'
+import { defaultSiteData, CATALOG_VERSION } from '../data/siteDefaults.js'
 import { updateCatalog } from '../utils/catalog.js'
 import { api, setToken, getStoredToken, isApiUnavailable } from '../api/client.js'
 
@@ -79,7 +79,7 @@ function migrateHeroImages(siteData) {
 
   const defaultSlides = defaultSiteData.content.heroSlides
   const needsHeroUpgrade =
-    heroSlides.length < 10 ||
+    heroSlides.length === 0 ||
     heroSlides.some((s) => (s.image || '').includes('photo-1469334031218'))
 
   if (needsHeroUpgrade) {
@@ -98,6 +98,9 @@ function migrateHeroImages(siteData) {
   let promo = siteData.content?.promo || {}
   if (/Lumina/i.test(`${promo.badge || ''} ${promo.title || ''} ${promo.subtitle || ''} ${promo.cta || ''}`)) {
     promo = { ...defaultSiteData.content.promo, image: promo.image || defaultSiteData.content.promo.image }
+  }
+  if (!promo.image || promo.image.includes('photo-1607083206869')) {
+    promo = { ...promo, image: defaultSiteData.content.promo.image }
   }
 
   const defaultPayments = defaultSiteData.payments || []
@@ -142,8 +145,37 @@ function migrateHeroImages(siteData) {
   }
 }
 
+const CATALOG_KEYS = ['products', 'categories', 'brands', 'sellers', 'coupons', 'reviews', 'notifications']
+
+function resetStaleCatalog(stored) {
+  if (!stored || stored.catalogVersion === CATALOG_VERSION) return stored
+  for (const key of [STORAGE_KEYS.cart, STORAGE_KEYS.wishlist, STORAGE_KEYS.compare]) localStorage.removeItem(key)
+  const fresh = { ...stored, catalogVersion: CATALOG_VERSION }
+  for (const key of CATALOG_KEYS) delete fresh[key]
+  if (fresh.content) {
+    fresh.content = { ...fresh.content }
+    delete fresh.content.heroSlides
+    delete fresh.content.testimonials
+  }
+  return fresh
+}
+
+const brandMeta = Object.fromEntries((defaultSiteData.brands || []).map((b) => [b.id, b]))
+
+function withBrandMeta(brands) {
+  return byDefaultOrder(
+    brands.map((b) => ({ ...brandMeta[b.id], ...b, logo: b.logo || brandMeta[b.id]?.logo || b.name?.[0] || '' })),
+    defaultSiteData.brands
+  )
+}
+
+function byDefaultOrder(items, defaults) {
+  const rank = new Map((defaults || []).map((d, i) => [d.id, i]))
+  return [...items].sort((a, b) => (rank.get(a.id) ?? 1e6) - (rank.get(b.id) ?? 1e6))
+}
+
 function loadSiteData() {
-  const stored = loadJSON(STORAGE_KEYS.siteData, null)
+  const stored = resetStaleCatalog(loadJSON(STORAGE_KEYS.siteData, null))
   const merged = deepMerge(defaultSiteData, stored)
   if (!Array.isArray(merged.products) || merged.products.length === 0) merged.products = defaultSiteData.products
   return migrateHeroImages(merged)
@@ -155,9 +187,6 @@ function loadTheme() {
     if (stored === 'light' || stored === 'dark') return stored
   } catch {
     /* ignore */
-  }
-  if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark'
   }
   return 'light'
 }
@@ -181,6 +210,7 @@ let toastSeq = 0
 
 export function StoreProvider({ children }) {
   const { t } = useTranslation()
+  const [siteData, setSiteData] = useState(loadSiteData)
   const [cart, setCart] = useState(() => loadJSON(STORAGE_KEYS.cart, []))
   const [wishlist, setWishlist] = useState(() => loadJSON(STORAGE_KEYS.wishlist, []))
   const [compare, setCompare] = useState(() => loadJSON(STORAGE_KEYS.compare, []))
@@ -189,7 +219,6 @@ export function StoreProvider({ children }) {
   const [orders, setOrders] = useState(() => loadJSON(STORAGE_KEYS.orders, []))
   const [toasts, setToasts] = useState([])
   const [cartOpen, setCartOpen] = useState(false)
-  const [siteData, setSiteData] = useState(loadSiteData)
   const [adminSession, setAdminSession] = useState(() => loadJSON(STORAGE_KEYS.admin, null))
   const [apiReady, setApiReady] = useState(false)
   const [apiOnline, setApiOnline] = useState(false)
@@ -267,7 +296,7 @@ export function StoreProvider({ children }) {
   }, [siteData.settings])
 
   useEffect(() => {
-    const lng = i18n.language || 'en'
+    const lng = i18n.language || 'ar'
     const dir = LANGUAGE_META[lng]?.dir || 'ltr'
     document.documentElement.dir = dir
     document.documentElement.lang = lng
@@ -315,8 +344,8 @@ export function StoreProvider({ children }) {
         ...prev,
         products,
         sellers: sellers || prev.sellers,
-        categories: categories.length ? categories : prev.categories,
-        brands: brands.length ? brands : prev.brands,
+        categories: categories.length ? byDefaultOrder(categories, defaultSiteData.categories) : prev.categories,
+        brands: brands.length ? withBrandMeta(brands) : prev.brands,
         coupons: coupons?.length ? coupons : prev.coupons,
         settings: { ...prev.settings, ...(data.settings || {}) },
         payments: data.payments || prev.payments,
@@ -461,7 +490,27 @@ export function StoreProvider({ children }) {
       const accounts = loadLocalAccounts()
       const account = accounts.find((a) => a.email === normalized && a.password === password)
       if (!account) {
-        throw new Error(err.message || t('auth.invalidCredentials'))
+        throw new Error(
+          err.status === 401 || err.status === 400 ? t('auth.invalidCredentials') : err.message || t('auth.invalidCredentials')
+        )
+      }
+      if (!isApiUnavailable(err)) {
+        try {
+          const { token, user: u } = await api.register({
+            name: account.name,
+            email: account.email,
+            password: account.password,
+            phone: account.phone || undefined
+          })
+          saveLocalAccounts(accounts.filter((a) => a.email !== account.email))
+          setToken(token)
+          setUser(u)
+          setApiOnline(true)
+          toast(t('notif.welcome').replace(/Lumina Market|Ciar VIP/g, t('brand')))
+          return u
+        } catch {
+          /* keep the local session below */
+        }
       }
       const u = makeLocalUser(account)
       setToken(`local-${u.id}`)
@@ -482,7 +531,9 @@ export function StoreProvider({ children }) {
       return u
     } catch (err) {
       if (!isApiUnavailable(err)) {
-        throw new Error(err.status === 409 ? t('auth.emailTaken') : err.message)
+        throw new Error(
+          err.status === 409 ? t('auth.emailTaken') : err.status === 400 ? t('auth.invalidDetails') : err.message
+        )
       }
       const accounts = loadLocalAccounts()
       if (accounts.some((a) => a.email === normalized)) {

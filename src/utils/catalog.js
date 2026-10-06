@@ -33,6 +33,10 @@ export function getCategories() {
   return registry.categories
 }
 
+export function subcategoryLabel(t, label) {
+  return t(`subcategories.${label}`, { defaultValue: label })
+}
+
 export function catName(c) {
   if (!c) return ''
   if (c.name) return c.name

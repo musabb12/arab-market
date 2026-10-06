@@ -1,4 +1,4 @@
-export { getBrand, getCategory, getSeller, getBrands, getCategories, catName, updateCatalog } from './catalog.js'
+export { getBrand, getCategory, getSeller, getBrands, getCategories, catName, subcategoryLabel, updateCatalog } from './catalog.js'
 
 export function formatDate(iso) {
   if (!iso) return ''

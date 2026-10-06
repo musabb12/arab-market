@@ -4,12 +4,12 @@
 
 html {
   scroll-behavior: smooth;
-  --site-nav-h: 4.5rem;
+  --site-nav-h: 8.5rem;
 }
 
 @media (min-width: 768px) {
   html {
-    --site-nav-h: 7.25rem;
+    --site-nav-h: 9.25rem;
   }
 }
 
@@ -84,6 +84,13 @@ html.dark ::-webkit-scrollbar-thumb {
 }
 html.dark ::-webkit-scrollbar-thumb:hover {
   background: #5d82a8;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 .line-clamp-2 {

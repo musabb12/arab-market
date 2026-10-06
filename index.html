@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -9,13 +9,13 @@
     <script>
       (function () {
         try {
+          if (localStorage.getItem('ciar_defaults_version') !== '2') {
+            localStorage.removeItem('i18nextLng')
+            localStorage.removeItem('ciar_theme')
+            localStorage.setItem('ciar_defaults_version', '2')
+          }
           var stored = localStorage.getItem('ciar_theme')
-          var theme =
-            stored === 'light' || stored === 'dark'
-              ? stored
-              : window.matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light'
+          var theme = stored === 'dark' ? 'dark' : 'light'
           var root = document.documentElement
           if (theme === 'dark') {
             root.classList.add('dark')

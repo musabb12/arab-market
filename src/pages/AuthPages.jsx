@@ -113,7 +113,7 @@ export function Login() {
         {t('auth.noAccount')} <Link to="/register" className="font-semibold text-brand-600 hover:underline">{t('auth.createOne')}</Link>
       </p>
       <p className="text-center text-xs text-slate-400 mt-3">
-        Want to sell? <Link to="/sell" className="text-brand-600 font-semibold hover:underline">Apply as a merchant</Link>
+        {t('auth.wantToSell')} <Link to="/sell" className="text-brand-600 font-semibold hover:underline">{t('auth.applyMerchant')}</Link>
       </p>
     </AuthShell>
   )
@@ -173,7 +173,7 @@ export function Register() {
           <input type="checkbox" checked={form.agree} onChange={(e) => setForm({ ...form, agree: e.target.checked })} className="h-4 w-4 rounded border-slate-300 accent-brand-600" />
           {t('auth.agreeTerms')}
         </label>
-        <button type="submit" disabled={!form.agree || form.password !== form.confirm || loading} className="w-full py-4 rounded-full bg-brand-600 text-white font-semibold transition-all disabled:opacity-40">
+        <button type="submit" disabled={!form.agree || loading} className="w-full py-4 rounded-full bg-brand-600 text-white font-semibold transition-all disabled:opacity-40">
           {loading ? '...' : t('auth.createAccount')}
         </button>
       </form>

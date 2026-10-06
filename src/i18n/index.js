@@ -64,7 +64,7 @@ i18n
     supportedLngs: Object.keys(LANGUAGE_META),
     interpolation: { escapeValue: false },
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['localStorage', 'htmlTag'],
       caches: ['localStorage']
     }
   })

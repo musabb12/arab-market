@@ -9,7 +9,7 @@ const BADGES = ['flashSale', 'featured', 'bestSeller', 'newArrival']
 
 const emptyForm = {
   name: '', price: 0, originalPrice: 0, stock: 100, rating: 4.5, reviews: 0,
-  category: 'electronics', brand: 'nova', sellerId: 's1', image: '', badges: [],
+  category: 'bags', brand: 'hermes', sellerId: 's1', image: '', badges: [],
   description: '', specs: [], colors: [], active: true
 }
 
