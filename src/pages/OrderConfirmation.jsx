@@ -107,7 +107,7 @@ export default function OrderConfirmation() {
               <div key={item.id} className="flex items-center gap-4">
                 <img src={item.product.image} alt={item.product.name} className="h-16 w-16 rounded-xl object-cover" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-brand-600">{getBrand(item.product.brand).name}</p>
+                  <p className="text-xs font-semibold text-brand-600">{t(`brands.${item.product.brand}`, { defaultValue: getBrand(item.product.brand).name })}</p>
                   <p className="text-sm font-medium text-midnight-900">{item.product.name}</p>
                 </div>
                 <span className="text-sm text-slate-500">x{item.qty}</span>

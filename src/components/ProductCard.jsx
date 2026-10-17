@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../context/StoreContext.jsx'
-import { getBrand, discountPercent } from '../utils/helpers.js'
+import { getBrand, brandLabel, discountPercent } from '../utils/helpers.js'
 import Icon from './Icons.jsx'
 
 const badgeStyles = {
@@ -96,7 +96,7 @@ export default function ProductCard({ product, index = 0 }) {
       </div>
 
       <div className="pt-2.5 px-0.5">
-        <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400 truncate" dir="ltr">{brand.name}</p>
+        <p className="text-[11px] font-bold tracking-[0.04em] text-slate-600 dark:text-slate-300 truncate">{brandLabel(brand, t)}</p>
         <Link to={`/product/${product.id}`}>
           <h3 className="mt-0.5 text-[13px] text-midnight-900 dark:text-slate-100 truncate hover:text-brand-600 transition-colors" dir="auto">{product.name}</h3>
         </Link>

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useStore } from '../context/StoreContext.jsx'
 import Icon from './Icons.jsx'
-import { subcategoryLabel } from '../utils/catalog.js'
+import { subcategoryLabel, subcategoryImage } from '../utils/catalog.js'
 
 function Dropdown({ trigger, children, align = 'right' }) {
   const [open, setOpen] = useState(false)
@@ -67,12 +67,16 @@ export default function Navbar() {
     theme,
     setTheme
   } = useStore()
+  const canBrowse = Boolean(user) || settings?.requireLogin === false
   const [query, setQuery] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [catOpen, setCatOpen] = useState(false)
   const [msgIndex, setMsgIndex] = useState(0)
   const catRef = useRef(null)
   const headerRef = useRef(null)
+  const stripViewportRef = useRef(null)
+  const stripTrackRef = useRef(null)
+  const [stripX, setStripX] = useState(0)
 
   const messages = [t('topBar.msg1'), t('topBar.ship'), t('topBar.msg2'), t('topBar.msg3')]
 
@@ -122,6 +126,59 @@ export default function Navbar() {
     { to: '/brands', label: t('nav.brands') }
   ]
 
+  const getStripMax = () => {
+    const viewport = stripViewportRef.current
+    const track = stripTrackRef.current
+    if (!viewport || !track) return 0
+    const viewW = viewport.clientWidth
+    if (viewW <= 0) return 0
+    let trackW = track.scrollWidth
+    if (trackW <= viewW + 2) {
+      trackW = Array.from(track.children).reduce((sum, node) => sum + node.getBoundingClientRect().width, 0)
+    }
+    return Math.max(0, trackW - viewW)
+  }
+
+  const scrollStrip = (dir) => {
+    const viewport = stripViewportRef.current
+    const track = stripTrackRef.current
+    if (!viewport || !track) return
+    let max = getStripMax()
+    const step = Math.max(180, Math.round(Math.max(viewport.clientWidth, 240) * 0.55))
+    if (max <= 2) {
+      max = Math.max(step * 3, track.children.length * 72 - viewport.clientWidth)
+    }
+    if (max <= 2) return
+    setStripX((prev) => {
+      let next = prev + dir * step
+      if (next < 0) next = max
+      else if (next > max) next = 0
+      return Math.max(0, Math.min(max, next))
+    })
+  }
+
+  useLayoutEffect(() => {
+    setStripX(0)
+  }, [ltr, language, stripLinks.length])
+
+  useEffect(() => {
+    const viewport = stripViewportRef.current
+    const track = stripTrackRef.current
+    if (!viewport || !track) return
+    const clamp = () => {
+      const max = Math.max(0, track.scrollWidth - viewport.clientWidth)
+      setStripX((prev) => Math.min(prev, max))
+    }
+    const ro = new ResizeObserver(clamp)
+    ro.observe(viewport)
+    ro.observe(track)
+    window.addEventListener('resize', clamp)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', clamp)
+    }
+  }, [stripLinks.length, language])
+
   const drawerLinks = [
     { to: '/', key: 'nav.home' },
     { to: '/deals', key: 'nav.deals' },
@@ -133,7 +190,7 @@ export default function Navbar() {
 
   return (
     <header ref={headerRef} className="fixed top-0 inset-x-0 z-50">
-      <div className="bg-midnight-950 text-white h-8 flex items-center justify-center overflow-hidden px-4">
+      <div className="hidden md:flex bg-midnight-950 text-white h-8 items-center justify-center overflow-hidden px-4">
         <AnimatePresence mode="wait">
           <motion.p
             key={`${msgIndex}-${i18n.language}`}
@@ -281,20 +338,20 @@ export default function Navbar() {
             )}
 
             <Link
-              to={user ? '/wishlist' : '/login'}
-              state={user ? undefined : { from: '/wishlist' }}
+              to={canBrowse ? '/wishlist' : '/login'}
+              state={canBrowse ? undefined : { from: '/wishlist' }}
               className="relative p-2 sm:p-2.5 rounded-full transition-colors hover:bg-slate-50 dark:hover:bg-white/10"
               aria-label={t('nav.wishlist')}
             >
               <Icon name="heart" size={22} className="text-midnight-900 dark:text-white" />
-              {user && wishlist.length > 0 && (
+              {canBrowse && wishlist.length > 0 && (
                 <span className="absolute -top-0.5 -end-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-white text-[10px] font-bold">{wishlist.length}</span>
               )}
             </Link>
 
             <button
               onClick={() => {
-                if (!user) {
+                if (!canBrowse) {
                   navigate('/login', { state: { from: '/cart' } })
                   return
                 }
@@ -304,7 +361,7 @@ export default function Navbar() {
               aria-label={t('nav.cart')}
             >
               <Icon name="cart" size={22} className="text-midnight-900 dark:text-white" />
-              {user && cartCount > 0 && (
+              {canBrowse && cartCount > 0 && (
                 <span className="absolute -top-0.5 -end-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-brand-600 text-white text-[10px] font-bold">{cartCount}</span>
               )}
             </button>
@@ -326,7 +383,7 @@ export default function Navbar() {
         </form>
       </div>
 
-      <nav className="bg-white dark:bg-midnight-950 border-b border-slate-200 dark:border-white/10 shadow-[0_6px_18px_-16px_rgba(15,33,55,0.6)]">
+      <nav className="hidden md:block bg-white dark:bg-midnight-950 border-b border-slate-200 dark:border-white/10 shadow-[0_6px_18px_-16px_rgba(15,33,55,0.6)]">
         <div className="max-w-7xl mx-auto px-4 flex items-center gap-2">
           <div className="relative hidden md:block shrink-0" ref={catRef}>
             <button
@@ -348,23 +405,30 @@ export default function Navbar() {
                 >
                   {categories.map((c) => (
                     <div key={c.id} className="min-w-0">
-                      <Link to={`/category/${c.id}`} className="group flex items-center gap-2.5 mb-2" onClick={() => setCatOpen(false)}>
-                        <img src={c.image} alt="" className="h-10 w-10 rounded-full object-cover ring-1 ring-slate-200 dark:ring-white/10" loading="lazy" />
+                      <Link to={`/category/${c.id}`} className="group flex items-center gap-2.5 mb-3" onClick={() => setCatOpen(false)}>
+                        <img src={c.image} alt="" className="h-11 w-11 rounded-full object-cover ring-2 ring-amber-400/50" loading="lazy" />
                         <span className="text-sm font-bold text-midnight-900 dark:text-white group-hover:text-brand-600 transition-colors">{t(c.nameKey)}</span>
                       </Link>
-                      <ul className="space-y-1 ps-[3.1rem]">
+                      <div className="flex flex-wrap gap-3">
                         {(c.subcategories || []).slice(0, 4).map((s) => (
-                          <li key={s}>
-                            <Link
-                              to={`/category/${c.id}`}
-                              onClick={() => setCatOpen(false)}
-                              className="text-xs text-slate-500 dark:text-slate-400 hover:text-brand-600 transition-colors"
-                            >
+                          <Link
+                            key={s}
+                            to={`/products?q=${encodeURIComponent(s)}&category=${c.id}`}
+                            onClick={() => setCatOpen(false)}
+                            className="group/sub flex flex-col items-center gap-1 w-[4.25rem]"
+                          >
+                            <img
+                              src={subcategoryImage(s, c.image)}
+                              alt=""
+                              loading="lazy"
+                              className="h-11 w-11 rounded-full object-cover ring-1 ring-slate-200 dark:ring-white/15 group-hover/sub:ring-amber-500 transition-all"
+                            />
+                            <span className="text-[10px] leading-tight text-center text-slate-500 dark:text-slate-400 group-hover/sub:text-brand-600 line-clamp-2">
                               {subcategoryLabel(t, s)}
-                            </Link>
-                          </li>
+                            </span>
+                          </Link>
                         ))}
-                      </ul>
+                      </div>
                     </div>
                   ))}
                 </motion.div>
@@ -372,31 +436,53 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          <div className="flex-1 min-w-0 flex items-center gap-0.5 overflow-x-auto no-scrollbar">
-            {stripLinks.map((l) => {
-              const active = path === l.to
-              return (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  className={`relative shrink-0 whitespace-nowrap px-3 py-3 text-[13px] font-semibold transition-colors ${
-                    active
-                      ? 'text-midnight-900 dark:text-white'
-                      : l.accent
-                        ? 'text-red-600 hover:text-red-700'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-midnight-900 dark:hover:text-white'
-                  }`}
-                >
-                  {l.label}
-                  {active && <span className="absolute inset-x-3 bottom-0 h-[2px] rounded-full bg-midnight-900 dark:bg-white" />}
-                </Link>
-              )
-            })}
-          </div>
+          <div className="flex flex-1 min-w-0 max-w-full items-center gap-1.5 overflow-hidden">
+            <button
+              type="button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollStrip(-1) }}
+              aria-label={t('common.previous', { defaultValue: 'Previous' })}
+              className="relative z-10 shrink-0 flex h-9 w-9 items-center justify-center rounded-full border border-midnight-900 bg-midnight-900 text-white shadow-md transition-all duration-200 hover:bg-brand-600 hover:border-brand-600 active:scale-95 dark:border-white dark:bg-white dark:text-midnight-950 dark:hover:bg-brand-600 dark:hover:border-brand-600 dark:hover:text-white"
+            >
+              <Icon name="chevronLeft" size={18} strokeWidth={2.4} className="rtl:rotate-180" />
+            </button>
 
-          <Link to="/sell" className="hidden lg:inline-flex shrink-0 px-4 py-2 rounded-full bg-brand-600 text-white text-xs font-semibold hover:opacity-90 transition-opacity">
-            {t('nav.sell')}
-          </Link>
+            <div ref={stripViewportRef} className="relative min-w-0 flex-1 max-w-full overflow-hidden">
+              <div
+                ref={stripTrackRef}
+                className="flex w-max items-center gap-0.5 will-change-transform transition-transform duration-300 ease-out"
+                style={{ transform: `translate3d(${(ltr ? -stripX : stripX)}px, 0, 0)` }}
+              >
+                {stripLinks.map((l) => {
+                  const active = path === l.to
+                  return (
+                    <Link
+                      key={l.to}
+                      to={l.to}
+                      className={`relative shrink-0 whitespace-nowrap px-3 py-3 text-[13px] font-semibold transition-colors ${
+                        active
+                          ? 'text-midnight-900 dark:text-white'
+                          : l.accent
+                            ? 'text-red-600 hover:text-red-700'
+                            : 'text-slate-600 dark:text-slate-300 hover:text-midnight-900 dark:hover:text-white'
+                      }`}
+                    >
+                      {l.label}
+                      {active && <span className="absolute inset-x-3 bottom-0 h-[2px] rounded-full bg-midnight-900 dark:bg-white" />}
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollStrip(1) }}
+              aria-label={t('common.next', { defaultValue: 'Next' })}
+              className="relative z-10 shrink-0 flex h-9 w-9 items-center justify-center rounded-full border border-midnight-900 bg-midnight-900 text-white shadow-md transition-all duration-200 hover:bg-brand-600 hover:border-brand-600 active:scale-95 dark:border-white dark:bg-white dark:text-midnight-950 dark:hover:bg-brand-600 dark:hover:border-brand-600 dark:hover:text-white"
+            >
+              <Icon name="chevronRight" size={18} strokeWidth={2.4} className="rtl:rotate-180" />
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -465,7 +551,6 @@ export default function Navbar() {
                   ))}
                 </div>
                 <Link to="/track-order" className="block px-4 py-3 mt-3 text-sm font-medium text-midnight-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg">{t('nav.trackOrder')}</Link>
-                <Link to="/sell" className="block px-4 py-3 text-sm font-medium text-midnight-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg">{t('nav.sell')}</Link>
                 <div className="mt-4 border-t border-slate-100 dark:border-white/10 pt-4">
                   <span className="px-4 text-xs font-semibold uppercase tracking-wider text-slate-400">{t('common.language')}</span>
                   <div className="grid grid-cols-2 gap-1 mt-2 px-2">

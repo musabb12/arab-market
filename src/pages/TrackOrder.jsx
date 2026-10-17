@@ -130,7 +130,7 @@ export default function TrackOrder() {
                   <div key={item.id} className="flex items-center gap-3">
                     <img src={item.product.image} alt={item.product.name} className="h-12 w-12 rounded-lg object-cover" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-brand-600">{getBrand(item.product.brand).name}</p>
+                      <p className="text-xs font-semibold text-brand-600">{t(`brands.${item.product.brand}`, { defaultValue: getBrand(item.product.brand).name })}</p>
                       <p className="text-sm text-midnight-900 line-clamp-1">{item.product.name}</p>
                     </div>
                     <span className="text-sm font-semibold text-midnight-900">x{item.qty}</span>

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Toggle, Badge } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
+import PaymentBrand from '../../components/PaymentBrand.jsx'
 
 export default function Payments() {
   const { t } = useTranslation()
@@ -14,8 +15,6 @@ export default function Payments() {
     toast(enabled ? t('admin.common.enabled') : t('admin.common.disabled'))
   }
 
-  const icons = { card: 'creditCard', cod: 'wallet', paypal: 'wallet', applepay: 'apple', googlepay: 'wallet' }
-
   return (
     <div>
       <SectionTitle title={t('admin.payments.title')} subtitle={t('admin.payments.subtitle')} />
@@ -24,11 +23,15 @@ export default function Payments() {
         <div className="grid md:grid-cols-2 gap-4">
           {payments.map((p) => (
             <div key={p.id} className="border border-slate-100 rounded-2xl p-5 flex items-center gap-4">
-              <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${p.enabled ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
-                <Icon name={icons[p.id] || 'creditCard'} size={22} />
+              <span className={`flex h-14 w-20 shrink-0 items-center justify-center rounded-xl overflow-hidden ${p.enabled ? 'bg-white border border-slate-100' : 'bg-slate-100 opacity-60'}`}>
+                <PaymentBrand
+                  id={p.id}
+                  size="sm"
+                  title={t(`home.payment_${p.id}`, { defaultValue: p.name })}
+                />
               </span>
-              <div className="flex-1">
-                <p className="font-semibold text-midnight-900">{p.name}</p>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-midnight-900">{t(`home.payment_${p.id}`, { defaultValue: p.name })}</p>
               </div>
               <Toggle checked={p.enabled} onChange={(v) => toggle(p.id, v)} />
             </div>

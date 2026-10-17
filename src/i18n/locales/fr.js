@@ -7,6 +7,15 @@ export default {
     login: 'Se connecter',
     register: 'Créer un compte'
   },
+
+  mobileNav: {
+    store: 'Boutique',
+    categories: 'Catégories',
+    trends: 'Tendances',
+    bag: 'Panier',
+    me: 'Moi',
+    loginPrompt: 'Connectez-vous et profitez davantage'
+  },
   nav: {
     home: 'Accueil',
     categories: 'Catégories',
@@ -138,8 +147,8 @@ export default {
     accessories: 'Accessoires',
     home: 'Maison de Luxe',
     tech: 'High-Tech de Luxe',
-    travel: 'Voyage',
-    leisure: 'Sports d\'Élite',
+    leisure: 'Sport',
+    supplements: 'Compléments alimentaires',
     art: 'Art & Collection',
     title: 'Toutes les catégories',
     subtitle: 'Parcourez tous les rayons de la marketplace'
@@ -360,6 +369,9 @@ export default {
     signIn: 'Se connecter',
     myOrders: 'Mes commandes',
     wishlist: 'Liste de souhaits',
+    sellBadge: 'Pour les marchands',
+    sellTitle: 'Vendez sur Ciar VIP',
+    sellSubtitle: 'Rejoignez notre marketplace d\'élite.',
     sellWithUs: 'Vendre avec nous',
     becomeSeller: 'Devenir vendeur',
     sellerLogin: 'Espace vendeur',

@@ -7,6 +7,15 @@ export default {
     login: 'サインイン',
     register: 'アカウント作成'
   },
+
+  mobileNav: {
+    store: 'ストア',
+    categories: 'カテゴリ',
+    trends: 'トレンド',
+    bag: 'バッグ',
+    me: 'マイページ',
+    loginPrompt: 'ログインしてもっと楽しむ'
+  },
   nav: {
     home: 'ホーム',
     categories: 'カテゴリー',
@@ -138,8 +147,8 @@ export default {
     accessories: 'アクセサリー',
     home: 'ラグジュアリーホーム',
     tech: 'ラグジュアリーテック',
-    travel: 'トラベル',
-    leisure: 'エリートスポーツ',
+    leisure: 'スポーツ',
+    supplements: '栄養サプリメント',
     art: 'アート＆コレクション',
     title: '全カテゴリー',
     subtitle: 'マーケットプレイスのすべての部門をご覧ください'
@@ -360,6 +369,9 @@ export default {
     signIn: 'サインイン',
     myOrders: 'マイ注文',
     wishlist: 'お気に入り',
+    sellBadge: '出品者向け',
+    sellTitle: 'Ciar VIPで販売',
+    sellSubtitle: 'エリートマーケットプレイスに参加。',
     sellWithUs: '出品する',
     becomeSeller: 'セラーになる',
     sellerLogin: 'セラーログイン',
@@ -450,6 +462,8 @@ export default {
     subtitle: '年中無休、24時間いつでも対応いたします。',
     supportTitle: 'カスタマーサポート',
     supportText: '注文、配送、返品についてのご質問はこちら',
+    whatsappText: 'WhatsApp',
+    socialTitle: 'Social',
     salesTitle: 'セラーになる',
     salesText: 'Ciar VIPでの販売にご興味がありますか？',
     pressTitle: 'メディア＆プレス',

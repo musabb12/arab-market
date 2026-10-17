@@ -25,17 +25,24 @@ async function request(path, options = {}) {
   const token = getToken()
   if (token) headers.Authorization = `Bearer ${token}`
 
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers,
-    body: options.body != null ? JSON.stringify(options.body) : undefined
-  })
+  let res
+  try {
+    res = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers,
+      body: options.body != null ? JSON.stringify(options.body) : undefined
+    })
+  } catch (networkErr) {
+    const err = new Error(networkErr?.message || 'Network error')
+    err.offline = true
+    throw err
+  }
 
   const text = await res.text()
   const contentType = res.headers.get('content-type') || ''
-  // Netlify SPA fallback can return index.html with 200 for missing /api routes.
-  if (contentType.includes('text/html') || /^\s*</.test(text)) {
-    const err = new Error('API returned HTML instead of JSON (is the backend deployed?)')
+  // Netlify SPA fallback / Vite proxy crash often return HTML or empty 5xx.
+  if (contentType.includes('text/html') || /^\s*</.test(text) || (res.status >= 500 && !text.trim())) {
+    const err = new Error('API unavailable')
     err.status = res.status
     err.offline = true
     throw err

@@ -51,7 +51,7 @@ export default function Wishlist() {
                   </button>
                 </div>
                 <div className="p-4">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-brand-600 mb-1">{getBrand(p.brand).name}</p>
+                  <p className="text-[10px] font-semibold tracking-wide text-brand-600 mb-1">{t(`brands.${p.brand}`, { defaultValue: getBrand(p.brand).name })}</p>
                   <Link to={`/product/${p.id}`} className="text-sm font-semibold text-midnight-900 line-clamp-2 hover:text-brand-600 transition-colors mb-2">{p.name}</Link>
                   <div className="flex items-center gap-1.5 mb-3">
                     <StarRating rating={p.rating} size={13} />

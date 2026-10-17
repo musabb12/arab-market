@@ -40,6 +40,18 @@ export default function SystemSettings() {
             </div>
             <div className="flex items-center justify-between p-4 rounded-xl border border-slate-100">
               <div className="flex items-center gap-3">
+                <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${settings.requireLogin !== false ? 'bg-brand-50 text-brand-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                  <Icon name={settings.requireLogin !== false ? 'lock' : 'bag'} size={18} />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-midnight-900">{t('admin.system.requireLogin')}</p>
+                  <p className="text-xs text-slate-400">{t('admin.system.requireLoginHint')}</p>
+                </div>
+              </div>
+              <Toggle checked={settings.requireLogin !== false} onChange={(v) => set('requireLogin', v)} />
+            </div>
+            <div className="flex items-center justify-between p-4 rounded-xl border border-slate-100">
+              <div className="flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
                   <Icon name="compare" size={18} />
                 </span>

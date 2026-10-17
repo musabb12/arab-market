@@ -7,6 +7,15 @@ export default {
     login: 'Giriş Yap',
     register: 'Hesap Oluştur'
   },
+
+  mobileNav: {
+    store: 'Mağaza',
+    categories: 'Kategoriler',
+    trends: 'Trendler',
+    bag: 'Çanta',
+    me: 'Ben',
+    loginPrompt: 'Giriş yapın ve daha fazlasının tadını çıkarın'
+  },
   nav: {
     home: 'Ana Sayfa',
     categories: 'Kategoriler',
@@ -138,8 +147,8 @@ export default {
     accessories: 'Aksesuar',
     home: 'Lüks Ev',
     tech: 'Lüks Teknoloji',
-    travel: 'Seyahat',
-    leisure: 'Elit Sporlar',
+    leisure: 'Spor',
+    supplements: 'Gıda Takviyeleri',
     art: 'Sanat ve Koleksiyon',
     title: 'Tüm Kategoriler',
     subtitle: 'Pazaryerindeki her departmanı keşfedin'
@@ -360,6 +369,9 @@ export default {
     signIn: 'Giriş Yap',
     myOrders: 'Siparişlerim',
     wishlist: 'Alışveriş Listem',
+    sellBadge: 'Satıcılar için',
+    sellTitle: "Ciar VIP'de sat",
+    sellSubtitle: 'Seçkin pazaryerimize katılın.',
     sellWithUs: 'Bizimle Satış Yapın',
     becomeSeller: 'Satıcı Olun',
     sellerLogin: 'Satıcı Girişi',
@@ -450,6 +462,8 @@ export default {
     subtitle: 'Haftanın 7 günü, günde 24 saat yardım için buradayız.',
     supportTitle: 'Müşteri Desteği',
     supportText: 'Sipariş, kargo veya iadeyle ilgili sorularınız mı var?',
+    whatsappText: 'WhatsApp',
+    socialTitle: 'Social',
     salesTitle: 'Satıcı Olun',
     salesText: 'Ciar VIP\'te satış yapmakla ilgileniyor musunuz?',
     pressTitle: 'Medya & Basın',

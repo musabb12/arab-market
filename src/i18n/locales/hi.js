@@ -7,6 +7,15 @@ export default {
     login: 'साइन इन करें',
     register: 'खाता बनाएं'
   },
+
+  mobileNav: {
+    store: 'स्टोर',
+    categories: 'श्रेणियाँ',
+    trends: 'ट्रेंड्स',
+    bag: 'बैग',
+    me: 'मैं',
+    loginPrompt: 'लॉग इन करें और अधिक पाएं'
+  },
   nav: {
     home: 'होम',
     categories: 'श्रेणियाँ',
@@ -138,8 +147,8 @@ export default {
     accessories: 'एक्सेसरीज़',
     home: 'लग्ज़री होम',
     tech: 'लग्ज़री टेक',
-    travel: 'यात्रा',
-    leisure: 'एलीट स्पोर्ट्स',
+    leisure: 'खेल',
+    supplements: 'पोषण संबंधी पूरक',
     art: 'कला और संग्रह',
     title: 'सभी श्रेणियाँ',
     subtitle: 'मार्केटप्लेस के हर विभाग को ब्राउज़ करें'
@@ -360,6 +369,9 @@ export default {
     signIn: 'साइन इन करें',
     myOrders: 'मेरे ऑर्डर',
     wishlist: 'विशलिस्ट',
+    sellBadge: 'विक्रेताओं के लिए',
+    sellTitle: 'Ciar VIP पर बेचें',
+    sellSubtitle: 'हमारे एलिट मार्केटप्लेस से जुड़ें।',
     sellWithUs: 'हमारे साथ बेचें',
     becomeSeller: 'विक्रेता बनें',
     sellerLogin: 'विक्रेता लॉगिन',
@@ -450,6 +462,8 @@ export default {
     subtitle: 'हम हफ्ते के 7 दिन, 24 घंटे आपकी मदद के लिए यहां हैं।',
     supportTitle: 'ग्राहक सहायता',
     supportText: 'ऑर्डर, शिपिंग या रिटर्न के बारे में प्रश्न हैं?',
+    whatsappText: 'WhatsApp',
+    socialTitle: 'Social',
     salesTitle: 'विक्रेता बनें',
     salesText: 'Ciar VIP पर बेचने में रुचि रखते हैं?',
     pressTitle: 'मीडिया एंड प्रेस',

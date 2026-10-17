@@ -9,18 +9,19 @@ import Icon from './Icons.jsx'
 export default function CartDrawer() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { cart, cartOpen, setCartOpen, updateQty, removeFromCart, cartSubtotal, formatPrice, user } = useStore()
+  const { cart, cartOpen, setCartOpen, updateQty, removeFromCart, cartSubtotal, formatPrice, user, settings } = useStore()
+  const canBrowse = Boolean(user) || settings?.requireLogin === false
 
   const freeShipThreshold = 99
 
   useEffect(() => {
-    if (cartOpen && !user) {
+    if (cartOpen && !canBrowse) {
       setCartOpen(false)
       navigate('/login', { state: { from: '/cart' } })
     }
-  }, [cartOpen, user, setCartOpen, navigate])
+  }, [cartOpen, canBrowse, setCartOpen, navigate])
 
-  if (!user) return null
+  if (!canBrowse) return null
 
   return (
     <AnimatePresence>
@@ -72,7 +73,7 @@ export default function CartDrawer() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div>
-                            <p className="text-[10px] font-semibold uppercase tracking-wider text-brand-600">{getBrand(item.product.brand).name}</p>
+                            <p className="text-[10px] font-semibold tracking-wide text-brand-600">{t(`brands.${item.product.brand}`, { defaultValue: getBrand(item.product.brand).name })}</p>
                             <Link to={`/product/${item.product.id}`} className="text-sm font-medium text-midnight-900 line-clamp-2 hover:text-brand-600 transition-colors">
                               {item.product.name}
                             </Link>
@@ -119,7 +120,14 @@ export default function CartDrawer() {
                     <span className="text-xl font-bold text-midnight-900">{formatPrice(cartSubtotal)}</span>
                   </div>
                   <button
-                    onClick={() => { setCartOpen(false); navigate('/checkout') }}
+                    onClick={() => {
+                      setCartOpen(false)
+                      if (!user) {
+                        navigate('/login', { state: { from: '/checkout' } })
+                        return
+                      }
+                      navigate('/checkout')
+                    }}
                     className="w-full py-3.5 rounded-full bg-brand-600 text-white font-semibold hover:opacity-90 transition-opacity"
                   >
                     {t('cart.checkout')}

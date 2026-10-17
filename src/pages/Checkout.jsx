@@ -7,6 +7,7 @@ import { useStore } from '../context/StoreContext.jsx'
 import { COUNTRIES } from '../utils/helpers.js'
 import { getBrand } from '../utils/helpers.js'
 import Icon from '../components/Icons.jsx'
+import PaymentBrand from '../components/PaymentBrand.jsx'
 
 export default function Checkout() {
   const { t } = useTranslation()
@@ -55,7 +56,8 @@ export default function Checkout() {
   }
 
   const validContact = form.email && form.firstName && form.lastName && form.address && form.city && form.zip
-  const validPayment = form.payment === 'cod' || form.payment === 'card'
+  const enabledPayments = payments.filter((p) => p.enabled !== false)
+  const validPayment = enabledPayments.some((p) => p.id === form.payment)
 
   const submit = async () => {
     setError('')
@@ -158,10 +160,19 @@ export default function Checkout() {
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl border border-slate-100 shadow-soft p-7">
               <h3 className="font-bold text-midnight-900 mb-4">{t('checkout.payment')}</h3>
               <div className="grid sm:grid-cols-2 gap-3 mb-6">
-                {payments.filter((p) => p.enabled).map((p) => (
-                  <button key={p.id} onClick={() => setForm((f) => ({ ...f, payment: p.id }))} className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all ${form.payment === p.id ? 'border-brand-600 bg-brand-50' : 'border-slate-200 hover:border-slate-300'}`}>
-                    <Icon name={p.id === 'cod' ? 'wallet' : 'creditCard'} size={22} className="text-brand-600" />
-                    <span className="text-sm font-semibold text-midnight-900">{p.id === 'cod' ? t('checkout.cashOnDelivery') : p.id === 'card' ? t('checkout.card') : p.name}</span>
+                {enabledPayments.map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setForm((f) => ({ ...f, payment: p.id }))}
+                    className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all text-start ${form.payment === p.id ? 'border-brand-600 bg-brand-50' : 'border-slate-200 hover:border-slate-300'}`}
+                  >
+                    <span className="flex h-12 w-16 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-white px-1">
+                      <PaymentBrand id={p.id} size="sm" title={t(`home.payment_${p.id}`, { defaultValue: p.name })} />
+                    </span>
+                    <span className="text-sm font-semibold text-midnight-900">
+                      {t(`home.payment_${p.id}`, { defaultValue: p.name })}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -169,8 +180,13 @@ export default function Checkout() {
               {form.payment === 'card' && (
                 <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm text-slate-600 mb-2">
                   {apiOnline
-                    ? 'You will complete card payment securely on Stripe Checkout.'
-                    : 'Card payments require the API server and STRIPE_SECRET_KEY.'}
+                    ? t('checkout.cardStripeHint', { defaultValue: 'You will complete card payment securely on Stripe Checkout.' })
+                    : t('checkout.cardOfflineHint', { defaultValue: 'Card payments require the API server and STRIPE_SECRET_KEY.' })}
+                </div>
+              )}
+              {(form.payment === 'whish' || form.payment === 'ciarprepaid') && (
+                <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm text-slate-600 mb-2">
+                  {t('checkout.localPayHint', { defaultValue: 'You will receive payment instructions after placing the order.' })}
                 </div>
               )}
 
@@ -206,7 +222,7 @@ export default function Checkout() {
                   <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-midnight-900 text-white text-[10px] font-bold">{item.qty}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-brand-600">{getBrand(item.product.brand).name}</p>
+                  <p className="text-xs font-semibold text-brand-600">{t(`brands.${item.product.brand}`, { defaultValue: getBrand(item.product.brand).name })}</p>
                   <p className="text-sm font-medium text-midnight-900 line-clamp-1">{item.product.name}</p>
                 </div>
                 <span className="text-sm font-semibold text-midnight-900">{formatPrice(item.product.price * item.qty)}</span>

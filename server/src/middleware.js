@@ -86,7 +86,18 @@ export function serializeProduct(p) {
     badges: parseJson(p.badges, []),
     flashPercent: p.flashPercent,
     stock: p.stock,
-    colors: parseJson(p.colors, []),
+    ...(() => {
+      const raw = parseJson(p.colors, [])
+      if (Array.isArray(raw)) return { colors: raw }
+      return {
+        colors: raw.swatches || [],
+        colorVariants: raw.variants || [],
+        sizes: raw.sizes || [],
+        fabric: raw.fabric || '',
+        measurements: raw.measurements || {},
+        subcategory: raw.subcategory || ''
+      }
+    })(),
     description: p.description,
     specs: parseJson(p.specs, []),
     active: p.active,

@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { PageHero, Breadcrumb, ProductGrid } from '../components/Layout.jsx'
 import { useStore } from '../context/StoreContext.jsx'
 import Icon from '../components/Icons.jsx'
-import { subcategoryLabel } from '../utils/catalog.js'
+import CircleLink from '../components/CircleLink.jsx'
+import { subcategoryLabel, subcategoryImage } from '../utils/catalog.js'
 
 export default function CategoryPage() {
   const { categoryId } = useParams()
@@ -29,11 +30,16 @@ export default function CategoryPage() {
       <Breadcrumb items={[{ to: '/products', label: t('products.title') }, { label: t(category.nameKey) }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-wrap gap-2 mb-8">
+        {/* Circular subcategory icons — SHEIN-style across the platform */}
+        <div className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-2 mb-10">
           {category.subcategories.map((s) => (
-            <Link key={s} to={`/products?q=${encodeURIComponent(s)}`} className="text-xs px-4 py-2 rounded-full bg-white dark:bg-midnight-900 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:border-midnight-900 hover:text-midnight-900 dark:hover:border-white dark:hover:text-white transition-colors">
-              {subcategoryLabel(t, s)}
-            </Link>
+            <CircleLink
+              key={s}
+              to={`/products?q=${encodeURIComponent(s)}&category=${category.id}`}
+              image={subcategoryImage(s, category.image)}
+              label={subcategoryLabel(t, s)}
+              size="md"
+            />
           ))}
         </div>
 
@@ -44,7 +50,7 @@ export default function CategoryPage() {
               {relatedBrands.map((b) => (
                 <Link key={b.id} to={`/brand/${b.id}`} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 dark:bg-midnight-800 hover:bg-amber-50 dark:hover:bg-midnight-700 transition-colors">
                   <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${b.gradient} text-white text-xs font-bold`}>{b.logo}</span>
-                  <span className="text-sm font-semibold text-midnight-900 dark:text-white" dir="ltr">{b.name}</span>
+                  <span className="text-sm font-semibold text-midnight-900 dark:text-white">{t(`brands.${b.id}`, { defaultValue: b.name })}</span>
                   {b.rare && <span className="rounded-full bg-midnight-950 px-2 py-0.5 text-[10px] font-bold text-amber-300">{t('common.rare')}</span>}
                 </Link>
               ))}

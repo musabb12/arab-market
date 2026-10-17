@@ -35,11 +35,11 @@ export default function Brands() {
                       {b.logo}
                     </span>
                     <span className="flex flex-col items-end gap-1.5">
-                      <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{b.country}</span>
+                      <span className="text-xs font-bold text-slate-500 tracking-wider">{t(`countries.${b.country}`, { defaultValue: b.country })}</span>
                       {b.rare && <span className="rounded-full bg-midnight-950 px-2.5 py-0.5 text-[10px] font-bold text-amber-300">{t('common.rare')}</span>}
                     </span>
                   </div>
-                  <h3 className="font-display text-xl font-semibold text-midnight-900 dark:text-white group-hover:text-brand-600 transition-colors mb-2">{b.name}</h3>
+                  <h3 className="font-display text-xl font-semibold text-midnight-900 dark:text-white group-hover:text-brand-600 transition-colors mb-2">{t(`brands.${b.id}`, { defaultValue: b.name })}</h3>
                   <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-4 flex-1">{b.description}</p>
                   <div className="flex items-center justify-between">
                     {cat && <span className="text-xs font-medium bg-slate-100 px-3 py-1 rounded-full text-slate-600">{t(cat.nameKey)}</span>}

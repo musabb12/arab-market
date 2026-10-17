@@ -3,11 +3,13 @@ import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import { Layout, ScrollToTop } from './components/Layout.jsx'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
+import MobileBottomNav from './components/MobileBottomNav.jsx'
 import CartDrawer from './components/CartDrawer.jsx'
 import Toasts from './components/Toasts.jsx'
 import RequireAuth from './components/RequireAuth.jsx'
 
 import Home from './pages/Home.jsx'
+import CategoriesHub from './pages/CategoriesHub.jsx'
 import Products from './pages/Products.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
 import CategoryPage from './pages/CategoryPage.jsx'
@@ -68,18 +70,19 @@ function StorefrontLayout() {
     <Layout>
       <ScrollToTop />
       <Navbar />
-      <main className="flex-1 pt-[var(--site-nav-h)]">
+      <main className="flex-1 pt-[var(--site-nav-h)] pb-[calc(3.5rem+env(safe-area-inset-bottom,0px))] md:pb-0">
         <Outlet />
       </main>
       <Footer />
+      <MobileBottomNav />
       <CartDrawer />
       <Toasts />
     </Layout>
   )
 }
 
-function Private({ children }) {
-  return <RequireAuth>{children}</RequireAuth>
+function Private({ children, always = false }) {
+  return <RequireAuth always={always}>{children}</RequireAuth>
 }
 
 export default function App() {
@@ -114,6 +117,7 @@ export default function App() {
       <Route element={<StorefrontLayout />}>
         {/* Public */}
         <Route path="/" element={<Home />} />
+        <Route path="/categories" element={<CategoriesHub />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/help" element={<HelpCenter />} />
@@ -123,14 +127,14 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Shopping — members only */}
+        {/* Shopping — gated by admin requireLogin (always=true keeps account/checkout locked) */}
         <Route path="/products" element={<Private><Products /></Private>} />
         <Route path="/product/:id" element={<Private><ProductDetail /></Private>} />
         <Route path="/category/:categoryId" element={<Private><CategoryPage /></Private>} />
         <Route path="/search" element={<Private><SearchPage /></Private>} />
         <Route path="/cart" element={<Private><CartPage /></Private>} />
-        <Route path="/checkout" element={<Private><Checkout /></Private>} />
-        <Route path="/order-confirmation" element={<Private><OrderConfirmation /></Private>} />
+        <Route path="/checkout" element={<Private always><Checkout /></Private>} />
+        <Route path="/order-confirmation" element={<Private always><OrderConfirmation /></Private>} />
         <Route path="/wishlist" element={<Private><Wishlist /></Private>} />
         <Route path="/compare" element={<Private><ComparePage /></Private>} />
         <Route path="/track-order" element={<Private><TrackOrder /></Private>} />
@@ -142,11 +146,11 @@ export default function App() {
         <Route path="/brand/:id" element={<Private><BrandDetail /></Private>} />
         <Route path="/gift-cards" element={<Private><GiftCards /></Private>} />
         <Route path="/store/:sellerId" element={<Private><StorePage /></Private>} />
-        <Route path="/seller" element={<Private><SellerDashboard /></Private>} />
-        <Route path="/account" element={<Private><Account /></Private>} />
-        <Route path="/account/orders" element={<Private><OrdersPage /></Private>} />
-        <Route path="/account/addresses" element={<Private><Addresses /></Private>} />
-        <Route path="/account/settings" element={<Private><Settings /></Private>} />
+        <Route path="/seller" element={<Private always><SellerDashboard /></Private>} />
+        <Route path="/account" element={<Private always><Account /></Private>} />
+        <Route path="/account/orders" element={<Private always><OrdersPage /></Private>} />
+        <Route path="/account/addresses" element={<Private always><Addresses /></Private>} />
+        <Route path="/account/settings" element={<Private always><Settings /></Private>} />
 
         <Route path="*" element={<NotFound />} />
       </Route>

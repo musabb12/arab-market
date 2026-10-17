@@ -1,5 +1,7 @@
-import { brands as defaultBrands, categories as defaultCategories } from '../data/categories.js'
+import { brands as defaultBrands, categories as defaultCategories, subcategoryImage } from '../data/categories.js'
 import { sellers as defaultSellers } from '../data/products.js'
+
+export { subcategoryImage }
 
 let registry = {
   brands: defaultBrands,
@@ -37,8 +39,26 @@ export function subcategoryLabel(t, label) {
   return t(`subcategories.${label}`, { defaultValue: label })
 }
 
-export function catName(c) {
+export function catName(c, t) {
   if (!c) return ''
-  if (c.name) return c.name
-  return (c.nameKey || '').replace('categories.', '').replace(/\./g, ' ')
+  if (typeof t === 'function' && c.nameKey) {
+    return t(c.nameKey, { defaultValue: c.name || c.id || '' })
+  }
+  if (c.name && c.name !== c.id) return c.name
+  if (c.nameKey) return c.nameKey.split('.').pop() || c.id || ''
+  return c.name || c.id || ''
+}
+
+export function brandLabel(brandOrId, t) {
+  const b = typeof brandOrId === 'string' ? getBrand(brandOrId) : brandOrId
+  if (!b) return ''
+  if (typeof t === 'function') return t(`brands.${b.id}`, { defaultValue: b.name })
+  return b.name
+}
+
+export function sellerLabel(sellerOrId, t) {
+  const s = typeof sellerOrId === 'string' ? getSeller(sellerOrId) : sellerOrId
+  if (!s) return ''
+  if (typeof t === 'function') return t(`sellers.${s.id}`, { defaultValue: s.name })
+  return s.name
 }

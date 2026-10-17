@@ -90,7 +90,7 @@ export default function Products() {
               <h4 className="text-sm font-semibold text-midnight-900 mb-3">{t('common.brand')}</h4>
               <div className="space-y-1.5">
                 {brands.slice(0, 8).map((b) => (
-                  <FilterItem key={b.id} active={brand === b.id} onClick={() => setFilter('brand', b.id)} label={b.name} />
+                  <FilterItem key={b.id} active={brand === b.id} onClick={() => setFilter('brand', b.id)} label={t(`brands.${b.id}`, { defaultValue: b.name })} />
                 ))}
               </div>
             </div>
@@ -142,7 +142,7 @@ export default function Products() {
                 <span className="text-midnight-900 font-medium"> · {t(getCategory(cat).nameKey)}</span>
               )}
               {brand !== 'all' && (
-                <span className="text-midnight-900 font-medium"> · {getBrand(brand).name}</span>
+                <span className="text-midnight-900 font-medium"> · {t(`brands.${brand}`, { defaultValue: getBrand(brand).name })}</span>
               )}
             </p>
             <div className="flex items-center gap-2">

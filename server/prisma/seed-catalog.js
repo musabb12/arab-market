@@ -60,7 +60,13 @@ async function main() {
       badges: JSON.stringify(p.badges || []),
       flashPercent: p.flashPercent ?? null,
       stock: p.stock ?? 0,
-      colors: JSON.stringify(p.colors || []),
+      colors: JSON.stringify({
+        swatches: p.colors || [],
+        variants: p.colorVariants || [],
+        sizes: p.sizes || [],
+        fabric: p.fabric || '',
+        measurements: p.measurements || {}
+      }),
       description: p.description || '',
       specs: JSON.stringify(p.specs || []),
       active: true

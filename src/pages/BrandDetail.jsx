@@ -25,8 +25,8 @@ export default function BrandDetail() {
 
   return (
     <div>
-      <PageHero title={brand.name} subtitle={brand.description} crumb={brand.name}  theme="brands" />
-      <Breadcrumb items={[{ to: '/brands', label: t('nav.brands') }, { label: brand.name }]} />
+      <PageHero title={t(`brands.${brand.id}`, { defaultValue: brand.name })} subtitle={brand.description} crumb={t(`brands.${brand.id}`, { defaultValue: brand.name })} theme="brands" />
+      <Breadcrumb items={[{ to: '/brands', label: t('nav.brands') }, { label: t(`brands.${brand.id}`, { defaultValue: brand.name }) }]} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="relative bg-white rounded-3xl border border-slate-100 shadow-soft overflow-hidden mb-10">
@@ -38,10 +38,10 @@ export default function BrandDetail() {
                   {brand.logo}
                 </span>
                 <div className="pb-1">
-                  <h2 className="font-display text-2xl font-bold text-midnight-900">{brand.name}</h2>
+                  <h2 className="font-display text-2xl font-bold text-midnight-900">{t(`brands.${brand.id}`, { defaultValue: brand.name })}</h2>
                   <p className="text-sm text-slate-500 flex items-center gap-1.5">
                     <Icon name="mapPin" size={13} />
-                    {brand.country}
+                    {t(`countries.${brand.country}`, { defaultValue: brand.country })}
                     {cat && <> · {t(cat.nameKey)}</>}
                   </p>
                 </div>

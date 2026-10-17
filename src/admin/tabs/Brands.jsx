@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Button, Modal, Field, TextInput, Textarea, Table, SearchInput, Badge } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
+import { brandLabel, catName } from '../../utils/helpers.js'
 
 const gradients = ['bg-brand-600', 'bg-rose-500', 'bg-emerald-500', 'bg-amber-500', 'bg-midnight-800', 'bg-sky-500']
 
@@ -15,7 +16,10 @@ export default function Brands() {
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState({ name: '', logo: '', country: '', description: '', category: '', gradient: gradients[0] })
 
-  const list = brands.filter((b) => b.name.toLowerCase().includes(q.toLowerCase()))
+  const list = brands.filter((b) => {
+    const label = brandLabel(b, t)
+    return label.toLowerCase().includes(q.toLowerCase()) || label.includes(q) || b.name.toLowerCase().includes(q.toLowerCase())
+  })
 
   const openNew = () => { setEditing(null); setForm({ name: '', logo: '', country: '', description: '', category: categories[0]?.id || '', gradient: gradients[0] }); setOpen(true) }
   const openEdit = (b) => { setEditing(b); setForm(b); setOpen(true) }
@@ -59,12 +63,12 @@ export default function Brands() {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${b.gradient} text-white font-bold`}>{b.logo}</span>
-                    <span className="font-semibold text-midnight-900">{b.name}</span>
+                    <span className="font-semibold text-midnight-900">{brandLabel(b, t)}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-slate-600">{categories.find((c) => c.id === b.category)?.name || '—'}</td>
+                <td className="px-4 py-3 text-slate-600">{catName(categories.find((c) => c.id === b.category), t) || '—'}</td>
                 <td className="px-4 py-3"><Badge tone="blue">{countFor(b.id)}</Badge></td>
-                <td className="px-4 py-3 text-slate-600">{b.country}</td>
+                <td className="px-4 py-3 text-slate-600">{t(`countries.${b.country}`, { defaultValue: b.country })}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     <button onClick={() => openEdit(b)} className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-brand-600"><Icon name="edit" size={16} /></button>
@@ -85,7 +89,7 @@ export default function Brands() {
             <Field label={t('admin.sellers.country')}><TextInput value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} /></Field>
             <Field label={t('admin.common.category')}>
               <select className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-brand-400" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                {categories.map((c) => <option key={c.id} value={c.id}>{catName(c, t)}</option>)}
               </select>
             </Field>
             <Field label={t('admin.common.description')} className="sm:col-span-2"><Textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></Field>

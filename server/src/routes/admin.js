@@ -55,8 +55,26 @@ router.get('/products', async (_req, res) => {
   res.json({ products: products.map(serializeProduct) })
 })
 
+function packColorsMeta(d) {
+  if (d.colorsMeta && typeof d.colorsMeta === 'object') return JSON.stringify(d.colorsMeta)
+  if (d.colors && !Array.isArray(d.colors) && typeof d.colors === 'object') return JSON.stringify(d.colors)
+  const swatches = Array.isArray(d.colors) ? d.colors : []
+  if (d.sizes || d.fabric || d.measurements || d.subcategory || d.colorVariants) {
+    return JSON.stringify({
+      swatches,
+      variants: d.colorVariants || [],
+      sizes: d.sizes || [],
+      fabric: d.fabric || '',
+      measurements: d.measurements || {},
+      subcategory: d.subcategory || ''
+    })
+  }
+  return JSON.stringify(swatches)
+}
+
 router.post('/products', async (req, res) => {
   const d = req.body
+  const images = Array.isArray(d.images) && d.images.length ? d.images : [d.image].filter(Boolean)
   const product = await prisma.product.create({
     data: {
       name: d.name,
@@ -65,15 +83,17 @@ router.post('/products', async (req, res) => {
       sellerId: d.sellerId,
       price: Number(d.price),
       originalPrice: d.originalPrice != null ? Number(d.originalPrice) : null,
-      image: d.image,
-      images: JSON.stringify(d.images || [d.image]),
+      rating: d.rating != null ? Number(d.rating) : 0,
+      reviewsCount: d.reviews != null ? Number(d.reviews) : 0,
+      image: d.image || images[0] || '',
+      images: JSON.stringify(images),
       badges: JSON.stringify(d.badges || []),
       stock: Number(d.stock || 0),
-      colors: JSON.stringify(d.colors || []),
+      colors: packColorsMeta(d),
       description: d.description || '',
       specs: JSON.stringify(d.specs || []),
       active: d.active !== false,
-      flashPercent: d.flashPercent ?? null
+      flashPercent: d.flashPercent != null && d.flashPercent !== '' ? Number(d.flashPercent) : null
     },
     include: { seller: true }
   })
@@ -82,19 +102,32 @@ router.post('/products', async (req, res) => {
 
 router.patch('/products/:id', async (req, res) => {
   const d = req.body
+  const data = {
+    ...(d.name != null ? { name: d.name } : {}),
+    ...(d.price != null ? { price: Number(d.price) } : {}),
+    ...(d.originalPrice != null ? { originalPrice: Number(d.originalPrice) || null } : {}),
+    ...(d.stock != null ? { stock: Number(d.stock) } : {}),
+    ...(d.active != null ? { active: Boolean(d.active) } : {}),
+    ...(d.sellerId ? { sellerId: d.sellerId } : {}),
+    ...(d.brand || d.brandId ? { brandId: d.brand || d.brandId } : {}),
+    ...(d.category || d.categoryId ? { categoryId: d.category || d.categoryId } : {}),
+    ...(d.image != null ? { image: d.image } : {}),
+    ...(d.images ? { images: JSON.stringify(d.images) } : {}),
+    ...(d.badges ? { badges: JSON.stringify(d.badges) } : {}),
+    ...(d.description != null ? { description: d.description } : {}),
+    ...(d.specs ? { specs: JSON.stringify(d.specs) } : {}),
+    ...(d.rating != null ? { rating: Number(d.rating) } : {}),
+    ...(d.reviews != null ? { reviewsCount: Number(d.reviews) } : {}),
+    ...(d.flashPercent !== undefined
+      ? { flashPercent: d.flashPercent != null && d.flashPercent !== '' ? Number(d.flashPercent) : null }
+      : {}),
+    ...(d.colors != null || d.colorsMeta != null || d.sizes != null || d.fabric != null || d.measurements != null || d.subcategory != null
+      ? { colors: packColorsMeta(d) }
+      : {})
+  }
   const product = await prisma.product.update({
     where: { id: req.params.id },
-    data: {
-      ...(d.name != null ? { name: d.name } : {}),
-      ...(d.price != null ? { price: Number(d.price) } : {}),
-      ...(d.stock != null ? { stock: Number(d.stock) } : {}),
-      ...(d.active != null ? { active: Boolean(d.active) } : {}),
-      ...(d.sellerId ? { sellerId: d.sellerId } : {}),
-      ...(d.category || d.categoryId ? { categoryId: d.category || d.categoryId } : {}),
-      ...(d.image ? { image: d.image } : {}),
-      ...(d.badges ? { badges: JSON.stringify(d.badges) } : {}),
-      ...(d.description != null ? { description: d.description } : {})
-    },
+    data,
     include: { seller: true }
   })
   res.json({ product: serializeProduct(product) })

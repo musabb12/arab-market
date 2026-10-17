@@ -4,6 +4,7 @@ import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Button, Modal, Field, TextInput, Textarea, Toggle, SearchInput, Badge, AdminCardGrid, AdminEntityCard, AdminIconButton } from '../ui.jsx'
 import { catName } from '../../utils/catalog.js'
 import Icon from '../../components/Icons.jsx'
+import ImageUploader from '../../components/ImageUploader.jsx'
 
 const gradients = ['bg-brand-600', 'bg-rose-500', 'bg-emerald-500', 'bg-amber-500', 'bg-midnight-800', 'bg-sky-500']
 
@@ -16,10 +17,10 @@ export default function Categories() {
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState({ name: '', image: '', gradient: gradients[0], subcategories: '', active: true })
 
-  const list = categories.filter((c) => catName(c).toLowerCase().includes(q.toLowerCase()))
+  const list = categories.filter((c) => catName(c, t).toLowerCase().includes(q.toLowerCase()) || catName(c, t).includes(q))
 
   const openNew = () => { setEditing(null); setForm({ name: '', image: '', gradient: gradients[0], subcategories: '', active: true }); setOpen(true) }
-  const openEdit = (c) => { setEditing(c); setForm({ name: catName(c), image: c.image, gradient: c.gradient, subcategories: c.subcategories.join(', '), active: c.active !== false }); setOpen(true) }
+  const openEdit = (c) => { setEditing(c); setForm({ name: catName(c, t), image: c.image, gradient: c.gradient, subcategories: c.subcategories.join(', '), active: c.active !== false }); setOpen(true) }
 
   const save = (e) => {
     e.preventDefault()
@@ -61,9 +62,9 @@ export default function Categories() {
             <AdminEntityCard
               key={c.id}
               image={c.image}
-              imageAlt={catName(c)}
+              imageAlt={catName(c, t)}
               gradient={c.gradient}
-              title={catName(c)}
+              title={catName(c, t)}
               subtitle={`${countFor(c.id)} ${t('admin.sellers.products').toLowerCase()}`}
               topBadges={[
                 { label: c.active !== false ? t('admin.common.active') : t('admin.common.inactive'), tone: c.active !== false ? 'green' : 'gray' },
@@ -101,7 +102,7 @@ export default function Categories() {
       <Modal open={open} onClose={() => setOpen(false)} title={editing ? t('admin.categories.edit') : t('admin.categories.add')}>
         <form onSubmit={save} className="space-y-4">
           <Field label={t('admin.common.name')}><TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required /></Field>
-          <Field label={t('admin.common.imageUrl')}><TextInput value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://images.unsplash.com/..." /></Field>
+          <ImageUploader label={t('admin.common.image')} value={form.image} onChange={(url) => setForm({ ...form, image: url })} />
           <Field label={t('admin.common.description')}><Textarea rows={2} value={form.subcategories} onChange={(e) => setForm({ ...form, subcategories: e.target.value })} /></Field>
           <Field label={t('admin.common.image')}>
             <div className="flex flex-wrap gap-2">

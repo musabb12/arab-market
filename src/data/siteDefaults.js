@@ -31,7 +31,7 @@ export const ALL_CURRENCIES = [
 
 const img = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=80`
 
-export const CATALOG_VERSION = 'luxury-2'
+export const CATALOG_VERSION = 'luxury-4'
 
 export const defaultSiteData = {
   catalogVersion: CATALOG_VERSION,
@@ -84,9 +84,24 @@ export const defaultSiteData = {
     taxRate: 5,
     defaultCurrency: 'USD',
     maintenanceMode: false,
+    requireLogin: true,
     allowCompare: true,
     maxCompare: 4,
-    lowStockThreshold: 50
+    lowStockThreshold: 50,
+    phone: '+966 11 234 5678',
+    whatsapp: '+966501234567',
+    email: 'hello@ciarvip.com',
+    facebook: 'https://facebook.com/ciarvip',
+    instagram: 'https://instagram.com/ciarvip',
+    twitter: 'https://x.com/ciarvip',
+    tiktok: 'https://tiktok.com/@ciarvip',
+    youtube: 'https://youtube.com/@ciarvip',
+    linkedin: 'https://linkedin.com/company/ciarvip',
+    snapchat: 'https://www.snapchat.com/add/ciarvip',
+    telegram: 'https://t.me/ciarvip',
+    pinterest: 'https://pinterest.com/ciarvip',
+    threads: 'https://www.threads.net/@ciarvip',
+    discord: 'https://discord.gg/ciarvip'
   },
 
   languages: ALL_LANGUAGES,
@@ -94,6 +109,8 @@ export const defaultSiteData = {
 
   payments: [
     { id: 'card', name: 'Credit / Debit Card', enabled: true },
+    { id: 'ciarprepaid', name: 'Ciar Prepaid Mastercard', enabled: true },
+    { id: 'whish', name: 'Whish Money', enabled: true },
     { id: 'cod', name: 'Cash on Delivery', enabled: true },
     { id: 'paypal', name: 'PayPal', enabled: true },
     { id: 'applepay', name: 'Apple Pay', enabled: true },

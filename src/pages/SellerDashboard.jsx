@@ -7,6 +7,7 @@ import { useStore } from '../context/StoreContext.jsx'
 import { api } from '../api/client.js'
 import { formatDate } from '../utils/helpers.js'
 import Icon from '../components/Icons.jsx'
+import ImageUploader from '../components/ImageUploader.jsx'
 
 const tabs = [
   { key: 'overview', label: 'overview', icon: 'home' },
@@ -231,7 +232,13 @@ export default function SellerDashboard() {
                   </select>
                   <input required type="number" step="0.01" placeholder="Price" className={input} value={productForm.price} onChange={(e) => setProductForm({ ...productForm, price: e.target.value })} />
                   <input required type="number" placeholder="Stock" className={input} value={productForm.stock} onChange={(e) => setProductForm({ ...productForm, stock: e.target.value })} />
-                  <input required placeholder="Image URL" className={`md:col-span-2 ${input}`} value={productForm.image} onChange={(e) => setProductForm({ ...productForm, image: e.target.value })} />
+                  <div className="md:col-span-2">
+                    <ImageUploader
+                      label={t('admin.common.image', { defaultValue: 'Image' })}
+                      value={productForm.image}
+                      onChange={(url) => setProductForm({ ...productForm, image: url })}
+                    />
+                  </div>
                   <textarea placeholder="Description" className={`md:col-span-2 ${input}`} rows={3} value={productForm.description} onChange={(e) => setProductForm({ ...productForm, description: e.target.value })} />
                   <button type="submit" className="md:col-span-2 py-3 rounded-full bg-brand-600 text-white font-semibold">Create product</button>
                 </form>

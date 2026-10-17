@@ -59,7 +59,7 @@ export default function OrdersPage() {
                         <div key={item.id} className="flex items-center gap-4">
                           <img src={item.product.image} alt={item.product.name} className="h-14 w-14 rounded-xl object-cover" />
                           <div className="flex-1 min-w-0">
-                            <p className="text-xs font-semibold text-brand-600">{getBrand(item.product.brand).name}</p>
+                            <p className="text-xs font-semibold text-brand-600">{t(`brands.${item.product.brand}`, { defaultValue: getBrand(item.product.brand).name })}</p>
                             <Link to={`/product/${item.product.id}`} className="text-sm font-medium text-midnight-900 line-clamp-1 hover:text-brand-600 transition-colors">{item.product.name}</Link>
                           </div>
                           <span className="text-sm text-slate-500">x{item.qty}</span>

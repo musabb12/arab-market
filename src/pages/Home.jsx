@@ -8,6 +8,8 @@ import ProductCard from '../components/ProductCard.jsx'
 import StarRating from '../components/StarRating.jsx'
 import Icon from '../components/Icons.jsx'
 import PaymentBrand, { NETWORK_BRANDS } from '../components/PaymentBrand.jsx'
+import CircleLink from '../components/CircleLink.jsx'
+import MobileStoreFeed from '../components/MobileStoreFeed.jsx'
 
 function HomeTitle({ title, subtitle, action, light = false }) {
   return (
@@ -102,11 +104,12 @@ function ProductRail({ products }) {
 
 export default function Home() {
   const { t, i18n } = useTranslation()
-  const { formatPrice, products, categories, brands, testimonials, content, user, payments } = useStore()
+  const { formatPrice, products, categories, brands, testimonials, content, user, payments, settings } = useStore()
   const [slide, setSlide] = useState(0)
   const [tab, setTab] = useState('all')
   const [visible, setVisible] = useState(15)
   const isMember = Boolean(user)
+  const canBrowse = isMember || settings?.requireLogin === false
 
   const heroSlides = (content.heroSlides || []).filter((s) => s.enabled !== false).map((s) => ({
     id: s.id,
@@ -149,8 +152,8 @@ export default function Home() {
     return i18n.getFixedT('en')(key, { defaultValue: '' }) === tm.text ? t(key) : tm.text
   }
   const activeSlide = heroSlides[slide] || heroSlides[0]
-  const shopLink = (to) => (isMember ? to : '/login')
-  const shopState = (to) => (isMember ? undefined : { from: to })
+  const shopLink = (to) => (canBrowse ? to : '/login')
+  const shopState = (to) => (canBrowse ? undefined : { from: to })
   const go = (dir) => setSlide((s) => (s + dir + heroSlides.length) % heroSlides.length)
 
   const perks = [
@@ -162,8 +165,11 @@ export default function Home() {
 
   return (
     <div className="bg-slate-50 dark:bg-midnight-950">
-      {/* HERO */}
-      <section className="relative h-[440px] sm:h-[500px] md:h-[580px] overflow-hidden bg-midnight-950">
+      {/* SHEIN-style mobile store feed */}
+      <MobileStoreFeed />
+
+      {/* Desktop / tablet hero */}
+      <section className="relative hidden md:block h-[50vh] overflow-hidden bg-midnight-950">
         {heroSlides.map((s, i) => (
           <motion.div
             key={s.id || i}
@@ -198,7 +204,7 @@ export default function Home() {
               </h1>
               <p className="text-white/85 text-base md:text-lg leading-relaxed mb-7 max-w-lg">{activeSlide?.sub}</p>
               <div className="flex flex-wrap items-center gap-3">
-                {isMember ? (
+                {canBrowse ? (
                   <>
                     <Link to="/products" className="group px-7 py-3.5 rounded-full bg-white text-midnight-950 font-bold text-sm flex items-center gap-2 hover:bg-amber-100 transition-colors">
                       {t('home.heroCta')}
@@ -246,8 +252,8 @@ export default function Home() {
         )}
       </section>
 
-      {/* PERKS */}
-      <section className="bg-white dark:bg-midnight-900 border-b border-slate-100 dark:border-white/10">
+      {/* PERKS — desktop */}
+      <section className="hidden md:block bg-white dark:bg-midnight-900 border-b border-slate-100 dark:border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-3.5 flex gap-7 overflow-x-auto no-scrollbar md:justify-between">
           {perks.map((p) => (
             <div key={p.icon} className="flex items-center gap-2 shrink-0 text-xs md:text-[13px] font-semibold text-midnight-900 dark:text-white">
@@ -258,27 +264,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SHOP BY CATEGORY */}
-      <section className="py-9 md:py-12 bg-white dark:bg-midnight-950">
+      {/* SHOP BY CATEGORY — desktop */}
+      <section className="hidden md:block py-9 md:py-12 bg-white dark:bg-midnight-950">
         <div className="max-w-7xl mx-auto px-4">
           <HomeTitle title={t('home.shopByCategory')} subtitle={t('home.categoriesSubtitle')} />
           <div className="flex md:grid md:grid-cols-7 gap-4 md:gap-x-4 md:gap-y-8 overflow-x-auto no-scrollbar pb-1">
             {categories.map((c) => (
-              <Link
+              <CircleLink
                 key={c.id}
                 to={shopLink(`/category/${c.id}`)}
                 state={shopState(`/category/${c.id}`)}
-                className="group flex flex-col items-center gap-2.5 shrink-0 w-[78px] md:w-auto"
-              >
-                <span className="relative block h-[74px] w-[74px] md:h-[7.5rem] md:w-[7.5rem] rounded-full p-[2.5px] bg-gradient-to-br from-amber-200 via-amber-600 to-amber-300 shadow-[0_10px_25px_-15px_rgba(180,120,20,0.8)]">
-                  <span className="block h-full w-full overflow-hidden rounded-full bg-white dark:bg-midnight-950 p-[2px]">
-                    <img src={c.image} alt={t(c.nameKey)} loading="lazy" className="h-full w-full rounded-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                  </span>
-                </span>
-                <span className="text-[11px] md:text-[13px] font-semibold text-center leading-tight text-midnight-900 dark:text-white group-hover:text-brand-600 transition-colors">
-                  {t(c.nameKey)}
-                </span>
-              </Link>
+                image={c.image}
+                label={t(c.nameKey)}
+                size="lg"
+              />
             ))}
           </div>
         </div>
@@ -306,7 +305,7 @@ export default function Home() {
                   <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-amber-400/40 font-display text-lg font-bold text-amber-300 transition-transform group-hover:scale-110" dir="ltr">
                     {b.logo}
                   </span>
-                  <p className="mt-3 text-sm font-semibold text-white truncate" dir="ltr">{b.name}</p>
+                  <p className="mt-3 text-sm font-semibold text-white truncate">{t(`brands.${b.id}`, { defaultValue: b.name })}</p>
                   <p className="text-[11px] text-white/45 truncate">{b.country}</p>
                 </Link>
               ))}
@@ -315,7 +314,7 @@ export default function Home() {
         </section>
       )}
 
-      {isMember && flashProducts.length > 0 && (
+      {canBrowse && flashProducts.length > 0 && (
         <section className="py-10 md:py-14 bg-white dark:bg-midnight-950">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex flex-wrap items-end justify-between gap-4 mb-5 md:mb-7">
@@ -367,7 +366,7 @@ export default function Home() {
         </div>
       </section>
 
-      {isMember && rareProducts.length > 0 && (
+      {canBrowse && rareProducts.length > 0 && (
         <section className="py-10 md:py-14 bg-white dark:bg-midnight-950">
           <div className="max-w-7xl mx-auto px-4">
             <HomeTitle
@@ -385,7 +384,7 @@ export default function Home() {
         </section>
       )}
 
-      {!isMember && (
+      {!canBrowse && (
         <section className="py-16 md:py-20 bg-midnight-900 relative overflow-hidden">
           <div className="absolute inset-0 opacity-30">
             <img
@@ -483,7 +482,7 @@ export default function Home() {
                     transition={{ delay: 0.36, duration: 0.5 }}
                     className="flex flex-wrap items-center gap-3"
                   >
-                    {isMember ? (
+                    {canBrowse ? (
                       <Link
                         to="/deals"
                         className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-semibold text-white bg-brand-600 shadow-lg shadow-orange-900/25 transition-all hover:brightness-110 hover:-translate-y-0.5"
@@ -501,10 +500,10 @@ export default function Home() {
                       </Link>
                     )}
                     <Link
-                      to={isMember ? '/coupons' : '/about'}
+                      to={canBrowse ? '/coupons' : '/about'}
                       className="inline-flex items-center px-7 py-3.5 rounded-2xl text-sm font-semibold text-white/90 border border-white/20 bg-white/5 backdrop-blur-md hover:bg-white/12 hover:border-white/35 transition-all"
                     >
-                      {isMember ? t('home.promoCta2') : t('common.learnMore')}
+                      {canBrowse ? t('home.promoCta2') : t('common.learnMore')}
                     </Link>
                   </motion.div>
                 </div>
@@ -537,7 +536,7 @@ export default function Home() {
         </section>
       )}
 
-      {isMember && (
+      {canBrowse && (
         <section className="py-10 md:py-14 bg-white dark:bg-midnight-950">
           <div className="max-w-7xl mx-auto px-4">
             <HomeTitle title={t('home.forYouTitle')} />
@@ -675,7 +674,7 @@ export default function Home() {
         <div className="relative max-w-[1400px] mx-auto px-3 sm:px-5 lg:px-8">
           <SectionHeader title={t('home.paymentsTitle')} subtitle={t('home.paymentsSubtitle')} />
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 mb-8 md:mb-10">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mb-8 md:mb-10">
             {(payments || []).map((p, i) => {
                 const active = p.enabled !== false
                 return (

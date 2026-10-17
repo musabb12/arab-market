@@ -1,3 +1,5 @@
+import { defaultFabric, defaultMeasurements, defaultSizes, normalizeColorVariants } from '../utils/productDetails.js'
+
 const u = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=80`
 
 export const sellers = [
@@ -8,25 +10,99 @@ export const sellers = [
 ]
 
 let seq = 1
-const p = (data) => ({
-  id: `p${seq++}`,
-  sellerId: data.sellerId || 's1',
-  images: data.images || [data.image],
-  colors: data.colors || [],
-  ...data
-})
+const p = (data) => {
+  const base = {
+    id: `p${seq++}`,
+    sellerId: data.sellerId || 's1',
+    images: data.images || [data.image],
+    colors: data.colors || [],
+    ...data
+  }
+  return {
+    ...base,
+    sizes: base.sizes || defaultSizes(base.category),
+    fabric: base.fabric || defaultFabric(base.category, base.specs),
+    measurements: base.measurements || defaultMeasurements(base.category),
+    colorVariants: normalizeColorVariants(base)
+  }
+}
 
 export const products = [
   // Women
   p({ name: 'Valentino Haute Couture Silk Gown', brand: 'valentino', category: 'women', price: 18500, rating: 5, reviews: 42, image: u('photo-1595777457583-95e059d581b8'), images: [u('photo-1595777457583-95e059d581b8'), u('photo-1566174053879-31528523f8ae')], badges: ['featured', 'luxury'], stock: 3, colors: ['#b91c1c'], description: 'A sweeping silk faille gown in the house’s signature red, hand-finished in the Valentino couture ateliers in Rome.', specs: ['100% silk faille', 'Hand-finished in Rome', 'Made to measure', 'Couture certificate'] }),
   p({ name: 'Elie Saab Embellished Evening Gown', brand: 'elie-saab', category: 'women', price: 14900, rating: 4.9, reviews: 37, image: u('photo-1566174053879-31528523f8ae'), badges: ['newArrival', 'featured'], stock: 4, colors: ['#581c87'], description: 'Off-shoulder couture gown with hand-embroidered crystals and a fluid silk train.', specs: ['Silk crepe', 'Hand embroidery', 'Couture fitting', 'Made in Beirut'] }),
   p({ name: 'Zuhair Murad Tulle Princess Gown', brand: 'zuhair-murad', category: 'women', price: 12800, originalPrice: 14500, rating: 4.9, reviews: 29, image: u('photo-1539008835657-9e8e9680c956'), badges: ['flashSale'], flashPercent: 12, stock: 3, colors: ['#93c5fd'], description: 'Layers of airy tulle and lace appliqués for a red-carpet silhouette.', specs: ['Silk tulle', 'Lace appliqué', 'Corset bodice', 'Made in Lebanon'] }),
-  p({ name: 'Chanel Bouclé Tweed Jacket', brand: 'chanel', category: 'women', price: 9200, rating: 4.9, reviews: 118, image: u('photo-1581044777550-4cfa60707c03'), badges: ['bestSeller'], stock: 6, colors: ['#fbcfe8', '#111827'], description: 'The iconic Chanel jacket in hand-woven bouclé tweed with chain-weighted hem and jewel buttons.', specs: ['Wool-silk bouclé', 'Chain-weighted hem', 'CC jewel buttons', 'Made in France'] }),
-  p({ name: 'Dior Bar Silk Dress', brand: 'dior', category: 'women', price: 6400, rating: 4.8, reviews: 64, image: u('photo-1515372039744-b8f02a3ae446'), badges: ['newArrival'], stock: 8, colors: ['#f8fafc'], description: 'A tribute to the New Look: cinched waist, full skirt and pure silk.', specs: ['100% silk', 'Cinched waist', 'Pleated skirt', 'Made in Italy'] }),
-  p({ name: 'Dior Oblique Cashmere Coat', brand: 'dior', category: 'women', price: 7900, rating: 4.8, reviews: 51, image: u('photo-1485968579580-b6d095142e6e'), badges: ['bestSeller'], stock: 7, description: 'Double-faced cashmere coat with a tailored silhouette and Oblique lining.', specs: ['Double-faced cashmere', 'Oblique jacquard lining', 'Horn buttons', 'Made in Italy'] }),
+  p({
+    name: 'Chanel Bouclé Tweed Jacket',
+    brand: 'chanel',
+    category: 'women',
+    price: 9200,
+    rating: 4.9,
+    reviews: 118,
+    image: u('photo-1581044777550-4cfa60707c03'),
+    images: [u('photo-1581044777550-4cfa60707c03'), u('photo-1485968579580-b6d095142e6e')],
+    badges: ['bestSeller'],
+    stock: 6,
+    colors: ['#fbcfe8', '#111827'],
+    fabric: 'Wool-silk bouclé tweed',
+    sizes: ['34', '36', '38', '40', '42'],
+    measurements: { length: '58 cm', bust: 'Fitted', sleeve: '60 cm', shoulder: '36–40 cm' },
+    colorVariants: [
+      { id: 'rose', name: 'Rose Clair', hex: '#fbcfe8', images: [u('photo-1581044777550-4cfa60707c03'), u('photo-1515372039744-b8f02a3ae446')] },
+      { id: 'noir', name: 'Noir', hex: '#111827', images: [u('photo-1485968579580-b6d095142e6e'), u('photo-1539533018447-63fcce2678e3')] }
+    ],
+    description: 'The iconic Chanel jacket in hand-woven bouclé tweed with chain-weighted hem and jewel buttons.',
+    specs: ['Wool-silk bouclé', 'Chain-weighted hem', 'CC jewel buttons', 'Made in France']
+  }),
+  p({ name: 'Dior Bar Silk Dress', brand: 'dior', category: 'women', price: 6400, rating: 4.8, reviews: 64, image: u('photo-1515372039744-b8f02a3ae446'), badges: ['newArrival'], stock: 8, colors: ['#f8fafc'], fabric: '100% silk', sizes: ['34', '36', '38', '40'], measurements: { length: '110 cm', bust: 'Fitted', waist: 'Cinched', hips: 'Full skirt' }, description: 'A tribute to the New Look: cinched waist, full skirt and pure silk.', specs: ['100% silk', 'Cinched waist', 'Pleated skirt', 'Made in Italy'] }),
+  p({
+    name: 'Dior Oblique Cashmere Coat',
+    brand: 'dior',
+    category: 'women',
+    price: 7900,
+    rating: 4.8,
+    reviews: 51,
+    image: u('photo-1485968579580-b6d095142e6e'),
+    images: [u('photo-1485968579580-b6d095142e6e'), u('photo-1539533018447-63fcce2678e3'), u('photo-1544966503-7cc5ac882d5f')],
+    badges: ['bestSeller'],
+    stock: 7,
+    colors: ['#e7e5e4', '#111827', '#1e3a8a'],
+    fabric: 'Double-faced cashmere',
+    sizes: ['34', '36', '38', '40', '42', '44'],
+    measurements: { length: '112 cm', bust: 'Loose fit', sleeve: '62 cm', shoulder: '38–42 cm' },
+    colorVariants: [
+      { id: 'beige', name: 'Beige Cachemire', hex: '#e7e5e4', images: [u('photo-1485968579580-b6d095142e6e'), u('photo-1544966503-7cc5ac882d5f')] },
+      { id: 'noir', name: 'Noir', hex: '#111827', images: [u('photo-1539533018447-63fcce2678e3'), u('photo-1485968579580-b6d095142e6e')] },
+      { id: 'navy', name: 'Marine', hex: '#1e3a8a', images: [u('photo-1544966503-7cc5ac882d5f'), u('photo-1485968579580-b6d095142e6e')] }
+    ],
+    description: 'Double-faced cashmere coat with a tailored silhouette and Oblique lining.',
+    specs: ['Double-faced cashmere', 'Oblique jacquard lining', 'Horn buttons', 'Made in Italy']
+  }),
 
   // Men
-  p({ name: 'Brioni Brunico Wool & Silk Suit', brand: 'brioni', category: 'men', price: 7800, rating: 4.9, reviews: 88, image: u('photo-1594938298603-c8148c4dae35'), badges: ['featured', 'bestSeller'], stock: 6, colors: ['#1e3a8a', '#111827'], sellerId: 's3', description: 'Hand-tailored in Penne with more than 220 production steps and a fully canvassed construction.', specs: ['Wool & silk', 'Full canvas', '220+ hand steps', 'Made in Italy'] }),
+  p({
+    name: 'Brioni Brunico Wool & Silk Suit',
+    brand: 'brioni',
+    category: 'men',
+    price: 7800,
+    rating: 4.9,
+    reviews: 88,
+    image: u('photo-1594938298603-c8148c4dae35'),
+    images: [u('photo-1594938298603-c8148c4dae35'), u('photo-1617127365659-c47fa864d8bc')],
+    badges: ['featured', 'bestSeller'],
+    stock: 6,
+    colors: ['#1e3a8a', '#111827'],
+    fabric: 'Wool & silk',
+    sizes: ['46', '48', '50', '52', '54'],
+    measurements: { length: 'Jacket 74 cm', chest: 'Made to measure', waist: 'Trousers adjustable', sleeve: '64 cm' },
+    colorVariants: [
+      { id: 'navy', name: 'Navy', hex: '#1e3a8a', images: [u('photo-1594938298603-c8148c4dae35'), u('photo-1617137968427-85924c800a22')] },
+      { id: 'noir', name: 'Noir', hex: '#111827', images: [u('photo-1617127365659-c47fa864d8bc'), u('photo-1507679799987-c73779587ccf')] }
+    ],
+    sellerId: 's3',
+    description: 'Hand-tailored in Penne with more than 220 production steps and a fully canvassed construction.',
+    specs: ['Wool & silk', 'Full canvas', '220+ hand steps', 'Made in Italy']
+  }),
   p({ name: 'Kiton K-50 Cashmere Suit', brand: 'kiton', category: 'men', price: 14500, rating: 5, reviews: 21, image: u('photo-1617137968427-85924c800a22'), badges: ['rare', 'luxury'], stock: 2, sellerId: 's3', description: 'One of the rarest suits in the world: 50 hours of Neapolitan handwork in 15-micron cashmere.', specs: ['15-micron cashmere', '50 hours of handwork', 'Limited to 500 a year', 'Made in Naples'] }),
   p({ name: 'Tom Ford O’Connor Velvet Tuxedo', brand: 'tom-ford', category: 'men', price: 5990, originalPrice: 6900, rating: 4.8, reviews: 46, image: u('photo-1507679799987-c73779587ccf'), badges: ['flashSale'], flashPercent: 13, stock: 5, sellerId: 's3', description: 'Peak-lapel tuxedo in midnight velvet with satin trims for black-tie evenings.', specs: ['Silk velvet', 'Satin peak lapel', 'Half canvas', 'Made in Italy'] }),
   p({ name: 'Loro Piana Vicuña Overcoat', brand: 'loro-piana', category: 'men', price: 22500, rating: 5, reviews: 14, image: u('photo-1539533018447-63fcce2678e3'), badges: ['rare'], stock: 2, sellerId: 's3', description: 'Crafted from vicuña, the rarest natural fiber on earth, for unmatched lightness and warmth.', specs: ['100% vicuña', 'Hand-finished', 'Horn buttons', 'Made in Italy'] }),
@@ -114,9 +190,15 @@ export const products = [
   p({ name: 'Leica M11 Monochrom', brand: 'leica', category: 'tech', price: 9195, originalPrice: 9995, rating: 4.9, reviews: 34, image: u('photo-1516035069371-29a1b244cc32'), badges: ['flashSale'], flashPercent: 8, stock: 4, sellerId: 's2', description: 'The purist’s rangefinder with a 60MP black-and-white sensor.', specs: ['60MP monochrome', 'Rangefinder', 'Brass top plate', 'Made in Wetzlar'] }),
   p({ name: 'Devialet Gemini II Earbuds', brand: 'devialet', category: 'tech', price: 400, rating: 4.7, reviews: 88, image: u('photo-1606220588913-b3aacb4d2f46'), badges: ['newArrival'], stock: 25, sellerId: 's2', description: 'Parisian sound engineering in a compact true wireless design.', specs: ['Adaptive ANC', 'Spatial audio', '30h battery', 'Designed in Paris'] }),
 
-  // Travel
-  p({ name: 'Rimowa Original Cabin Aluminium', brand: 'rimowa', category: 'travel', price: 1450, rating: 4.9, reviews: 167, image: u('photo-1565026057447-bc90a3dceb87'), badges: ['bestSeller'], stock: 12, sellerId: 's3', description: 'The iconic grooved aluminium cabin case with multiwheel system.', specs: ['Anodised aluminium', 'Multiwheel', 'TSA locks', 'Made in Germany'] }),
-  p({ name: 'Globe-Trotter Centenary Trolley Case', brand: 'globe-trotter', category: 'travel', price: 3200, rating: 4.9, reviews: 24, image: u('photo-1581553680321-4fffae59fccd'), badges: ['rare', 'newArrival'], stock: 3, sellerId: 's3', description: 'Hand-made vulcanised fibreboard case with leather corners, as used by royalty.', specs: ['Vulcanised fibreboard', 'Leather corners', 'Hand-riveted', 'Made in England'] }),
+  // Nutritional supplements (under elite sports lifestyle)
+  p({ name: 'Thorne Whey Protein Isolate Vanilla', brand: 'thorne', category: 'supplements', price: 89, rating: 4.9, reviews: 214, image: u('photo-1593095948071-474c5cc2989d'), badges: ['bestSeller'], stock: 40, sellerId: 's4', description: 'NSF Certified for Sport whey isolate for clean recovery and lean muscle.', specs: ['21g protein', 'NSF Certified', 'Low lactose', 'Vanilla'] }),
+  p({ name: 'Momentous Creatine Monohydrate', brand: 'momentous', category: 'supplements', price: 48, rating: 4.9, reviews: 186, image: u('photo-1579722820308-d74e571900a9'), badges: ['bestSeller', 'featured'], stock: 55, sellerId: 's4', description: 'Micronised creatine trusted by professional athletes for strength and power.', specs: ['5g serving', 'Creapure', 'Unflavoured', '90 servings'] }),
+  p({ name: 'AG1 Daily Foundational Nutrition', brand: 'ag1', category: 'supplements', price: 99, rating: 4.8, reviews: 320, image: u('photo-1550572017-edd951aa8f72'), badges: ['newArrival', 'rare'], stock: 30, sellerId: 's4', description: 'Greens, probiotics and adaptogens in one daily scoop for whole-body nutrition.', specs: ['75 vitamins & minerals', 'Probiotics', 'Adaptogens', 'Travel packs available'] }),
+  p({ name: 'Vital Proteins Collagen Peptides', brand: 'vital-proteins', category: 'supplements', price: 52, rating: 4.8, reviews: 410, image: u('photo-1620916567459-0f39f5a6e0a1'), badges: ['bestSeller'], stock: 48, sellerId: 's4', description: 'Grass-fed collagen peptides for joints, skin and recovery.', specs: ['20g collagen', 'Grass-fed', 'Unflavoured', 'Dissolves easily'] }),
+  p({ name: 'Thorne Omega-3 with CoQ10', brand: 'thorne', category: 'supplements', price: 64, rating: 4.9, reviews: 97, image: u('photo-1584308666744-24d5c474f2ae'), badges: ['newArrival'], stock: 35, sellerId: 's4', description: 'Molecularly distilled fish oil with CoQ10 for heart and recovery support.', specs: ['EPA + DHA', 'CoQ10', 'Softgels', 'Third-party tested'] }),
+  p({ name: 'Momentous Essential Aminos', brand: 'momentous', category: 'supplements', price: 58, rating: 4.8, reviews: 74, image: u('photo-1505751172876-fa1923c5c528'), badges: ['featured'], stock: 42, sellerId: 's4', description: 'Essential amino acids for muscle repair before or after training.', specs: ['EAA formula', 'Light citrus', 'Zero sugar', 'Travel tin'] }),
+  p({ name: 'Thorne Pre-Workout Elite', brand: 'thorne', category: 'supplements', price: 54, rating: 4.7, reviews: 112, image: u('photo-1517836357463-d25dfeac3438'), badges: ['flashSale'], flashPercent: 12, originalPrice: 61, stock: 28, sellerId: 's4', description: 'Clean energy, focus and pump support without artificial dyes.', specs: ['Caffeine + L-citrulline', 'NSF Certified', 'Berry', '20 servings'] }),
+  p({ name: 'AG1 Plant Protein Blend', brand: 'ag1', category: 'supplements', price: 79, rating: 4.8, reviews: 88, image: u('photo-1622484211148-c6b9d51f506f'), badges: ['newArrival'], stock: 26, sellerId: 's4', description: 'Plant-based protein with digestive enzymes for daily performance.', specs: ['20g plant protein', 'Enzymes', 'Chocolate', 'Vegan'] }),
 
   // Elite sports
   p({ name: 'Honma Beres 5-Star Golf Set', brand: 'honma', category: 'leisure', price: 28000, rating: 5, reviews: 10, image: u('photo-1535131749006-b7f58c99034b'), badges: ['rare', 'featured'], stock: 2, sellerId: 's4', description: 'Full set finished in 24K gold and platinum, hand-crafted in Sakata, Japan.', specs: ['24K gold accents', 'Platinum ferrules', 'ARMRQ shafts', 'Made in Japan'] }),

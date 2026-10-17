@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Badge, Button, Modal, Field, TextInput, SearchInput, Bar, Empty, AdminCardGrid, AdminEntityCard, AdminIconButton } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
+import ImageUploader from '../../components/ImageUploader.jsx'
+import { sellerLabel } from '../../utils/helpers.js'
 
 export default function Sellers() {
   const { t } = useTranslation()
@@ -13,7 +15,11 @@ export default function Sellers() {
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState({ name: '', image: '', rating: 4.8, followers: 100, response: '1h', commissionRate: 8, status: 'approved', earnings: 0 })
 
-  const list = sellers.filter((s) => s.name.toLowerCase().includes(q.toLowerCase()))
+  const list = sellers.filter((s) => {
+    const label = sellerLabel(s, t)
+    const qq = q.toLowerCase()
+    return label.toLowerCase().includes(qq) || label.includes(q) || (s.name || '').toLowerCase().includes(qq)
+  })
   const maxEarnings = Math.max(...sellers.map((s) => s.earnings || 0), 1)
 
   const openEdit = (s) => { setEditing(s); setForm(s); setOpen(true) }
@@ -73,9 +79,9 @@ export default function Sellers() {
             <AdminEntityCard
               key={s.id}
               image={s.image}
-              imageAlt={s.name}
+              imageAlt={sellerLabel(s, t)}
               gradient="bg-brand-600"
-              title={s.name}
+              title={sellerLabel(s, t)}
               subtitle={`${s.followers?.toLocaleString?.() || s.followers} · ${s.response}`}
               topBadges={[
                 {
@@ -117,7 +123,9 @@ export default function Sellers() {
         <form onSubmit={save} className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
             <Field label={t('admin.sellers.storeName')}><TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required /></Field>
-            <Field label={t('admin.common.imageUrl')}><TextInput value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} /></Field>
+            <div className="sm:col-span-2">
+              <ImageUploader label={t('admin.common.image')} value={form.image} onChange={(url) => setForm({ ...form, image: url })} />
+            </div>
             <Field label={t('admin.reviews.rating')}><TextInput type="number" step="0.1" min="0" max="5" value={form.rating} onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })} /></Field>
             <Field label={t('admin.sellers.commission')}><TextInput type="number" value={form.commissionRate} onChange={(e) => setForm({ ...form, commissionRate: Number(e.target.value) })} /></Field>
             <Field label={t('admin.common.status')}>

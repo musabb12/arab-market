@@ -7,6 +7,15 @@ export default {
     login: 'Iniciar Sesión',
     register: 'Crear Cuenta'
   },
+
+  mobileNav: {
+    store: 'Tienda',
+    categories: 'Categorías',
+    trends: 'Tendencias',
+    bag: 'Bolsa',
+    me: 'Yo',
+    loginPrompt: 'Inicia sesión y disfruta más'
+  },
   nav: {
     home: 'Inicio',
     categories: 'Categorías',
@@ -138,8 +147,8 @@ export default {
     accessories: 'Accesorios',
     home: 'Hogar de Lujo',
     tech: 'Tecnología de Lujo',
-    travel: 'Viajes',
-    leisure: 'Deportes de Élite',
+    leisure: 'Deportes',
+    supplements: 'Complementos nutricionales',
     art: 'Arte y Coleccionismo',
     title: 'Todas las Categorías',
     subtitle: 'Explora todos los departamentos del marketplace'
@@ -360,6 +369,9 @@ export default {
     signIn: 'Iniciar Sesión',
     myOrders: 'Mis Pedidos',
     wishlist: 'Lista de Deseos',
+    sellBadge: 'Para comerciantes',
+    sellTitle: 'Vende en Ciar VIP',
+    sellSubtitle: 'Únete a nuestro marketplace de élite.',
     sellWithUs: 'Vende Con Nosotros',
     becomeSeller: 'Conviértete en Vendedor',
     sellerLogin: 'Inicio de Sesión del Vendedor',
@@ -450,6 +462,8 @@ export default {
     subtitle: 'Estamos aquí para ayudarte, 24 horas al día, 7 días a la semana.',
     supportTitle: 'Atención al Cliente',
     supportText: '¿Preguntas sobre pedidos, envíos o devoluciones?',
+    whatsappText: 'WhatsApp',
+    socialTitle: 'Social',
     salesTitle: 'Conviértete en Vendedor',
     salesText: '¿Te interesa vender en Ciar VIP?',
     pressTitle: 'Medios y Prensa',

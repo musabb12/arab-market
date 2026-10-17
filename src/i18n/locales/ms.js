@@ -7,6 +7,15 @@ export default {
     login: 'Log Masuk',
     register: 'Daftar Akaun'
   },
+
+  mobileNav: {
+    store: 'Kedai',
+    categories: 'Kategori',
+    trends: 'Trend',
+    bag: 'Beg',
+    me: 'Saya',
+    loginPrompt: 'Log masuk dan nikmati lebih banyak'
+  },
   nav: {
     home: 'Utama',
     categories: 'Kategori',
@@ -147,6 +156,8 @@ export default {
     paymentNetworks: 'Rangkaian diterima',
     paymentNetworksText: 'Kami menerima rangkaian kad global dan serantau yang terkemuka.',
     payment_card: 'Kad Kredit / Debit',
+    payment_ciarprepaid: 'Ciar Prepaid Mastercard',
+    payment_whish: 'Whish Money',
     payment_cod: 'Bayar Semasa Penghantaran',
     payment_paypal: 'PayPal',
     payment_applepay: 'Apple Pay',
@@ -170,8 +181,8 @@ export default {
     accessories: 'Aksesori',
     home: 'Kediaman Mewah',
     tech: 'Teknologi Mewah',
-    travel: 'Pelancongan',
-    leisure: 'Sukan Elit',
+    leisure: 'Sukan',
+    supplements: 'Suplemen Pemakanan',
     art: 'Seni & Koleksi',
     title: 'Semua Kategori',
     subtitle: 'Layari setiap jabatan di pasaran'
@@ -401,6 +412,9 @@ export default {
     signIn: 'Log Masuk',
     myOrders: 'Pesanan Saya',
     wishlist: 'Senarai Hajat',
+    sellBadge: 'Untuk peniaga',
+    sellTitle: 'Jual di Ciar VIP',
+    sellSubtitle: 'Sertai pasaran elit kami.',
     sellWithUs: 'Jual Bersama Kami',
     becomeSeller: 'Jadi Penjual',
     sellerLogin: 'Log Masuk Penjual',
@@ -491,6 +505,8 @@ export default {
     subtitle: 'Kami sedia membantu, 24 jam sehari, 7 hari seminggu.',
     supportTitle: 'Khidmat Pelanggan',
     supportText: 'Ada soalan tentang pesanan, penghantaran atau pemulangan?',
+    whatsappText: 'WhatsApp',
+    socialTitle: 'Social',
     salesTitle: 'Jadi Penjual',
     salesText: 'Berminat untuk menjual di Ciar VIP?',
     pressTitle: 'Media & Akhbar',

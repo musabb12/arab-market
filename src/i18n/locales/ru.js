@@ -7,6 +7,15 @@ export default {
     login: 'Войти',
     register: 'Создать аккаунт'
   },
+
+  mobileNav: {
+    store: 'Магазин',
+    categories: 'Категории',
+    trends: 'Тренды',
+    bag: 'Сумка',
+    me: 'Я',
+    loginPrompt: 'Войдите и получите больше'
+  },
   nav: {
     home: 'Главная',
     categories: 'Категории',
@@ -138,8 +147,8 @@ export default {
     accessories: 'Аксессуары',
     home: 'Роскошный дом',
     tech: 'Люксовая техника',
-    travel: 'Путешествия',
-    leisure: 'Элитный спорт',
+    leisure: 'Спорт',
+    supplements: 'Пищевые добавки',
     art: 'Искусство и коллекции',
     title: 'Все категории',
     subtitle: 'Просмотрите все отделы маркетплейса'
@@ -360,6 +369,9 @@ export default {
     signIn: 'Войти',
     myOrders: 'Мои заказы',
     wishlist: 'Избранное',
+    sellBadge: 'Для продавцов',
+    sellTitle: 'Продавайте на Ciar VIP',
+    sellSubtitle: 'Присоединяйтесь к нашему элитному маркетплейсу.',
     sellWithUs: 'Продавайте с нами',
     becomeSeller: 'Стать продавцом',
     sellerLogin: 'Вход для продавцов',
@@ -450,6 +462,8 @@ export default {
     subtitle: 'Мы готовы помочь 24 часа в сутки, 7 дней в неделю.',
     supportTitle: 'Служба поддержки',
     supportText: 'Вопросы о заказах, доставке или возврате?',
+    whatsappText: 'WhatsApp',
+    socialTitle: 'Social',
     salesTitle: 'Стать продавцом',
     salesText: 'Хотите продавать на Ciar VIP?',
     pressTitle: 'СМИ и пресса',

@@ -74,7 +74,7 @@ export default function CartPage() {
                       <img src={item.product.image} alt={item.product.name} className="h-20 w-20 rounded-xl object-cover" />
                     </Link>
                     <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-brand-600">{getBrand(item.product.brand).name}</p>
+                      <p className="text-[10px] font-semibold tracking-wide text-brand-600">{t(`brands.${item.product.brand}`, { defaultValue: getBrand(item.product.brand).name })}</p>
                       <Link to={`/product/${item.product.id}`} className="text-sm font-medium text-midnight-900 line-clamp-2 hover:text-brand-600 transition-colors">{item.product.name}</Link>
                       <p className="text-xs text-slate-400 mt-1">{t('common.inStock')}</p>
                     </div>

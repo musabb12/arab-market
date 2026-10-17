@@ -8,6 +8,7 @@ import catalogRoutes from './routes/catalog.js'
 import sellerRoutes from './routes/sellers.js'
 import orderRoutes from './routes/orders.js'
 import adminRoutes from './routes/admin.js'
+import uploadRoutes, { uploadsDir } from './routes/upload.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
@@ -16,16 +17,24 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173'
 
 app.use(
   cors({
-    origin: [CLIENT_URL, 'http://localhost:5173', 'http://127.0.0.1:5173'],
+    origin: [
+      CLIENT_URL,
+      'http://localhost:5173',
+      'http://127.0.0.1:5173',
+      'http://localhost:5174',
+      'http://127.0.0.1:5174'
+    ],
     credentials: true
   })
 )
-app.use(express.json({ limit: '2mb' }))
+app.use(express.json({ limit: '12mb' }))
+app.use('/uploads', express.static(uploadsDir))
 
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true, service: 'lumina-api' })
 })
 
+app.use('/api/upload', uploadRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api', catalogRoutes)
 app.use('/api/seller', sellerRoutes)

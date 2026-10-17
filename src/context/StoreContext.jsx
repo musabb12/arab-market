@@ -140,7 +140,8 @@ function migrateHeroImages(siteData) {
       logoText: ['L', 'A'].includes(siteData.settings?.logoText) ? 'C' : (siteData.settings?.logoText || 'C'),
       tagline: siteData.settings?.tagline?.includes('Arab') ? 'Premium Marketplace' : (siteData.settings?.tagline || 'Premium Marketplace'),
       brandColor,
-      accentColor
+      accentColor,
+      requireLogin: siteData.settings?.requireLogin !== false
     }
   }
 }
@@ -487,9 +488,13 @@ export function StoreProvider({ children }) {
       toast(t('notif.welcome').replace(/Lumina Market|Ciar VIP/g, t('brand')))
       return u
     } catch (err) {
+      if (isApiUnavailable(err)) setApiOnline(false)
       const accounts = loadLocalAccounts()
       const account = accounts.find((a) => a.email === normalized && a.password === password)
       if (!account) {
+        if (isApiUnavailable(err)) {
+          throw new Error(t('auth.serverOffline'))
+        }
         throw new Error(
           err.status === 401 || err.status === 400 ? t('auth.invalidCredentials') : err.message || t('auth.invalidCredentials')
         )
@@ -530,7 +535,9 @@ export function StoreProvider({ children }) {
       toast(t('notif.welcome').replace(/Lumina Market|Ciar VIP/g, t('brand')))
       return u
     } catch (err) {
-      if (!isApiUnavailable(err)) {
+      if (isApiUnavailable(err)) {
+        setApiOnline(false)
+      } else {
         throw new Error(
           err.status === 409 ? t('auth.emailTaken') : err.status === 400 ? t('auth.invalidDetails') : err.message
         )

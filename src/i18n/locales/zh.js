@@ -7,6 +7,15 @@ export default {
     login: '登录',
     register: '创建账户'
   },
+
+  mobileNav: {
+    store: '商店',
+    categories: '分类',
+    trends: '潮流',
+    bag: '购物袋',
+    me: '我的',
+    loginPrompt: '登录享受更多'
+  },
   nav: {
     home: '首页',
     categories: '商品分类',
@@ -138,8 +147,8 @@ export default {
     accessories: '配饰',
     home: '奢华家居',
     tech: '奢华科技',
-    travel: '旅行',
-    leisure: '精英运动',
+    leisure: '运动',
+    supplements: '营养补充剂',
     art: '艺术收藏',
     title: '全部商品分类',
     subtitle: '浏览平台内所有商品类目'
@@ -360,6 +369,9 @@ export default {
     signIn: '登录',
     myOrders: '我的订单',
     wishlist: '心愿单',
+    sellBadge: '商家专区',
+    sellTitle: '在 Ciar VIP 开店',
+    sellSubtitle: '加入我们的高端市场。',
     sellWithUs: '与我们合作',
     becomeSeller: '成为卖家',
     sellerLogin: '卖家登录',
@@ -450,6 +462,8 @@ export default {
     subtitle: '我们全天候为您提供帮助，一周 7 天，一天 24 小时。',
     supportTitle: '客户支持',
     supportText: '有关于订单、配送或退换的问题？',
+    whatsappText: 'WhatsApp',
+    socialTitle: 'Social',
     salesTitle: '成为卖家',
     salesText: '有意在 Ciar VIP 开店？',
     pressTitle: '媒体与新闻',

@@ -13,7 +13,7 @@ export default function ComparePage() {
 
   const rows = [
     { key: 'price', label: t('compare.price'), render: (p) => <b>{formatPrice(p.price)}</b> },
-    { key: 'brand', label: t('compare.brand'), render: (p) => getBrand(p.brand).name },
+    { key: 'brand', label: t('compare.brand'), render: (p) => t(`brands.${p.brand}`, { defaultValue: getBrand(p.brand).name }) },
     { key: 'rating', label: t('compare.rating'), render: (p) => <span className="flex items-center justify-center gap-1.5"><StarRating rating={p.rating} size={13} />{p.rating}</span> },
     { key: 'reviews', label: t('common.reviews', { count: 0 }).split(' ')[0], render: (p) => p.reviews.toLocaleString() },
     { key: 'shipping', label: t('compare.shipping'), render: () => <span className="text-emerald-600 font-medium">{t('compare.free')}</span> }

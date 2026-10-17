@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useStore } from '../../context/StoreContext.jsx'
 import { SectionTitle, Card, Button, Field, TextInput, Textarea, Toggle } from '../ui.jsx'
 import Icon from '../../components/Icons.jsx'
+import ImageUploader from '../../components/ImageUploader.jsx'
 
 const ICONS = ['truck', 'refresh', 'lock', 'headset', 'sparkle', 'zap', 'gift', 'tag']
 
@@ -55,9 +56,9 @@ export default function Content() {
                 <div className="md:col-span-2">
                   <img src={s.image} alt="" className="h-28 w-full object-cover rounded-xl" />
                 </div>
-                <Field label={t('admin.common.imageUrl')} className="md:col-span-2">
-                  <TextInput value={s.image} onChange={(e) => setSlide(s.id, { image: e.target.value })} />
-                </Field>
+                <div className="md:col-span-2">
+                  <ImageUploader label={t('admin.common.image')} value={s.image} onChange={(url) => setSlide(s.id, { image: url })} />
+                </div>
                 <Field label={t('admin.content.titleLabel')}><TextInput value={s.title} onChange={(e) => setSlide(s.id, { title: e.target.value })} /></Field>
                 <Field label={t('admin.content.subtitleLabel')}><TextInput value={s.subtitle} onChange={(e) => setSlide(s.id, { subtitle: e.target.value })} /></Field>
               </div>
@@ -84,7 +85,9 @@ export default function Content() {
             <Field label={t('admin.common.add')}><TextInput value={content.promo.cta} onChange={(e) => setContent({ promo: { ...content.promo, cta: e.target.value } })} /></Field>
             <Field label={t('admin.content.titleLabel')} className="md:col-span-2"><TextInput value={content.promo.title} onChange={(e) => setContent({ promo: { ...content.promo, title: e.target.value } })} /></Field>
             <Field label={t('admin.content.subtitleLabel')} className="md:col-span-2"><Textarea rows={2} value={content.promo.subtitle} onChange={(e) => setContent({ promo: { ...content.promo, subtitle: e.target.value } })} /></Field>
-            <Field label={t('admin.common.imageUrl')} className="md:col-span-2"><TextInput value={content.promo.image} onChange={(e) => setContent({ promo: { ...content.promo, image: e.target.value } })} /></Field>
+            <div className="md:col-span-2">
+              <ImageUploader label={t('admin.common.image')} value={content.promo.image} onChange={(url) => setContent({ promo: { ...content.promo, image: url } })} />
+            </div>
           </div>
         </Card>
       )}

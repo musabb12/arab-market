@@ -64,14 +64,14 @@ export function Toggle({ checked, onChange, disabled }) {
   )
 }
 
-export const inputClass = 'w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-50 transition-all bg-white'
+export const inputClass = 'w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-50 transition-all bg-white placeholder:text-slate-500'
 
 export function Field({ label, hint, children, className = '' }) {
   return (
     <label className={`block ${className}`}>
-      {label && <span className="block text-xs font-semibold text-slate-500 mb-1.5">{label}</span>}
+      {label && <span className="block text-xs font-semibold text-slate-700 mb-1.5">{label}</span>}
       {children}
-      {hint && <span className="block text-[11px] text-slate-400 mt-1">{hint}</span>}
+      {hint && <span className="block text-xs font-medium text-slate-600 mt-1">{hint}</span>}
     </label>
   )
 }

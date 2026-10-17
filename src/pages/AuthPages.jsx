@@ -6,9 +6,13 @@ import { useStore } from '../context/StoreContext.jsx'
 import { api } from '../api/client.js'
 import Icon from '../components/Icons.jsx'
 
-function AuthShell({ title, subtitle, children, side }) {
+function AuthShell({ title, subtitle, cta, children, side }) {
   return (
-    <div className="relative overflow-hidden min-h-[80vh] bg-white">
+    <div className="relative overflow-hidden min-h-[80vh] bg-gradient-to-br from-slate-50 via-white to-brand-50/40">
+      <div
+        className="pointer-events-none absolute -top-32 start-1/4 h-80 w-80 rounded-full opacity-40 blur-3xl"
+        style={{ background: 'radial-gradient(circle, rgba(224,68,24,0.2), transparent 70%)' }}
+      />
       <div className="relative max-w-6xl mx-auto px-4 py-16 grid lg:grid-cols-2 gap-12 items-center">
         <motion.div
           initial={{ opacity: 0, x: -24 }}
@@ -18,9 +22,9 @@ function AuthShell({ title, subtitle, children, side }) {
         >
           <div className="relative">
             <img src={side.image} alt="" className="rounded-3xl shadow-lift aspect-[4/5] object-cover w-full max-w-md mx-auto" />
-            <div className="absolute bottom-6 left-6 right-6 bg-white rounded-2xl p-5 shadow-lift">
+            <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur rounded-2xl p-5 shadow-lift border border-white/80">
               <p className="font-display text-lg font-semibold text-midnight-900 mb-1">{side.quote}</p>
-              <p className="text-xs text-slate-500">{side.author}</p>
+              <p className="text-xs text-slate-600">{side.author}</p>
             </div>
           </div>
         </motion.div>
@@ -31,8 +35,12 @@ function AuthShell({ title, subtitle, children, side }) {
           className="max-w-md mx-auto w-full"
         >
           <div className="bg-white rounded-3xl border border-slate-100 shadow-soft p-8">
-            <h1 className="font-display text-2xl font-bold text-midnight-900 mb-1">{title}</h1>
-            <p className="text-sm text-slate-500 mb-7">{subtitle}</p>
+            <p className="font-display text-2xl md:text-[1.65rem] font-bold text-midnight-900 leading-snug mb-3">
+              {title}
+            </p>
+            <p className="text-sm text-slate-700 leading-relaxed mb-3">{subtitle}</p>
+            {cta && <p className="text-sm font-semibold text-brand-700 mb-7">{cta}</p>}
+            {!cta && <div className="mb-4" />}
             {children}
           </div>
         </motion.div>
@@ -43,18 +51,14 @@ function AuthShell({ title, subtitle, children, side }) {
 
 const sideImages = {
   login: {
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=80',
-    quote: 'Premium shopping, delivered worldwide.',
-    author: 'Ciar VIP'
+    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=80'
   },
   register: {
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1000&q=80',
-    quote: 'Join millions of happy shoppers.',
-    author: 'Ciar VIP Community'
+    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1000&q=80'
   }
 }
 
-const input = 'w-full border border-slate-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-50 transition-all'
+const input = 'w-full border border-slate-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-50 transition-all placeholder:text-slate-500'
 
 export function Login() {
   const { t } = useTranslation()
@@ -81,8 +85,19 @@ export function Login() {
     }
   }
 
+  const side = {
+    ...sideImages.login,
+    quote: t('auth.welcomeBody'),
+    author: t('brand')
+  }
+
   return (
-    <AuthShell title={t('auth.loginTitle')} subtitle={t('auth.loginSubtitle')} side={sideImages.login}>
+    <AuthShell
+      title={t('auth.welcomeTitle')}
+      subtitle={t('auth.welcomeBody')}
+      cta={t('auth.welcomeLoginCta')}
+      side={side}
+    >
       {from && from !== '/' && (
         <div className="mb-4 text-sm text-brand-700 bg-brand-50 border border-brand-100 rounded-xl px-4 py-3">
           {t('auth.gateSubtitle')}
@@ -91,12 +106,12 @@ export function Login() {
       {error && <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">{error}</div>}
       <form onSubmit={submit} className="space-y-4">
         <div>
-          <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('auth.email')}</label>
+          <label className="block text-xs font-semibold text-slate-700 mb-1.5">{t('auth.email')}</label>
           <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@example.com" className={input} />
         </div>
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-semibold text-slate-500">{t('auth.password')}</label>
+            <label className="text-xs font-semibold text-slate-700">{t('auth.password')}</label>
             <Link to="/forgot-password" className="text-xs font-semibold text-brand-600 hover:underline">{t('auth.forgotPassword')}</Link>
           </div>
           <input type="password" required value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="••••••••" className={input} />
@@ -109,10 +124,10 @@ export function Login() {
           {loading ? '...' : t('auth.signIn')}
         </button>
       </form>
-      <p className="text-center text-sm text-slate-500 mt-6">
+      <p className="text-center text-sm text-slate-600 mt-6">
         {t('auth.noAccount')} <Link to="/register" className="font-semibold text-brand-600 hover:underline">{t('auth.createOne')}</Link>
       </p>
-      <p className="text-center text-xs text-slate-400 mt-3">
+      <p className="text-center text-xs text-slate-500 mt-3">
         {t('auth.wantToSell')} <Link to="/sell" className="text-brand-600 font-semibold hover:underline">{t('auth.applyMerchant')}</Link>
       </p>
     </AuthShell>
@@ -147,25 +162,36 @@ export function Register() {
     }
   }
 
+  const side = {
+    ...sideImages.register,
+    quote: t('auth.welcomeBody'),
+    author: t('brand')
+  }
+
   return (
-    <AuthShell title={t('auth.registerTitle')} subtitle={t('auth.registerSubtitle')} side={sideImages.register}>
+    <AuthShell
+      title={t('auth.welcomeTitle')}
+      subtitle={t('auth.welcomeBody')}
+      cta={t('auth.welcomeRegisterCta')}
+      side={side}
+    >
       {error && <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">{error}</div>}
       <form onSubmit={submit} className="space-y-4">
         <div>
-          <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('auth.name')}</label>
-          <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Alex Morgan" className={input} />
+          <label className="block text-xs font-semibold text-slate-700 mb-1.5">{t('auth.name')}</label>
+          <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder={t('auth.name')} className={input} />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('auth.email')}</label>
+          <label className="block text-xs font-semibold text-slate-700 mb-1.5">{t('auth.email')}</label>
           <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@example.com" className={input} />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('auth.password')}</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">{t('auth.password')}</label>
             <input type="password" required minLength={6} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="••••••••" className={input} />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('auth.confirmPassword')}</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">{t('auth.confirmPassword')}</label>
             <input type="password" required minLength={6} value={form.confirm} onChange={(e) => setForm({ ...form, confirm: e.target.value })} placeholder="••••••••" className={input} />
           </div>
         </div>
@@ -177,7 +203,7 @@ export function Register() {
           {loading ? '...' : t('auth.createAccount')}
         </button>
       </form>
-      <p className="text-center text-sm text-slate-500 mt-6">
+      <p className="text-center text-sm text-slate-600 mt-6">
         {t('auth.haveAccount')} <Link to="/login" className="font-semibold text-brand-600 hover:underline">{t('auth.signIn')}</Link>
       </p>
     </AuthShell>
@@ -190,8 +216,14 @@ export function ForgotPassword() {
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
 
+  const side = {
+    ...sideImages.login,
+    quote: t('auth.welcomeBody'),
+    author: t('brand')
+  }
+
   return (
-    <AuthShell title={t('auth.resetTitle')} subtitle={t('auth.resetSubtitle')} side={sideImages.login}>
+    <AuthShell title={t('auth.resetTitle')} subtitle={t('auth.resetSubtitle')} side={side}>
       {error && <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">{error}</div>}
       {sent ? (
         <div className="text-center py-6">
@@ -215,7 +247,7 @@ export function ForgotPassword() {
           className="space-y-4"
         >
           <div>
-            <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('auth.email')}</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">{t('auth.email')}</label>
             <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className={input} />
           </div>
           <button type="submit" className="w-full py-4 rounded-full bg-brand-600 text-white font-semibold transition-all">
@@ -223,7 +255,7 @@ export function ForgotPassword() {
           </button>
         </form>
       )}
-      <p className="text-center text-sm text-slate-500 mt-6">
+      <p className="text-center text-sm text-slate-600 mt-6">
         <Link to="/login" className="font-semibold text-brand-600 hover:underline flex items-center justify-center gap-1">
           <Icon name="arrowRight" size={14} className="rotate-180" />
           {t('auth.backToLogin')}

@@ -9,6 +9,8 @@ const SRC = {
   applepay: '/payments/applepay.svg',
   googlepay: '/payments/googlepay.svg',
   cod: '/payments/cod.svg',
+  whish: '/payments/whish.png',
+  ciarprepaid: '/payments/ciarprepaid.png',
   card: null
 }
 
@@ -34,12 +36,14 @@ export function PaymentBrand({ id, className = '', title, size = 'md' }) {
   const src = SRC[id]
   if (!src) return null
 
+  const isPhoto = /\.(png|jpe?g|webp)$/i.test(src)
+
   return (
     <span className={`inline-flex items-center justify-center ${className}`} title={title || id} role="img" aria-label={title || id}>
       <img
         src={src}
         alt={title || id}
-        className={`${s.single} w-auto ${s.max} object-contain`}
+        className={`${s.single} w-auto ${s.max} object-contain ${isPhoto ? 'rounded-md' : ''}`}
         loading="lazy"
       />
     </span>

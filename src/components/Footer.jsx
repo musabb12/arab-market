@@ -4,12 +4,19 @@ import { useTranslation } from 'react-i18next'
 import { useStore } from '../context/StoreContext.jsx'
 import Icon from './Icons.jsx'
 import PaymentBrand from './PaymentBrand.jsx'
+import CircleLink from './CircleLink.jsx'
+import { getSocialLinks } from '../utils/social.js'
 
 export default function Footer() {
   const { t } = useTranslation()
-  const { categories, content, settings } = useStore()
+  const { categories, settings } = useStore()
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
+
+  const phone = settings?.phone || '+966 11 234 5678'
+  const whatsapp = (settings?.whatsapp || '+966501234567').replace(/\D/g, '')
+  const mail = settings?.email || 'hello@ciarvip.com'
+  const social = getSocialLinks(settings)
 
   const serviceLinks = [
     { to: '/help', key: 'footer.helpCenter' },
@@ -38,6 +45,23 @@ export default function Footer() {
 
   return (
     <footer className="bg-midnight-900 text-slate-300 mt-auto">
+      {/* Sell CTA — end of page (not in top bar), per client request */}
+      <div className="border-b border-white/10 bg-gradient-to-r from-midnight-950 via-midnight-900 to-midnight-950">
+        <div className="max-w-7xl mx-auto px-4 py-10 md:py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="text-center md:text-start">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-amber-400 mb-2">{t('footer.sellBadge')}</p>
+            <h3 className="font-display text-2xl md:text-3xl font-bold text-white mb-2">{t('footer.sellTitle')}</h3>
+            <p className="text-sm text-slate-400 max-w-xl">{t('footer.sellSubtitle')}</p>
+          </div>
+          <Link
+            to="/sell"
+            className="shrink-0 px-8 py-3.5 rounded-full bg-brand-600 text-white text-sm font-bold hover:opacity-90 transition-opacity shadow-lg shadow-orange-900/30"
+          >
+            {t('nav.sell')}
+          </Link>
+        </div>
+      </div>
+
       {/* Newsletter */}
       <div className="border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-8 items-center">
@@ -76,7 +100,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Link columns */}
+      {/* Link columns + contact */}
       <div className="max-w-7xl mx-auto px-4 py-14 grid grid-cols-2 md:grid-cols-5 gap-10">
         <div className="col-span-2">
           <div className="mb-4">
@@ -85,10 +109,35 @@ export default function Footer() {
             </span>
           </div>
           <p className="text-sm text-slate-400 leading-relaxed mb-5 max-w-sm">{t('footer.aboutText')}</p>
-          <div className="flex items-center gap-2">
-            {['facebook', 'apple', 'chat', 'globe'].map((s) => (
-              <a key={s} href="#" aria-label={s} className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 hover:bg-brand-600 text-white transition-colors">
-                <Icon name={s} size={16} />
+
+          <div className="space-y-2.5 mb-6 text-sm">
+            <a href={`tel:${phone.replace(/\s/g, '')}`} className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors">
+              <Icon name="phone" size={16} className="text-brand-400" />
+              <span dir="ltr">{phone}</span>
+            </a>
+            <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer" className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors">
+              <Icon name="whatsapp" size={16} className="text-emerald-400" />
+              <span dir="ltr">WhatsApp · {settings?.whatsapp || '+966 50 123 4567'}</span>
+            </a>
+            <a href={`mailto:${mail}`} className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors">
+              <Icon name="mail" size={16} className="text-brand-400" />
+              <span dir="ltr">{mail}</span>
+            </a>
+          </div>
+
+          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">{t('footer.follow')}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            {social.map((s) => (
+              <a
+                key={s.id}
+                href={s.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={s.label}
+                title={s.label}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 hover:bg-brand-600 text-white transition-colors"
+              >
+                <Icon name={s.icon} size={17} />
               </a>
             ))}
           </div>
@@ -98,15 +147,21 @@ export default function Footer() {
         <FooterCol title={t('footer.sellWithUs')} links={sellLinks} />
       </div>
 
-      {/* Categories strip */}
+      {/* Circular categories strip */}
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3 block">{t('footer.categories')}</span>
-          <div className="flex flex-wrap gap-2">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4 block">{t('footer.categories')}</span>
+          <div className="flex gap-4 overflow-x-auto no-scrollbar pb-1">
             {categories.map((c) => (
-              <Link key={c.id} to={`/category/${c.id}`} className="text-xs text-slate-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full">
-                {t(c.nameKey)}
-              </Link>
+              <CircleLink
+                key={c.id}
+                to={`/category/${c.id}`}
+                image={c.image}
+                label={t(c.nameKey)}
+                size="sm"
+                light
+                className="w-[4.5rem]"
+              />
             ))}
           </div>
         </div>

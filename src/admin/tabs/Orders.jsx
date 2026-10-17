@@ -91,7 +91,7 @@ export default function Orders() {
                     <img src={i.product?.image} alt="" className="h-11 w-11 rounded-lg object-cover" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-midnight-900 truncate">{i.product?.name}</p>
-                      <p className="text-xs text-slate-400">{getBrand(i.product?.brand).name} · {i.qty}</p>
+                      <p className="text-xs text-slate-600">{t(`brands.${i.product?.brand}`, { defaultValue: getBrand(i.product?.brand).name })} · {i.qty}</p>
                     </div>
                     <span className="text-sm font-semibold">${(i.product?.price * i.qty).toFixed(2)}</span>
                   </div>
