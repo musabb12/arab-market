@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PageHero, Breadcrumb, FeatureBar } from '../components/Layout.jsx'
 import { useStore } from '../context/StoreContext.jsx'
 import Icon from '../components/Icons.jsx'
-import { getSocialLinks } from '../utils/social.js'
+import { getSocialLinks, getWhatsAppUrl } from '../utils/social.js'
 
 export default function Contact() {
   const { t } = useTranslation()
@@ -13,7 +13,7 @@ export default function Contact() {
 
   const phone = settings?.phone || '+966 11 234 5678'
   const whatsappDisplay = settings?.whatsapp || '+966 50 123 4567'
-  const whatsapp = whatsappDisplay.replace(/\D/g, '')
+  const whatsappUrl = getWhatsAppUrl(settings)
   const mail = settings?.email || 'hello@ciarvip.com'
 
   const input = 'w-full border border-slate-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-50 transition-all'
@@ -21,7 +21,7 @@ export default function Contact() {
 
   const channels = [
     { icon: 'phone', title: t('contact.phone'), text: t('contact.supportText'), action: t('contact.phone'), value: phone, href: `tel:${phone.replace(/\s/g, '')}` },
-    { icon: 'whatsapp', title: 'WhatsApp', text: t('contact.whatsappText'), action: 'WhatsApp', value: whatsappDisplay, href: `https://wa.me/${whatsapp}` },
+    { icon: 'whatsapp', title: 'WhatsApp', text: t('contact.whatsappText'), action: 'WhatsApp', value: whatsappDisplay, href: whatsappUrl },
     { icon: 'mail', title: t('contact.email'), text: t('contact.salesText'), action: t('contact.email'), value: mail, href: `mailto:${mail}` }
   ]
 

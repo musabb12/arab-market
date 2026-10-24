@@ -15,9 +15,17 @@ export const SOCIAL_NETWORKS = [
 ]
 
 export function getSocialLinks(settings = {}) {
+  const enabled = settings.socialEnabled || {}
   return SOCIAL_NETWORKS.map((n) => {
     const raw = settings[n.setting]
     const href = n.build ? n.build(raw || n.fallback || '') : raw || n.fallback
     return { id: n.id, icon: n.icon, label: n.label, href }
-  }).filter((n) => n.href)
+  }).filter((n) => n.href && enabled[n.id] !== false)
+}
+
+export function getWhatsAppUrl(settings = {}, text) {
+  const number = String(settings.whatsapp || '').replace(/\D/g, '')
+  if (!number) return ''
+  const message = text ?? settings.whatsappMessage
+  return `https://wa.me/${number}${message ? `?text=${encodeURIComponent(message)}` : ''}`
 }

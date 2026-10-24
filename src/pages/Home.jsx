@@ -10,6 +10,7 @@ import Icon from '../components/Icons.jsx'
 import PaymentBrand, { NETWORK_BRANDS } from '../components/PaymentBrand.jsx'
 import CircleLink from '../components/CircleLink.jsx'
 import MobileStoreFeed from '../components/MobileStoreFeed.jsx'
+import { AdSlot, AdPopup } from '../components/AdBanner.jsx'
 
 function HomeTitle({ title, subtitle, action, light = false }) {
   return (
@@ -167,6 +168,7 @@ export default function Home() {
     <div className="bg-slate-50 dark:bg-midnight-950">
       {/* SHEIN-style mobile store feed */}
       <MobileStoreFeed />
+      <AdPopup />
 
       {/* Desktop / tablet hero */}
       <section className="relative hidden md:block h-[50vh] overflow-hidden bg-midnight-950">
@@ -283,6 +285,13 @@ export default function Home() {
         </div>
       </section>
 
+      {/* AD — home top */}
+      <section className="py-6 md:py-8 bg-white dark:bg-midnight-950">
+        <div className="max-w-7xl mx-auto px-4">
+          <AdSlot position="homeTop" />
+        </div>
+      </section>
+
       {/* RARE MAISONS */}
       {rareBrands.length > 0 && (
         <section className="py-10 md:py-14 bg-midnight-950 relative overflow-hidden">
@@ -363,6 +372,13 @@ export default function Home() {
               )
             })}
           </div>
+        </div>
+      </section>
+
+      {/* AD — home middle */}
+      <section className="py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-4">
+          <AdSlot position="homeMiddle" />
         </div>
       </section>
 
@@ -754,6 +770,13 @@ export default function Home() {
               ))}
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* AD — home bottom */}
+      <section className="py-8 md:py-10 bg-slate-50 dark:bg-midnight-900/40">
+        <div className="max-w-7xl mx-auto px-4">
+          <AdSlot position="homeBottom" />
         </div>
       </section>
 

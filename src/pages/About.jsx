@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { PageHero, Breadcrumb, FeatureBar } from '../components/Layout.jsx'
 import Icon from '../components/Icons.jsx'
+import { useStore } from '../context/StoreContext.jsx'
+import { headerFontFamily, textSizeValue } from '../data/siteDefaults.js'
 
 const team = [
   { name: 'Elena Vasquez', role: 'Chief Executive Officer', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80' },
@@ -20,6 +22,20 @@ const offices = [
 
 export default function About() {
   const { t } = useTranslation()
+  const { siteData } = useStore()
+  const custom = siteData?.pages?.about || {}
+  const pick = (key, v) => (typeof v === 'string' && v.trim() ? v : t(key))
+
+  const pageFont = headerFontFamily(custom.font)
+  const titleStyle = {
+    ...(pageFont ? { fontFamily: pageFont } : {}),
+    ...(textSizeValue(custom.titleSize) ? { fontSize: textSizeValue(custom.titleSize) } : {})
+  }
+  const bodyStyle = {
+    ...(pageFont ? { fontFamily: pageFont } : {}),
+    ...(textSizeValue(custom.bodySize) ? { fontSize: textSizeValue(custom.bodySize) } : {}),
+    ...(custom.textColor ? { color: custom.textColor } : {})
+  }
 
   const values = [
     { icon: 'heart', title: t('about.value1Title'), text: t('about.value1Text') },
@@ -37,26 +53,26 @@ export default function About() {
 
   return (
     <div>
-      <PageHero title={t('about.title')} subtitle={t('about.subtitle')} crumb={t('footer.about')}  theme="about" />
+      <PageHero title={pick('about.title', custom.title)} subtitle={pick('about.subtitle', custom.intro)} crumb={t('footer.about')}  theme="about" />
       <Breadcrumb items={[{ label: t('footer.about') }]} />
 
       {/* Story */}
       <section className="py-16 md:py-24 bg-white dark:bg-midnight-950 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <h2 className="font-display text-3xl md:text-4xl font-semibold text-midnight-900 dark:text-white mb-6">{t('about.storyTitle')}</h2>
-            <div className="space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed">
-              <p>{t('about.story1')}</p>
-              <p>{t('about.story2')}</p>
-              <p>{t('about.story3')}</p>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-midnight-900 dark:text-white mb-6" style={titleStyle}>{pick('about.storyTitle', custom.storyTitle)}</h2>
+            <div className="space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed" style={bodyStyle}>
+              <p>{pick('about.story1', custom.story1)}</p>
+              <p>{pick('about.story2', custom.story2)}</p>
+              <p>{pick('about.story3', custom.story3)}</p>
             </div>
             <div className="mt-8 p-5 bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-800/40 rounded-2xl">
-              <p className="font-display text-lg font-semibold text-midnight-900 dark:text-white italic">"{t('about.missionText')}"</p>
+              <p className="font-display text-lg font-semibold text-midnight-900 dark:text-white italic" style={titleStyle}>"{pick('about.missionText', custom.missionText)}"</p>
               <p className="text-sm text-brand-600 font-semibold mt-2 uppercase tracking-widest">{t('about.missionTitle')}</p>
             </div>
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="relative">
-            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80" alt="Our team" className="rounded-3xl shadow-lift aspect-[4/3] object-cover w-full" />
+            <img src={custom.storyImage || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80'} alt="Our team" className="rounded-3xl shadow-lift aspect-[4/3] object-cover w-full" />
             <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-lift px-6 py-4 hidden md:block">
               <p className="font-display text-3xl font-bold text-gradient">300M+</p>
               <p className="text-xs text-slate-500">{t('home.statsShoppers')}</p>

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useStore } from '../context/StoreContext.jsx'
 import Icon from './Icons.jsx'
 import { subcategoryLabel, subcategoryImage } from '../utils/catalog.js'
+import { headerFontFamily } from '../data/siteDefaults.js'
 
 function Dropdown({ trigger, children, align = 'right' }) {
   const [open, setOpen] = useState(false)
@@ -64,9 +65,11 @@ export default function Navbar() {
     activeLanguages,
     activeCurrencies,
     settings,
+    siteData,
     theme,
     setTheme
   } = useStore()
+  const header = siteData?.header || {}
   const canBrowse = Boolean(user) || settings?.requireLogin === false
   const [query, setQuery] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -78,7 +81,17 @@ export default function Navbar() {
   const stripTrackRef = useRef(null)
   const [stripX, setStripX] = useState(0)
 
-  const messages = [t('topBar.msg1'), t('topBar.ship'), t('topBar.msg2'), t('topBar.msg3')]
+  const customTopMessages = (header.topBarMessages || []).filter((m) => m && m.trim())
+  const messages = customTopMessages.length ? customTopMessages : [t('topBar.msg1'), t('topBar.ship'), t('topBar.msg2'), t('topBar.msg3')]
+  const logoFont = headerFontFamily(header.logoFont)
+  const barImages = [header.barBgImage, ...(header.barBgImages || [])].filter(Boolean)
+  const [bgIndex, setBgIndex] = useState(0)
+
+  useEffect(() => {
+    if (barImages.length < 2) return
+    const id = setInterval(() => setBgIndex((i) => (i + 1) % barImages.length), 6000)
+    return () => clearInterval(id)
+  }, [barImages.length])
 
   useLayoutEffect(() => {
     const el = headerRef.current
@@ -121,9 +134,11 @@ export default function Navbar() {
   const stripLinks = [
     { to: '/products', label: t('home.forYouAll') },
     { to: '/new-arrivals', label: t('nav.newArrivals') },
+    ...(siteData.fitting?.navLink !== false ? [{ to: '/fitting-room', label: t('nav.fittingRoom'), accent: true }] : []),
     ...categories.map((c) => ({ to: `/category/${c.id}`, label: t(c.nameKey) })),
     { to: '/deals', label: t('nav.deals'), accent: true },
-    { to: '/brands', label: t('nav.brands') }
+    { to: '/brands', label: t('nav.brands') },
+    ...(header.customLinks || []).filter((l) => l.to && l.label).map((l) => ({ to: l.to, label: l.label }))
   ]
 
   const getStripMax = () => {
@@ -190,7 +205,14 @@ export default function Navbar() {
 
   return (
     <header ref={headerRef} className="fixed top-0 inset-x-0 z-50">
-      <div className="hidden md:flex bg-midnight-950 text-white h-8 items-center justify-center overflow-hidden px-4">
+      {header.topBarEnabled !== false && (
+      <div
+        className="hidden md:flex bg-midnight-950 text-white h-8 items-center justify-center overflow-hidden px-4"
+        style={{
+          ...(header.topBarBg ? { background: header.topBarBg } : {}),
+          ...(header.topBarBgImage ? { backgroundImage: `url(${header.topBarBgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {})
+        }}
+      >
         <AnimatePresence mode="wait">
           <motion.p
             key={`${msgIndex}-${i18n.language}`}
@@ -199,15 +221,34 @@ export default function Navbar() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
             className="text-[11px] sm:text-xs tracking-wide truncate"
+            style={header.topBarColor ? { color: header.topBarColor } : undefined}
           >
             <span className="text-amber-300 me-2">✦</span>
             {messages[msgIndex]}
           </motion.p>
         </AnimatePresence>
       </div>
+      )}
 
-      <div className="bg-white dark:bg-midnight-950 border-b border-slate-100 dark:border-white/10">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 flex items-center gap-2 sm:gap-3 md:gap-5">
+      <div
+        className="relative bg-white dark:bg-midnight-950 border-b border-slate-100 dark:border-white/10 overflow-hidden"
+        style={{
+          ...(header.barBg ? { background: header.barBg } : {})
+        }}
+      >
+        {barImages.map((src, i) => (
+          <div
+            key={i}
+            className="pointer-events-none absolute inset-0 transition-opacity duration-1000"
+            style={{
+              opacity: (barImages.length > 1 ? i === bgIndex % barImages.length : i === 0) ? 1 : 0,
+              backgroundImage: `url(${src})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          />
+        ))}
+        <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-4 py-2.5 flex items-center gap-2 sm:gap-3 md:gap-5">
           <button
             className="md:hidden p-2 -ms-2 text-midnight-900 dark:text-white"
             onClick={() => setMobileOpen(true)}
@@ -217,11 +258,18 @@ export default function Navbar() {
           </button>
 
           <Link to="/" className="min-w-0 shrink">
-            <span className="block truncate font-display font-extrabold tracking-tight text-midnight-900 dark:text-white text-[1.7rem] sm:text-3xl md:text-[2.4rem] leading-none">
+            <span
+              className={`block truncate ${logoFont ? '' : 'font-display'} font-extrabold tracking-tight text-midnight-900 dark:text-white text-[1.7rem] sm:text-3xl md:text-[2.4rem] leading-none`}
+              style={{
+                ...(logoFont ? { fontFamily: logoFont } : {}),
+                ...(header.logoSize ? { fontSize: `${header.logoSize}rem` } : {})
+              }}
+            >
               {settings?.siteName || 'Ciar'} <span className="text-brand-600">{settings?.siteSuffix || 'VIP'}</span>
             </span>
           </Link>
 
+          {header.showSearch !== false && (
           <form onSubmit={submitSearch} className="flex-1 max-w-2xl hidden md:flex items-center relative">
             <input
               value={query}
@@ -237,6 +285,7 @@ export default function Navbar() {
               <Icon name="search" size={17} />
             </button>
           </form>
+          )}
 
           <div className="flex shrink-0 items-center gap-0 sm:gap-1 ms-auto">
             <div className="hidden lg:flex items-center gap-1.5 me-1">
@@ -287,6 +336,7 @@ export default function Navbar() {
               </Dropdown>
             </div>
 
+            {header.showThemeToggle !== false && (
             <button
               type="button"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -296,7 +346,9 @@ export default function Navbar() {
             >
               <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={20} />
             </button>
+            )}
 
+            {header.showTrackOrder !== false && (
             <Link
               to="/track-order"
               className="hidden xl:flex items-center gap-2 px-3 py-2 text-sm font-medium text-midnight-800 dark:text-slate-200 hover:text-brand-600 transition-colors"
@@ -304,6 +356,7 @@ export default function Navbar() {
               <Icon name="truck" size={18} />
               <span>{t('nav.trackOrder')}</span>
             </Link>
+            )}
 
             {user ? (
               <Dropdown
@@ -368,6 +421,7 @@ export default function Navbar() {
           </div>
         </div>
 
+        {header.showSearch !== false && (
         <form onSubmit={submitSearch} className="md:hidden px-4 pb-2.5">
           <div className="flex items-center rounded-full border border-slate-200 dark:border-white/15 bg-slate-50 dark:bg-midnight-900 overflow-hidden">
             <input
@@ -381,10 +435,13 @@ export default function Navbar() {
             </button>
           </div>
         </form>
+        )}
       </div>
 
-      <nav className="hidden md:block bg-white dark:bg-midnight-950 border-b border-slate-200 dark:border-white/10 shadow-[0_6px_18px_-16px_rgba(15,33,55,0.6)]">
+      {header.showNavStrip !== false && (
+      <nav className="relative z-10 hidden md:block bg-white dark:bg-midnight-950 border-b border-slate-200 dark:border-white/10 shadow-[0_6px_18px_-16px_rgba(15,33,55,0.6)]">
         <div className="max-w-7xl mx-auto px-4 flex items-center gap-2">
+          {header.showCategoriesMenu !== false && (
           <div className="relative hidden md:block shrink-0" ref={catRef}>
             <button
               onClick={() => setCatOpen((o) => !o)}
@@ -435,6 +492,7 @@ export default function Navbar() {
               )}
             </AnimatePresence>
           </div>
+          )}
 
           <div className="flex flex-1 min-w-0 max-w-full items-center gap-1.5 overflow-hidden">
             <button
@@ -485,6 +543,7 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+      )}
 
       <AnimatePresence>
         {mobileOpen && (
@@ -506,6 +565,7 @@ export default function Navbar() {
               <div className="p-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10">
                 <span className="font-display font-bold text-lg text-midnight-900 dark:text-white">{settings?.siteName || 'Ciar'} {settings?.siteSuffix || 'VIP'}</span>
                 <div className="flex items-center gap-1">
+                  {header.showThemeToggle !== false && (
                   <button
                     type="button"
                     onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -514,6 +574,7 @@ export default function Navbar() {
                   >
                     <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={20} />
                   </button>
+                  )}
                   <button onClick={() => setMobileOpen(false)} className="p-2 text-slate-500" aria-label="Close">
                     <Icon name="close" size={22} />
                   </button>
@@ -550,7 +611,9 @@ export default function Navbar() {
                     </Link>
                   ))}
                 </div>
-                <Link to="/track-order" className="block px-4 py-3 mt-3 text-sm font-medium text-midnight-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg">{t('nav.trackOrder')}</Link>
+                {header.showTrackOrder !== false && (
+                  <Link to="/track-order" className="block px-4 py-3 mt-3 text-sm font-medium text-midnight-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg">{t('nav.trackOrder')}</Link>
+                )}
                 <div className="mt-4 border-t border-slate-100 dark:border-white/10 pt-4">
                   <span className="px-4 text-xs font-semibold uppercase tracking-wider text-slate-400">{t('common.language')}</span>
                   <div className="grid grid-cols-2 gap-1 mt-2 px-2">

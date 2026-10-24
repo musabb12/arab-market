@@ -7,6 +7,8 @@ import MobileBottomNav from './components/MobileBottomNav.jsx'
 import CartDrawer from './components/CartDrawer.jsx'
 import Toasts from './components/Toasts.jsx'
 import RequireAuth from './components/RequireAuth.jsx'
+import ChatWidget from './components/ChatWidget.jsx'
+import WhatsAppFloat from './components/WhatsAppFloat.jsx'
 
 import Home from './pages/Home.jsx'
 import CategoriesHub from './pages/CategoriesHub.jsx'
@@ -39,6 +41,7 @@ import About from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
 import HelpCenter from './pages/HelpCenter.jsx'
 import InfoPage from './pages/InfoPage.jsx'
+import FittingRoom from './pages/FittingRoom.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 import AdminLayout from './admin/AdminLayout.jsx'
@@ -60,6 +63,12 @@ import LanguagesTab from './admin/tabs/Languages.jsx'
 import CurrenciesTab from './admin/tabs/Currencies.jsx'
 import AppearanceTab from './admin/tabs/Appearance.jsx'
 import ContentTab from './admin/tabs/Content.jsx'
+import HeaderTab from './admin/tabs/Header.jsx'
+import PagesTab from './admin/tabs/Pages.jsx'
+import SocialTab from './admin/tabs/Social.jsx'
+import AITab from './admin/tabs/AI.jsx'
+import AdsTab from './admin/tabs/Ads.jsx'
+import FittingTab from './admin/tabs/Fitting.jsx'
 import TicketsTab from './admin/tabs/Tickets.jsx'
 import NotificationsTab from './admin/tabs/Notifications.jsx'
 import AdminUsersTab from './admin/tabs/AdminUsers.jsx'
@@ -76,6 +85,8 @@ function StorefrontLayout() {
       <Footer />
       <MobileBottomNav />
       <CartDrawer />
+      <ChatWidget />
+      <WhatsAppFloat />
       <Toasts />
     </Layout>
   )
@@ -108,6 +119,12 @@ export default function App() {
         <Route path="currencies" element={<CurrenciesTab />} />
         <Route path="appearance" element={<AppearanceTab />} />
         <Route path="content" element={<ContentTab />} />
+        <Route path="header" element={<HeaderTab />} />
+        <Route path="pages" element={<PagesTab />} />
+        <Route path="social" element={<SocialTab />} />
+        <Route path="ai" element={<AITab />} />
+        <Route path="ads" element={<AdsTab />} />
+        <Route path="fitting" element={<FittingTab />} />
         <Route path="tickets" element={<TicketsTab />} />
         <Route path="notifications" element={<NotificationsTab />} />
         <Route path="admin-users" element={<AdminUsersTab />} />
@@ -122,6 +139,7 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/help" element={<HelpCenter />} />
         <Route path="/info/:page" element={<InfoPage />} />
+        <Route path="/fitting-room" element={<FittingRoom />} />
         <Route path="/sell" element={<Sell />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

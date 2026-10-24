@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { PageHero, Breadcrumb } from '../components/Layout.jsx'
 import Icon from '../components/Icons.jsx'
+import { useStore } from '../context/StoreContext.jsx'
+import { headerFontFamily, textSizeValue } from '../data/siteDefaults.js'
 
 const contentMap = {
   privacy: {
@@ -53,7 +55,9 @@ const relatedPages = ['privacy', 'terms', 'cookies', 'returns', 'shipping']
 export default function InfoPage() {
   const { page } = useParams()
   const { t, i18n } = useTranslation()
+  const { siteData } = useStore()
   const cfg = contentMap[page]
+  const custom = siteData?.pages?.[page]
 
   const updatedLabel = useMemo(() => {
     try {
@@ -78,17 +82,33 @@ export default function InfoPage() {
     )
   }
 
-  const title = t(`info.${cfg.key}`)
-  const intro = t(`info.${cfg.introKey}`)
+  const title = custom?.title?.trim() || t(`info.${cfg.key}`)
+  const intro = custom?.intro?.trim() || t(`info.${cfg.introKey}`)
+  const icon = custom?.icon || cfg.icon
 
-  const sections = Array.from({ length: cfg.count }, (_, i) => {
-    const n = i + 1
-    return {
-      n,
-      title: cfg.prefix ? t(`info.${cfg.prefix}${n}Title`) : t(`info.section${n}Title`),
-      text: cfg.prefix ? t(`info.${cfg.prefix}${n}Text`) : t(`info.section${n}Text`)
-    }
-  })
+  const pageFont = headerFontFamily(custom?.font)
+  const fontStyle = pageFont ? { fontFamily: pageFont } : null
+  const titleStyle = {
+    ...(fontStyle || {}),
+    ...(textSizeValue(custom?.titleSize) ? { fontSize: textSizeValue(custom.titleSize) } : {})
+  }
+  const bodyStyle = {
+    ...(fontStyle || {}),
+    ...(textSizeValue(custom?.bodySize) ? { fontSize: textSizeValue(custom.bodySize) } : {}),
+    ...(custom?.textColor ? { color: custom.textColor } : {})
+  }
+
+  const customSections = (custom?.sections || []).filter((s) => s.title?.trim() || s.text?.trim())
+  const sections = customSections.length
+    ? customSections.map((s, i) => ({ n: i + 1, title: s.title, text: s.text }))
+    : Array.from({ length: cfg.count }, (_, i) => {
+        const n = i + 1
+        return {
+          n,
+          title: cfg.prefix ? t(`info.${cfg.prefix}${n}Title`) : t(`info.section${n}Title`),
+          text: cfg.prefix ? t(`info.${cfg.prefix}${n}Text`) : t(`info.section${n}Text`)
+        }
+      })
 
   return (
     <div>
@@ -102,7 +122,7 @@ export default function InfoPage() {
               <div className="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-midnight-900 p-5 shadow-soft">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-600 text-white">
-                    <Icon name={cfg.icon} size={20} />
+                    <Icon name={icon} size={20} />
                   </span>
                   <div>
                     <p className="text-[10px] uppercase tracking-[0.18em] text-slate-400 font-semibold">{t('info.policyNav')}</p>
@@ -156,7 +176,7 @@ export default function InfoPage() {
               className="rounded-[1.75rem] border border-slate-200/80 dark:border-white/10 bg-white dark:bg-midnight-900 shadow-soft overflow-hidden"
             >
               <div className="border-b border-slate-100 dark:border-white/10 px-6 md:px-10 py-7 bg-gradient-to-l from-brand-50/80 via-white to-white dark:from-brand-950/40 dark:via-midnight-900 dark:to-midnight-900">
-                <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
+                <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl" style={bodyStyle}>
                   {intro}
                 </p>
               </div>
@@ -177,10 +197,10 @@ export default function InfoPage() {
                         {String(s.n).padStart(2, '0')}
                       </span>
                       <div className="min-w-0">
-                        <h2 className="font-display text-xl md:text-2xl font-semibold text-midnight-900 dark:text-white mb-2.5">
+                        <h2 className="font-display text-xl md:text-2xl font-semibold text-midnight-900 dark:text-white mb-2.5" style={titleStyle}>
                           {s.title}
                         </h2>
-                        <p className="text-sm md:text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                        <p className="text-sm md:text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed" style={bodyStyle}>
                           {s.text}
                         </p>
                       </div>

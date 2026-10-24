@@ -5,7 +5,7 @@ import { useStore } from '../context/StoreContext.jsx'
 import Icon from './Icons.jsx'
 import PaymentBrand from './PaymentBrand.jsx'
 import CircleLink from './CircleLink.jsx'
-import { getSocialLinks } from '../utils/social.js'
+import { getSocialLinks, getWhatsAppUrl } from '../utils/social.js'
 
 export default function Footer() {
   const { t } = useTranslation()
@@ -14,7 +14,7 @@ export default function Footer() {
   const [subscribed, setSubscribed] = useState(false)
 
   const phone = settings?.phone || '+966 11 234 5678'
-  const whatsapp = (settings?.whatsapp || '+966501234567').replace(/\D/g, '')
+  const whatsappUrl = getWhatsAppUrl(settings)
   const mail = settings?.email || 'hello@ciarvip.com'
   const social = getSocialLinks(settings)
 
@@ -115,7 +115,7 @@ export default function Footer() {
               <Icon name="phone" size={16} className="text-brand-400" />
               <span dir="ltr">{phone}</span>
             </a>
-            <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer" className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors">
+            <a href={whatsappUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors">
               <Icon name="whatsapp" size={16} className="text-emerald-400" />
               <span dir="ltr">WhatsApp · {settings?.whatsapp || '+966 50 123 4567'}</span>
             </a>

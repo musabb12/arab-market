@@ -33,6 +33,38 @@ const img = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=14
 
 export const CATALOG_VERSION = 'luxury-4'
 
+export const HEADER_FONTS = [
+  { id: 'default', label: 'Default', family: null },
+  { id: 'reem', label: 'Reem Kufi', family: "'Reem Kufi', 'Alexandria', sans-serif" },
+  { id: 'cairo', label: 'Cairo', family: "'Cairo', 'Alexandria', sans-serif" },
+  { id: 'tajawal', label: 'Tajawal', family: "'Tajawal', 'Alexandria', sans-serif" },
+  { id: 'changa', label: 'Changa', family: "'Changa', 'Alexandria', sans-serif" },
+  { id: 'almarai', label: 'Almarai', family: "'Almarai', 'Alexandria', sans-serif" },
+  { id: 'alexandria', label: 'Alexandria', family: "'Alexandria', sans-serif" },
+  { id: 'cormorant', label: 'Cormorant Garamond', family: "'Cormorant Garamond', Georgia, serif" },
+  { id: 'manrope', label: 'Manrope', family: "'Manrope', 'Alexandria', sans-serif" }
+]
+
+export function headerFontFamily(id) {
+  return HEADER_FONTS.find((f) => f.id === id)?.family || null
+}
+
+export const TEXT_SIZES = [
+  { id: 'default', label: 'Default', value: null },
+  { id: 'sm', label: 'Small', value: '0.82rem' },
+  { id: 'md', label: 'Medium', value: '0.95rem' },
+  { id: 'lg', label: 'Large', value: '1.1rem' },
+  { id: 'xl', label: 'X-Large', value: '1.3rem' }
+]
+
+export function textSizeValue(id) {
+  return TEXT_SIZES.find((s) => s.id === id)?.value || null
+}
+
+export const INFO_PAGES = ['privacy', 'terms', 'returns', 'shipping', 'cookies']
+
+export const AD_POSITIONS = ['homeTop', 'homeMiddle', 'homeBottom', 'popup']
+
 export const defaultSiteData = {
   catalogVersion: CATALOG_VERSION,
   products: defaultProducts.map((p) => ({ ...p, active: true, stockBase: p.stock })),
@@ -101,8 +133,72 @@ export const defaultSiteData = {
     telegram: 'https://t.me/ciarvip',
     pinterest: 'https://pinterest.com/ciarvip',
     threads: 'https://www.threads.net/@ciarvip',
-    discord: 'https://discord.gg/ciarvip'
+    discord: 'https://discord.gg/ciarvip',
+    whatsappMessage: 'Hello! I need help with my order.',
+    whatsappFloat: true,
+    socialEnabled: {
+      whatsapp: true,
+      instagram: true,
+      facebook: true,
+      twitter: true,
+      tiktok: true,
+      youtube: true,
+      linkedin: true,
+      snapchat: true,
+      telegram: true,
+      pinterest: true,
+      threads: true,
+      discord: true
+    }
   },
+
+  header: {
+    topBarEnabled: true,
+    topBarMessages: [],
+    topBarBg: '',
+    topBarColor: '',
+    topBarBgImage: '',
+    barBg: '',
+    barBgImage: '',
+    barBgImages: [],
+    logoFont: 'default',
+    logoSize: null,
+    showSearch: true,
+    showNavStrip: true,
+    showCategoriesMenu: true,
+    showTrackOrder: true,
+    showThemeToggle: true,
+    customLinks: []
+  },
+
+  ads: [],
+
+  fitting: {
+    enabled: true,
+    navLink: true,
+    showPhoto: true,
+    showMeasurements: true,
+    showPreferences: true,
+    resultsCount: 8,
+    minScore: 25,
+    budgetMax: 50000,
+    weights: { category: 30, segment: 10, color: 25, size: 15, budget: 15, rating: 5, fit: 5 }
+  },
+
+  ai: {
+    enabled: true,
+    name: 'Ciar Assistant',
+    welcome: 'Hello! I am your Ciar VIP shopping assistant. Ask me about products, orders, shipping or anything else.',
+    suggestions: ['Today\u2019s deals', 'Track my order', 'Help me find a gift'],
+    whatsappFallback: true,
+    faqs: [
+      { id: 'f1', q: 'shipping delivery', a: 'Standard delivery takes 5-8 business days and is free over $99. Express delivery arrives in 2-3 days.' },
+      { id: 'f2', q: 'return refund', a: 'You can return most items within 30 days of delivery for a full refund. Start the return from your account page.' },
+      { id: 'f3', q: 'payment methods', a: 'We accept credit cards, PayPal, Apple Pay, Google Pay, Whish Money and cash on delivery where available.' }
+    ]
+  },
+
+  pages: {},
 
   languages: ALL_LANGUAGES,
   currencies: ALL_CURRENCIES,

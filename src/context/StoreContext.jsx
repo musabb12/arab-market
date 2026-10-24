@@ -303,6 +303,16 @@ export function StoreProvider({ children }) {
     document.documentElement.lang = lng
   }, [i18n.language])
 
+  // Inject admin-defined category names into i18n so t(c.nameKey) resolves everywhere
+  useEffect(() => {
+    for (const c of siteData.categories || []) {
+      const en = c.name || c.nameAr
+      const ar = c.nameAr || c.name
+      if (en) i18n.addResource('en', 'translation', `categories.${c.id}`, en)
+      if (ar) i18n.addResource('ar', 'translation', `categories.${c.id}`, ar)
+    }
+  }, [siteData.categories])
+
   const toast = useCallback((message, type = 'success') => {
     const id = ++toastSeq
     setToasts((prev) => [...prev, { id, message, type }])
@@ -764,7 +774,7 @@ export function StoreProvider({ children }) {
       resetSiteData,
       pushNotification,
       products,
-      categories: siteData.categories,
+      categories: (siteData.categories || []).filter((c) => c.active !== false),
       brands: siteData.brands,
       sellers: siteData.sellers,
       coupons: siteData.coupons,

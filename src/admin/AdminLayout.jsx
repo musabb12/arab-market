@@ -55,7 +55,18 @@ const GROUPS = [
     labelKey: 'admin.groups.design',
     items: [
       { to: '/admin/appearance', icon: 'settings', labelKey: 'admin.nav.appearance' },
-      { to: '/admin/content', icon: 'document', labelKey: 'admin.nav.content' }
+      { to: '/admin/header', icon: 'menu', labelKey: 'admin.nav.header' },
+      { to: '/admin/content', icon: 'document', labelKey: 'admin.nav.content' },
+      { to: '/admin/pages', icon: 'edit', labelKey: 'admin.nav.pages' }
+    ]
+  },
+  {
+    labelKey: 'admin.groups.engagement',
+    items: [
+      { to: '/admin/ai', icon: 'sparkle', labelKey: 'admin.nav.ai' },
+      { to: '/admin/ads', icon: 'megaphone', labelKey: 'admin.nav.ads' },
+      { to: '/admin/fitting', icon: 'user', labelKey: 'admin.nav.fitting' },
+      { to: '/admin/social', icon: 'share', labelKey: 'admin.nav.social' }
     ]
   },
   {
